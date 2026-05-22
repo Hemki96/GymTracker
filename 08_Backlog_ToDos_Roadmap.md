@@ -36,7 +36,7 @@ Ziel: Trainingsplan aus der Vorlage als Datenmodell verfügbar machen.
 - Blockname wird angezeigt.
 - Ziel des Blocks wird angezeigt.
 - Wochen 1–6 sind vorhanden.
-- Jeder Woche sind drei Trainingstage zugeordnet.
+- Jeder Woche sind die im Trainingsblock definierten Trainingstage zugeordnet.
 
 ### User Story 1.2: Übungen aus Vorlage hinterlegen
 
@@ -56,7 +56,7 @@ Ziel: Trainingsplan aus der Vorlage als Datenmodell verfügbar machen.
 - Seed Import Service bauen
 - Repository für Trainingsplan erstellen
 - Unit Tests für Seed-Import schreiben
-- Validierung: 6 Wochen, 18 Sessions, 108 Übungszeilen
+- Validierung: strukturell vollständiger Trainingsblock ohne feste Wochen-, Session- oder Übungsanzahl
 
 ## Phase 2: Plananzeige
 
@@ -68,7 +68,7 @@ Ziel: Nutzer kann Wochen, Tage und Übungen durchsuchen.
 
 **Akzeptanzkriterien:**
 
-- Woche 1–6 sind auswählbar.
+- Alle Wochen des aktiven Blocks sind auswählbar.
 - Jede Woche zeigt Tag 1–3.
 - Abgeschlossene Einheiten sind markiert.
 

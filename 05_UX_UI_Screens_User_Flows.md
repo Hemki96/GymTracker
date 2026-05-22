@@ -69,8 +69,8 @@ Planstruktur anzeigen und navigierbar machen.
 
 ### Darstellung
 
-- Segmented Control oder horizontaler Week Picker: Woche 1–6
-- Karten für Tag 1, Tag 2, Tag 3
+- Segmented Control oder horizontaler Week Picker für alle Wochen des aktiven Blocks
+- Karten für alle Trainingstage der ausgewählten Woche
 - Status je Tag: geplant, abgeschlossen, übersprungen
 - Kernübungen je Tag
 - Warnindikatoren bei schmerzrelevanten Übungen

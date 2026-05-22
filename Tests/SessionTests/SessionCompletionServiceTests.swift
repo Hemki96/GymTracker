@@ -99,13 +99,13 @@ struct SessionCompletionServiceTests {
 
         let session = try SessionStartService(context: context).startSession(from: workout)
         let exerciseLog = try #require(session.exerciseLogs.first)
-        let firstSet = try #require(exerciseLog.setLogs.first)
-        firstSet.loggedWeightKg = 80
-        firstSet.loggedReps = 5
-        firstSet.rir = 2
-        firstSet.pain = 1
-        firstSet.isCompleted = true
-        try SessionEditingService(context: context).save(setLog: firstSet)
+        let copiedSourceSet = try #require(exerciseLog.setLogs.sorted { $0.setNumber < $1.setNumber }.last)
+        copiedSourceSet.loggedWeightKg = 80
+        copiedSourceSet.loggedReps = 5
+        copiedSourceSet.rir = 2
+        copiedSourceSet.pain = 1
+        copiedSourceSet.isCompleted = true
+        try SessionEditingService(context: context).save(setLog: copiedSourceSet)
 
         let addedSet = try SessionEditingService(context: context).addSet(to: exerciseLog)
 
@@ -116,10 +116,10 @@ struct SessionCompletionServiceTests {
         #expect(addedSet.pain == 1)
         #expect(session.totalVolumeKg == 400)
 
-        try SessionEditingService(context: context).deleteSet(firstSet)
+        try SessionEditingService(context: context).deleteSet(copiedSourceSet)
 
         let remainingNumbers = exerciseLog.setLogs
-            .filter { $0.id != firstSet.id }
+            .filter { $0.id != copiedSourceSet.id }
             .map(\.setNumber)
             .sorted()
         #expect(remainingNumbers == [1, 2])

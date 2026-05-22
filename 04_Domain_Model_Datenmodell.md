@@ -41,8 +41,8 @@ Ein Trainingsblock beschreibt einen zusammenhängenden Plan, z. B. „Wettkampfv
 |---|---|---|
 | `id` | UUID | eindeutige ID |
 | `blockId` | UUID | Referenz auf TrainingBlock |
-| `weekNumber` | Int | Woche 1–6 |
-| `title` | String | z. B. Woche 1 |
+| `weekNumber` | Int | laufende Woche innerhalb des Blocks |
+| `title` | String | z. B. Woche 1, Akkumulation |
 | `focus` | String? | optionaler Fokus |
 | `notes` | String? | Wochenhinweise |
 
@@ -54,8 +54,8 @@ Ein WorkoutPlan entspricht einem Trainingstag innerhalb einer Woche.
 |---|---|---|
 | `id` | UUID | eindeutige ID |
 | `weekId` | UUID | Referenz auf TrainingWeek |
-| `dayNumber` | Int | Tag 1–3 |
-| `title` | String | z. B. Tag 1 |
+| `dayNumber` | Int | laufender Trainingstag innerhalb der Woche |
+| `title` | String | z. B. Tag 1, Oberkörper |
 | `plannedDate` | Date? | optional geplanter Termin |
 | `status` | WorkoutStatus | planned, active, completed, skipped |
 | `sortOrder` | Int | Reihenfolge |

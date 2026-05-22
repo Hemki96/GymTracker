@@ -7,9 +7,7 @@ struct PlanView: View {
     @State private var blockExportURL: URL?
 
     private var visibleWeeks: [TrainingWeek] {
-        weeks
-            .filter { (1...6).contains($0.weekNumber) }
-            .sorted { $0.weekNumber < $1.weekNumber }
+        Self.visibleWeeks(from: weeks)
     }
 
     private var selectedWeek: TrainingWeek? {
@@ -21,9 +19,7 @@ struct PlanView: View {
     }
 
     private var workouts: [WorkoutPlan] {
-        selectedWeek?.workoutPlans
-            .filter { (1...3).contains($0.dayNumber) }
-            .sorted { $0.dayNumber < $1.dayNumber } ?? []
+        Self.visibleWorkouts(for: selectedWeek)
     }
 
     var body: some View {
@@ -45,7 +41,7 @@ struct PlanView: View {
                             VStack(alignment: .leading, spacing: 6) {
                                 Text(selectedWeek.title)
                                     .font(.title2.weight(.semibold))
-                                Text("Tag 1 bis Tag 3")
+                                Text(Self.trainingDaySummary(for: workouts))
                                     .font(.subheadline)
                                     .foregroundStyle(.secondary)
                             }
@@ -74,7 +70,11 @@ struct PlanView: View {
                 }
             }
             .task {
+                normalizeSelectedWeek()
                 refreshBlockExportURL()
+            }
+            .onChange(of: visibleWeeks.map(\.weekNumber)) { _, _ in
+                normalizeSelectedWeek()
             }
             .onChange(of: selectedWeekNumber) { _, _ in
                 refreshBlockExportURL()
@@ -92,6 +92,31 @@ struct PlanView: View {
         }
 
         blockExportURL = try? TrainingExportService().fileURL(forBlock: selectedBlock)
+    }
+
+    private func normalizeSelectedWeek() {
+        guard let firstWeek = visibleWeeks.first else { return }
+        if !visibleWeeks.contains(where: { $0.weekNumber == selectedWeekNumber }) {
+            selectedWeekNumber = firstWeek.weekNumber
+        }
+    }
+
+    static func visibleWeeks(from weeks: [TrainingWeek]) -> [TrainingWeek] {
+        weeks.sorted { $0.weekNumber < $1.weekNumber }
+    }
+
+    static func visibleWorkouts(for week: TrainingWeek?) -> [WorkoutPlan] {
+        week?.workoutPlans.sorted { lhs, rhs in
+            if lhs.sortOrder == rhs.sortOrder {
+                return lhs.dayNumber < rhs.dayNumber
+            }
+            return lhs.sortOrder < rhs.sortOrder
+        } ?? []
+    }
+
+    static func trainingDaySummary(for workouts: [WorkoutPlan]) -> String {
+        let count = workouts.count
+        return count == 1 ? "1 Trainingstag" : "\(count) Trainingstage"
     }
 }
 

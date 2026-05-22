@@ -11,7 +11,7 @@ struct TrainingModelTests {
         let week = TrainingWeek(weekNumber: 1, title: "Woche 1")
         let block = TrainingBlock(
             name: "Block A",
-            athleteName: "Christian",
+            athleteName: "Athlete",
             goal: "Strength",
             status: .active,
             createdAt: createdAt,
@@ -20,7 +20,7 @@ struct TrainingModelTests {
         week.block = block
 
         #expect(block.name == "Block A")
-        #expect(block.athleteName == "Christian")
+        #expect(block.athleteName == "Athlete")
         #expect(block.goal == "Strength")
         #expect(block.status == .active)
         #expect(block.createdAt == createdAt)
@@ -72,7 +72,7 @@ struct TrainingModelTests {
         let container = try makeInMemoryContainer()
         let context = ModelContext(container)
 
-        let block = TrainingBlock(name: "B1", goal: "Aufbau")
+        let block = TrainingBlock(name: "Strength Block", goal: "Aufbau")
         let week = TrainingWeek(weekNumber: 1, title: "Woche 1")
         let workoutPlan = WorkoutPlan(dayNumber: 1, title: "Tag 1", sortOrder: 1)
         let exercise = Exercise(name: "Trapbar Kreuzheben", category: .hinge)

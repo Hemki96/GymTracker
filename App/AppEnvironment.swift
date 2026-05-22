@@ -6,8 +6,6 @@ struct AppEnvironment {
 
     static func live() -> AppEnvironment {
         let modelContainer = GymTrackerModelContainer.make()
-        let context = ModelContext(modelContainer)
-        _ = try? SeedDataService().importChristianHemkerB1IfNeeded(into: context)
 
         return AppEnvironment(
             modelContainer: modelContainer,

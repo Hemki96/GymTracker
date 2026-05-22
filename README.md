@@ -27,7 +27,7 @@ Die Views sind fuer Darstellung, Navigation und SwiftUI-State verantwortlich. Fa
 
 1. `GymTrackerApp` erzeugt `AppEnvironment.live()`.
 2. `GymTrackerModelContainer.make()` stellt den SwiftData-Container bereit.
-3. `SeedDataService` validiert und importiert den B1-Trainingsplan einmalig ueber einen persistenten Marker.
+3. `SeedDataService` kann optionale Demo-/Seed-Trainingsplaene ueber einen persistenten Marker importieren; der Live-App-Start bleibt ohne vorinstallierten Plan.
 4. Views lesen Daten ueber `@Query` und delegieren Mutationen an Domain Services.
 5. Session-Abschluss aktualisiert Status, Dauer, Volumen, RIR, Schmerz und Warnungen.
 6. Exporte werden als Markdown pro Session und CSV pro Trainingsblock erzeugt.
@@ -40,7 +40,7 @@ Die Views sind fuer Darstellung, Navigation und SwiftUI-State verantwortlich. Fa
 - Leere Zustaende nutzen `ContentUnavailableView`.
 - Fehlerfaelle fuer Session-Start, Speichern, Abschluss und Export werden sichtbar behandelt oder getestet.
 - Aktive Session Recovery ist ueber `SessionStartService.activeSession()` und `startOrResumeSession(from:)` abgedeckt.
-- Seed-Daten werden vor Import auf 6 Wochen, 18 Sessions und 108 Uebungszeilen validiert.
+- Seed-Daten werden vor Import strukturell validiert, ohne eine feste Wochen-, Session- oder Uebungsanzahl vorauszusetzen.
 - Exportvalidierung deckt Markdown, CSV-Escaping, Dateinamen und fehlende Workout-Zuordnung ab.
 - Dark Mode und Dynamic Type stuetzen sich auf systemische SwiftUI-Farben, relative Fonts und flexible Grids.
 - Accessibility Labels sind fuer icon-only oder mehrdeutige Controls gesetzt; weitere UI-Audit-Tiefe sollte mit VoiceOver-Smoke-Tests erfolgen.

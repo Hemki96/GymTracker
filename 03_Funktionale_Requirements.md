@@ -2,7 +2,7 @@
 
 ## 1. Scope
 
-Die App soll eine iOS-Anwendung zum Planen, Durchführen und Auswerten von Gym-Sessions werden. Grundlage ist die Excel-Vorlage mit einem 6-Wochen-Plan und drei Trainingstagen pro Woche.
+Die App soll eine iOS-Anwendung zum Planen, Durchführen und Auswerten von Gym-Sessions werden. Sie unterstützt strukturierte Trainingsblöcke mit variabler Wochenanzahl, variabler Anzahl Trainingstage und optionalen Demo-/Seed-Daten.
 
 ## 2. Funktionale Anforderungen
 
@@ -266,7 +266,7 @@ Die App muss vollständig ohne Internet funktionieren.
 
 Der MVP gilt als fertig, wenn:
 
-- der 6-Wochen-Plan aus der Vorlage vollständig in der App abgebildet ist
+- ein strukturierter Trainingsblock mit variabler Wochen- und Tagesanzahl vollständig in der App abgebildet ist
 - Sessions gestartet und abgeschlossen werden können
 - Satzdaten gespeichert werden
 - Schmerz und RIR ausgewertet werden

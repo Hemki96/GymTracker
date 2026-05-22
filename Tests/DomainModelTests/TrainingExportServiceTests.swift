@@ -11,7 +11,7 @@ struct TrainingExportServiceTests {
 
         #expect(markdown.contains("# Unterkoerper A"))
         #expect(markdown.contains("- Datum: 2026-05-20"))
-        #expect(markdown.contains("- Block: Block B1"))
+        #expect(markdown.contains("- Block: Strength Block"))
         #expect(markdown.contains("| Dauer | 1 h 10 min |"))
         #expect(markdown.contains("| Volumen | 480 kg |"))
         #expect(markdown.contains("- Plan: 3 x 6-8"))
@@ -23,25 +23,25 @@ struct TrainingExportServiceTests {
 
     @Test
     func csvExportContainsWholeBlockWithEscapingPlanAndActualValues() {
-        let graph = makeTrainingGraph(blockName: "Block, B1")
+        let graph = makeTrainingGraph(blockName: "Block, Escaped")
         let csv = TrainingExportService().csv(for: graph.block)
         let lines = csv.components(separatedBy: "\n")
 
         #expect(lines.first == "Block,Woche,Tag,Workout,Plan-Datum,Uebung,Plan-Saetze,Plan-Wdh,Plan-Gewicht,Ziel-RIR,Schmerz-Ziel,Satz,Satz-Plan-Wdh,Satz-Plan-Gewicht,Session-Start,Session-Ende,Ist-Wdh,Ist-Gewicht-kg,Ist-RIR,Ist-Schmerz,Erledigt,Notizen")
-        #expect(lines.contains("\"Block, B1\",1,1,Unterkoerper A,2026-05-20,Trapbar Kreuzheben,3,6-8,80 kg,1-2,max 3/10,1,6-8,80 kg,2026-05-20 08:00,2026-05-20 09:10,6,80,2,1,ja,\"stabil | sauber, kontrolliert\""))
-        #expect(lines.contains("\"Block, B1\",1,1,Unterkoerper A,2026-05-20,Trapbar Kreuzheben,3,6-8,80 kg,1-2,max 3/10,2,6-8,80 kg,2026-05-20 08:00,2026-05-20 09:10,6,80,1,2,ja,stabil"))
+        #expect(lines.contains("\"Block, Escaped\",1,1,Unterkoerper A,2026-05-20,Trapbar Kreuzheben,3,6-8,80 kg,1-2,max 3/10,1,6-8,80 kg,2026-05-20 08:00,2026-05-20 09:10,6,80,2,1,ja,\"stabil | sauber, kontrolliert\""))
+        #expect(lines.contains("\"Block, Escaped\",1,1,Unterkoerper A,2026-05-20,Trapbar Kreuzheben,3,6-8,80 kg,1-2,max 3/10,2,6-8,80 kg,2026-05-20 08:00,2026-05-20 09:10,6,80,1,2,ja,stabil"))
     }
 
     @Test
     func exportFileNamesUseDateAndBlockName() throws {
-        let graph = makeTrainingGraph(blockName: "Block B1 Aufbau")
+        let graph = makeTrainingGraph(blockName: "Strength Block Aufbau")
         let service = TrainingExportService()
 
         let sessionURL = try service.fileURL(forSession: graph.session)
         let blockURL = try service.fileURL(forBlock: graph.block)
 
-        #expect(sessionURL.lastPathComponent == "2026-05-20_block-b1-aufbau_unterkoerper-a.md")
-        #expect(blockURL.lastPathComponent == "2026-05-01_block-b1-aufbau.csv")
+        #expect(sessionURL.lastPathComponent == "2026-05-20_strength-block-aufbau_unterkoerper-a.md")
+        #expect(blockURL.lastPathComponent == "2026-05-01_strength-block-aufbau.csv")
     }
 
     @Test
@@ -58,7 +58,7 @@ struct TrainingExportServiceTests {
         }
     }
 
-    private func makeTrainingGraph(blockName: String = "Block B1") -> (
+    private func makeTrainingGraph(blockName: String = "Strength Block") -> (
         block: TrainingBlock,
         session: SessionLog
     ) {

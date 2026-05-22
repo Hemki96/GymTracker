@@ -1,8 +1,8 @@
 # GymTracker iOS App – Dokumentationspaket
 
-Dieses Paket beschreibt eine iOS-App zum Tracken von Gym-Sessions auf Basis der hochgeladenen Excel-Vorlage **„Trainingsplan Christian Hemker B1.xlsx“**.
+Dieses Paket beschreibt eine allgemeine iOS-App zum Planen, Tracken und Auswerten strukturierter Gym-Sessions. Der bisherige Plan **„Trainingsplan Christian Hemker B1.xlsx“** dient nur noch als Demo-/Seed-Datensatz.
 
-Die Vorlage enthält:
+Der Demo-Datensatz enthält:
 
 - 6 Wochen Trainingsplanung
 - 3 Trainingstage pro Woche

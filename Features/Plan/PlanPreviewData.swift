@@ -19,7 +19,7 @@ enum PlanPreviewData {
         do {
             let container = try ModelContainer(for: schema, configurations: [configuration])
             let context = ModelContext(container)
-            _ = try SeedDataService().importChristianHemkerB1IfNeeded(into: context)
+            _ = try SeedDataService().importDemoPlanIfNeeded(into: context)
 
             let workouts = try context.fetch(FetchDescriptor<WorkoutPlan>())
             workouts.first { $0.week?.weekNumber == 1 && $0.dayNumber == 1 }?.status = .completed

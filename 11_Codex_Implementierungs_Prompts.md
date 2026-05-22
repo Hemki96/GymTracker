@@ -49,18 +49,18 @@ Anforderungen:
 ## Prompt 3: Seed-Daten aus Trainingsplan anlegen
 
 ```text
-Lege Seed-Daten für den Trainingsplan „Christian Hemker B1“ an.
+Lege generische Seed-Daten-Unterstützung an. Der Trainingsplan „Christian Hemker B1“ darf dabei nur ein Demo-Datensatz sein.
 
 Struktur:
-- 6 Wochen
-- 3 Trainingstage pro Woche
+- variable Wochenanzahl
+- variable Trainingstage pro Woche
 - Übungen und Planwerte aus der Dokumentation übernehmen
 - Felder: Übung, Cueing, Tempo, Sätze, Wiederholungen, Gewicht, Ziel RIR, Schmerz Ziel, Notizen
 
 Anforderungen:
 - SeedDataService implementieren
 - Daten nur einmal importieren
-- Validierung: 6 Wochen, 18 Sessions, 108 Übungszeilen
+- Validierung: strukturell vollständiger Trainingsblock ohne feste Wochen-, Session- oder Übungsanzahl
 - Unit Tests für den Import
 - Seed-Daten als JSON oder Swift Fixture, klar wartbar
 ```
@@ -78,8 +78,8 @@ Screens:
 - ExercisePlanRow
 
 Anforderungen:
-- Wochen 1 bis 6 anzeigen
-- pro Woche Tag 1 bis Tag 3 anzeigen
+- alle Wochen des aktiven Blocks anzeigen
+- pro Woche alle definierten Trainingstage anzeigen
 - Workout Details mit allen Übungen anzeigen
 - Cueing, Tempo, Sätze, Wiederholungen, Gewicht, Ziel-RIR und Schmerz-Ziel sichtbar machen
 - Status geplante/abgeschlossene Einheit anzeigen

@@ -48,7 +48,7 @@ Die App soll den Nutzer durch die geplante Session führen, Satzdaten erfassen u
 
 Der MVP soll folgende Kernfragen beantworten:
 
-1. Kann ein 6-Wochen-Plan aus der Excel-Struktur sauber in der App abgebildet werden?
+1. Kann ein strukturierter Trainingsblock mit variabler Wochen- und Tagesanzahl sauber in der App abgebildet werden?
 2. Kann eine Trainingseinheit im Gym schnell und zuverlässig getrackt werden?
 3. Kann der Nutzer nach der Session erkennen, ob Planvorgaben eingehalten wurden?
 4. Kann die App Fortschritt und Schmerzverlauf verständlich darstellen?

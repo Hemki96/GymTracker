@@ -59,11 +59,10 @@ Manuelle Explorationschecks
 | Test | Erwartung |
 |---|---|
 | Seed importiert Block | 1 Block |
-| Wochenanzahl | 6 Wochen |
-| Trainingstage | 18 |
-| Übungszeilen | 108 |
-| Übung Kniebeugen vorhanden | ja |
-| Schmerz-Ziel bei Kniebeugen | max 3/10 |
+| Strukturvalidierung | beliebige positive Wochen-, Tages- und Übungsanzahl |
+| Demo-Seed importiert | Demo-Block wird einmalig importiert |
+| Generischer Seed importierbar | nicht an Demo-Plan gebunden |
+| Planwerte bleiben erhalten | Übungen, Sätze, Wiederholungen, Gewicht, RIR, Schmerz, Notizen |
 
 ## 4. Repository Tests
 

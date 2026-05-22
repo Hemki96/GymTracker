@@ -4,7 +4,17 @@ import SwiftData
 struct SeedDataService {
     enum SeedError: Error, Equatable {
         case missingResource(String)
-        case invalidFixture(expectedWeeks: Int, actualWeeks: Int, expectedSessions: Int, actualSessions: Int, expectedExerciseRows: Int, actualExerciseRows: Int)
+        case invalidFixture(String)
+    }
+
+    struct SeedPlanDescriptor: Equatable {
+        let markerKey: String
+        let resourceName: String
+
+        static let bundledDemoPlan = SeedPlanDescriptor(
+            markerKey: "seed.trainingPlan.christianHemkerB1.v1",
+            resourceName: "seed_christian_b1_plan"
+        )
     }
 
     struct ImportResult: Equatable {
@@ -14,21 +24,26 @@ struct SeedDataService {
         let exerciseRows: Int
     }
 
-    private static let christianHemkerB1MarkerKey = "seed.trainingPlan.christianHemkerB1.v1"
-    private static let christianHemkerB1ResourceName = "seed_christian_b1_plan"
-
-    func importChristianHemkerB1IfNeeded(
+    func importDemoPlanIfNeeded(
         into context: ModelContext,
         bundle: Bundle = .main
     ) throws -> ImportResult {
-        let markerKey = Self.christianHemkerB1MarkerKey
+        try importSeedPlanIfNeeded(.bundledDemoPlan, into: context, bundle: bundle)
+    }
+
+    func importSeedPlanIfNeeded(
+        _ descriptor: SeedPlanDescriptor,
+        into context: ModelContext,
+        bundle: Bundle = .main
+    ) throws -> ImportResult {
+        let markerKey = descriptor.markerKey
         let existingMarker = try context.fetch(
             FetchDescriptor<PersistentTrainingMarker>(
                 predicate: #Predicate { $0.key == markerKey }
             )
         ).first
 
-        let fixture = try loadChristianHemkerB1Fixture(from: bundle)
+        let fixture = try loadSeedFixture(resourceName: descriptor.resourceName, from: bundle)
         let summary = try validate(fixture)
 
         guard existingMarker == nil else {
@@ -98,7 +113,7 @@ struct SeedDataService {
         for exercise in exercisesByName.values {
             context.insert(exercise)
         }
-        context.insert(PersistentTrainingMarker(key: Self.christianHemkerB1MarkerKey))
+        context.insert(PersistentTrainingMarker(key: markerKey))
 
         try context.save()
 
@@ -110,32 +125,72 @@ struct SeedDataService {
         )
     }
 
-    func loadChristianHemkerB1Fixture(from bundle: Bundle = .main) throws -> ChristianHemkerB1SeedFixture {
-        guard let url = bundle.url(forResource: Self.christianHemkerB1ResourceName, withExtension: "json") else {
-            throw SeedError.missingResource("\(Self.christianHemkerB1ResourceName).json")
+    func loadDemoFixture(from bundle: Bundle = .main) throws -> SeedTrainingFixture {
+        try loadSeedFixture(resourceName: SeedPlanDescriptor.bundledDemoPlan.resourceName, from: bundle)
+    }
+
+    func loadSeedFixture(resourceName: String, from bundle: Bundle = .main) throws -> SeedTrainingFixture {
+        guard let url = bundle.url(forResource: resourceName, withExtension: "json") else {
+            throw SeedError.missingResource("\(resourceName).json")
         }
 
         let data = try Data(contentsOf: url)
-        return try JSONDecoder().decode(ChristianHemkerB1SeedFixture.self, from: data)
+        return try JSONDecoder().decode(SeedTrainingFixture.self, from: data)
     }
 
     @discardableResult
-    func validate(_ fixture: ChristianHemkerB1SeedFixture) throws -> ImportResult {
+    func validate(_ fixture: SeedTrainingFixture) throws -> ImportResult {
+        guard !fixture.trainingBlock.name.trimmedNonEmpty.isNilOrEmpty else {
+            throw SeedError.invalidFixture("Training block name is required.")
+        }
+        guard !fixture.trainingBlock.weeks.isEmpty else {
+            throw SeedError.invalidFixture("At least one training week is required.")
+        }
+
         let weeks = fixture.trainingBlock.weeks.count
         let sessions = fixture.trainingBlock.weeks.reduce(0) { $0 + $1.days.count }
         let exerciseRows = fixture.trainingBlock.weeks.reduce(0) { weekTotal, week in
             weekTotal + week.days.reduce(0) { $0 + $1.exercises.count }
         }
 
-        guard weeks == 6, sessions == 18, exerciseRows == 108 else {
-            throw SeedError.invalidFixture(
-                expectedWeeks: 6,
-                actualWeeks: weeks,
-                expectedSessions: 18,
-                actualSessions: sessions,
-                expectedExerciseRows: 108,
-                actualExerciseRows: exerciseRows
-            )
+        guard sessions > 0 else {
+            throw SeedError.invalidFixture("At least one workout day is required.")
+        }
+        guard exerciseRows > 0 else {
+            throw SeedError.invalidFixture("At least one planned exercise is required.")
+        }
+
+        for week in fixture.trainingBlock.weeks {
+            guard week.weekNumber > 0 else {
+                throw SeedError.invalidFixture("Week numbers must be positive.")
+            }
+            guard !week.days.isEmpty else {
+                throw SeedError.invalidFixture("Week \(week.weekNumber) must contain at least one workout day.")
+            }
+
+            for day in week.days {
+                guard day.dayNumber > 0 else {
+                    throw SeedError.invalidFixture("Day numbers must be positive.")
+                }
+                guard !day.exercises.isEmpty else {
+                    throw SeedError.invalidFixture("Week \(week.weekNumber), day \(day.dayNumber) must contain at least one exercise.")
+                }
+
+                for exercise in day.exercises {
+                    guard exercise.sortOrder > 0 else {
+                        throw SeedError.invalidFixture("Exercise sort order must be positive.")
+                    }
+                    guard !exercise.name.trimmedNonEmpty.isNilOrEmpty else {
+                        throw SeedError.invalidFixture("Exercise name is required.")
+                    }
+                    guard !exercise.sets.trimmedNonEmpty.isNilOrEmpty else {
+                        throw SeedError.invalidFixture("Sets prescription is required.")
+                    }
+                    guard !exercise.reps.trimmedNonEmpty.isNilOrEmpty else {
+                        throw SeedError.invalidFixture("Reps prescription is required.")
+                    }
+                }
+            }
         }
 
         return ImportResult(didImport: false, weeks: weeks, sessions: sessions, exerciseRows: exerciseRows)
@@ -145,44 +200,33 @@ struct SeedDataService {
         value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : value
     }
 
-    private func category(for exerciseName: String) -> ExerciseCategory {
-        switch exerciseName {
-        case "Kniebeugen":
-            return .squat
-        case "Kreuzheben mit Trapbar", "Hyperextensions mit Glute Fokus":
-            return .hinge
-        case "Latziehen", "Rudern mit V-Griff", "Klimmzüge (mit Zusatzgewicht)", "Überzüge mit Kurzhantel":
-            return .pull
-        case "Kurzhantel über Kopf drücken, stehend":
-            return .push
-        case "Ab Wheel", "Pallof Rotations", "Hollow Body Hold", "Superman Hold":
-            return .core
-        case "Bulgarian Split Squats", "Beinbeuger", "Beinstrecker":
-            return .lowerBody
-        case "Lu Raises":
-            return .upperBody
-        default:
-            return .unknown
-        }
+    private func category(for _: String) -> ExerciseCategory {
+        .unknown
     }
 
-    private func isUnilateral(_ exerciseName: String) -> Bool {
-        exerciseName == "Bulgarian Split Squats"
+    private func isUnilateral(_: String) -> Bool {
+        false
     }
 
-    private func usesBodyweight(_ exerciseName: String) -> Bool {
-        ["Ab Wheel", "Hollow Body Hold", "Superman Hold", "Klimmzüge (mit Zusatzgewicht)"].contains(exerciseName)
+    private func usesBodyweight(_: String) -> Bool {
+        false
     }
 }
 
-struct ChristianHemkerB1SeedFixture: Decodable {
+private extension Optional where Wrapped == String {
+    var isNilOrEmpty: Bool {
+        self?.isEmpty ?? true
+    }
+}
+
+struct SeedTrainingFixture: Decodable {
     let source: String
     let trainingBlock: SeedTrainingBlock
 }
 
 struct SeedTrainingBlock: Decodable {
     let name: String
-    let athleteName: String
+    let athleteName: String?
     let goal: String
     let weeks: [SeedTrainingWeek]
 }

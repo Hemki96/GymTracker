@@ -6,10 +6,10 @@ import Testing
 @Suite(.serialized)
 struct SeedDataServiceTests {
     @Test
-    func christianHemkerB1FixtureHasExpectedShape() throws {
+    func demoFixtureHasExpectedShape() throws {
         let service = SeedDataService()
 
-        let fixture = try service.loadChristianHemkerB1Fixture()
+        let fixture = try service.loadDemoFixture()
         let result = try service.validate(fixture)
 
         #expect(fixture.source == "Trainingsplan Christian Hemker B1.xlsx")
@@ -26,8 +26,8 @@ struct SeedDataServiceTests {
         let context = ModelContext(container)
         let service = SeedDataService()
 
-        let firstImport = try service.importChristianHemkerB1IfNeeded(into: context)
-        let secondImport = try service.importChristianHemkerB1IfNeeded(into: context)
+        let firstImport = try service.importDemoPlanIfNeeded(into: context)
+        let secondImport = try service.importDemoPlanIfNeeded(into: context)
 
         #expect(firstImport.didImport)
         #expect(!secondImport.didImport)
@@ -55,7 +55,7 @@ struct SeedDataServiceTests {
         let container = try makeInMemoryContainer()
         let context = ModelContext(container)
 
-        _ = try SeedDataService().importChristianHemkerB1IfNeeded(into: context)
+        _ = try SeedDataService().importDemoPlanIfNeeded(into: context)
 
         let block = try #require(try context.fetch(FetchDescriptor<TrainingBlock>()).first)
         let weekOne = try #require(block.weeks.first { $0.weekNumber == 1 })
@@ -83,7 +83,7 @@ struct SeedDataServiceTests {
 
     @Test
     func validationRejectsIncompleteFixture() throws {
-        let invalidFixture = ChristianHemkerB1SeedFixture(
+        let invalidFixture = SeedTrainingFixture(
             source: "invalid.json",
             trainingBlock: SeedTrainingBlock(
                 name: "Invalid",
@@ -109,17 +109,54 @@ struct SeedDataServiceTests {
             _ = try SeedDataService().validate(invalidFixture)
             Issue.record("Expected incomplete seed fixture to fail validation")
         } catch let error as SeedDataService.SeedError {
-            #expect(error == .invalidFixture(
-                expectedWeeks: 6,
-                actualWeeks: 1,
-                expectedSessions: 18,
-                actualSessions: 1,
-                expectedExerciseRows: 108,
-                actualExerciseRows: 0
-            ))
+            #expect(error == .invalidFixture("At least one planned exercise is required."))
         } catch {
             Issue.record("Unexpected error: \(error)")
         }
+    }
+
+    @Test
+    func validationAcceptsAnyWellFormedTrainingBlockShape() throws {
+        let fixture = SeedTrainingFixture(
+            source: "generic-demo.json",
+            trainingBlock: SeedTrainingBlock(
+                name: "Generic Strength Block",
+                athleteName: nil,
+                goal: "General strength",
+                weeks: [
+                    SeedTrainingWeek(
+                        weekNumber: 7,
+                        title: "Accumulation",
+                        days: [
+                            SeedTrainingDay(
+                                dayNumber: 4,
+                                title: "Upper Body",
+                                exercises: [
+                                    SeedPlannedExercise(
+                                        sortOrder: 1,
+                                        name: "Incline Press",
+                                        cueing: "",
+                                        tempo: "",
+                                        sets: "2",
+                                        reps: "8-12",
+                                        plannedWeight: "",
+                                        targetRIR: "",
+                                        painTarget: "",
+                                        notes: ""
+                                    )
+                                ]
+                            )
+                        ]
+                    )
+                ]
+            )
+        )
+
+        let result = try SeedDataService().validate(fixture)
+
+        #expect(result.weeks == 1)
+        #expect(result.sessions == 1)
+        #expect(result.exerciseRows == 1)
     }
 
     private func makeInMemoryContainer() throws -> ModelContainer {
