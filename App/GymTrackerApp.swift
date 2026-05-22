@@ -23,6 +23,7 @@ struct GymTrackerApp: App {
                         Label("Analyse", systemImage: "chart.xyaxis.line")
                     }
             }
+            .tabViewStyle(.sidebarAdaptable)
         }
         .modelContainer(environment.modelContainer)
     }

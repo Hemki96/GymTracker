@@ -28,13 +28,21 @@ struct SeedDataService {
         into context: ModelContext,
         bundle: Bundle = .main
     ) throws -> ImportResult {
-        try importSeedPlanIfNeeded(.bundledDemoPlan, into: context, bundle: bundle)
+        try importSeedPlanIfNeeded(
+            .bundledDemoPlan,
+            into: context,
+            bundle: bundle,
+            isDemoPlan: true,
+            demoSourceIdentifier: DemoDataService.bundledDemoPlanIdentifier
+        )
     }
 
     func importSeedPlanIfNeeded(
         _ descriptor: SeedPlanDescriptor,
         into context: ModelContext,
-        bundle: Bundle = .main
+        bundle: Bundle = .main,
+        isDemoPlan: Bool = false,
+        demoSourceIdentifier: String? = nil
     ) throws -> ImportResult {
         let markerKey = descriptor.markerKey
         let existingMarker = try context.fetch(
@@ -59,7 +67,9 @@ struct SeedDataService {
         let block = TrainingBlock(
             name: blockFixture.name,
             athleteName: blockFixture.athleteName,
-            goal: blockFixture.goal
+            goal: blockFixture.goal,
+            isDemoPlan: isDemoPlan,
+            demoSourceIdentifier: demoSourceIdentifier
         )
 
         var exercisesByName: [String: Exercise] = [:]

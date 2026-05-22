@@ -50,10 +50,7 @@ struct WorkoutDayCard: View {
             .foregroundStyle(.secondary)
         }
         .padding(AppTheme.Spacing.large)
-        .background {
-            RoundedRectangle(cornerRadius: 8)
-                .fill(Color(.secondarySystemGroupedBackground))
-        }
+        .appCardSurface()
     }
 }
 
@@ -112,5 +109,5 @@ private extension WorkoutStatus {
 
     WorkoutDayCard(workout: workout)
         .padding()
-        .background(Color(.systemGroupedBackground))
+        .appGroupedBackground()
 }

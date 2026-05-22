@@ -10,7 +10,7 @@ GymTracker ist als schlanke SwiftUI-App mit klarer Trennung zwischen UI, Domain 
 App/
   App-Lifecycle, SwiftData-Container, Seed-Import
 Data/
-  SwiftData-Modelle, Seed-Daten, Repository-Protokolle
+  SwiftData-Modelle, Seed-/Demo-Daten, Repository-Protokolle
 Domain/
   Status-Enums, Summary-Modelle, Services fuer Session-, Analyse- und Exportlogik
 Features/
@@ -21,13 +21,13 @@ Tests/
   Swift Testing Suites fuer Domain Services, SwiftData-Modelle, Seeds und ViewModels
 ```
 
-Die Views sind fuer Darstellung, Navigation und SwiftUI-State verantwortlich. Fachlogik liegt in Services wie `SessionStartService`, `SessionCompletionService`, `SessionEditingService`, `ChartDataMapper`, `VolumeCalculator`, `PainThresholdEvaluator`, `RIRAnalyzer`, `TrainingExportService` und `SeedDataService`.
+Die Views sind fuer Darstellung, Navigation und SwiftUI-State verantwortlich. Fachlogik liegt in Services wie `SessionStartService`, `SessionCompletionService`, `SessionEditingService`, `ChartDataMapper`, `VolumeCalculator`, `PainThresholdEvaluator`, `RIRAnalyzer`, `TrainingExportService`, `SeedDataService` und `DemoDataService`.
 
 ## Datenfluss
 
 1. `GymTrackerApp` erzeugt `AppEnvironment.live()`.
 2. `GymTrackerModelContainer.make()` stellt den SwiftData-Container bereit.
-3. `SeedDataService` kann optionale Demo-/Seed-Trainingsplaene ueber einen persistenten Marker importieren; der Live-App-Start bleibt ohne vorinstallierten Plan.
+3. Der Live-App-Start bleibt ohne vorinstallierten Plan. Der Beispielplan wird nur ueber eine Nutzeraktion mit `DemoDataService` geladen.
 4. Views lesen Daten ueber `@Query` und delegieren Mutationen an Domain Services.
 5. Session-Abschluss aktualisiert Status, Dauer, Volumen, RIR, Schmerz und Warnungen.
 6. Exporte werden als Markdown pro Session und CSV pro Trainingsblock erzeugt.
@@ -41,6 +41,7 @@ Die Views sind fuer Darstellung, Navigation und SwiftUI-State verantwortlich. Fa
 - Fehlerfaelle fuer Session-Start, Speichern, Abschluss und Export werden sichtbar behandelt oder getestet.
 - Aktive Session Recovery ist ueber `SessionStartService.activeSession()` und `startOrResumeSession(from:)` abgedeckt.
 - Seed-Daten werden vor Import strukturell validiert, ohne eine feste Wochen-, Session- oder Uebungsanzahl vorauszusetzen.
+- Demo-Daten sind ueber `TrainingPlan.isDemoPlan` und `TrainingPlan.demoSourceIdentifier` markiert; Previews und generische Tests nutzen eigene Fixtures.
 - Exportvalidierung deckt Markdown, CSV-Escaping, Dateinamen und fehlende Workout-Zuordnung ab.
 - Dark Mode und Dynamic Type stuetzen sich auf systemische SwiftUI-Farben, relative Fonts und flexible Grids.
 - Accessibility Labels sind fuer icon-only oder mehrdeutige Controls gesetzt; weitere UI-Audit-Tiefe sollte mit VoiceOver-Smoke-Tests erfolgen.
@@ -99,3 +100,5 @@ Die Tests nutzen Swift Testing. SwiftData-nahe Suites sind serialisiert, damit I
 - Exporte werden aktuell in ein temporaeres App-Verzeichnis geschrieben und per ShareLink geteilt.
 - HealthKit, Cloud-Sync und Multi-User-Szenarien sind nicht implementiert.
 - Seed-Import ist bewusst idempotent, aber nicht als Migrationssystem fuer spaetere Planversionen ausgebaut.
+
+Weitere Details: [docs/demo-data-strategy.md](docs/demo-data-strategy.md).

@@ -35,7 +35,7 @@ struct SessionSummaryView: View {
             }
             .padding(AppTheme.Spacing.screen)
         }
-        .background(Color(.systemGroupedBackground))
+        .appGroupedBackground()
         .navigationTitle("Session-Zusammenfassung")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -67,10 +67,7 @@ struct SessionSummaryView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(AppTheme.Spacing.large)
-        .background {
-            RoundedRectangle(cornerRadius: 8)
-                .fill(Color(.secondarySystemGroupedBackground))
-        }
+        .appCardSurface()
     }
 
     private var metricGrid: some View {
@@ -101,10 +98,7 @@ struct SessionSummaryView: View {
         }
         .frame(maxWidth: .infinity, minHeight: 112, alignment: .leading)
         .padding(AppTheme.Spacing.large)
-        .background {
-            RoundedRectangle(cornerRadius: 8)
-                .fill(Color(.secondarySystemGroupedBackground))
-        }
+        .appCardSurface()
     }
 
     private var noteSection: some View {
@@ -118,10 +112,7 @@ struct SessionSummaryView: View {
                 .frame(minHeight: 96)
         }
         .padding(AppTheme.Spacing.large)
-        .background {
-            RoundedRectangle(cornerRadius: 8)
-                .fill(Color(.secondarySystemGroupedBackground))
-        }
+        .appCardSurface()
     }
 
     @ViewBuilder
@@ -132,10 +123,7 @@ struct SessionSummaryView: View {
                 .foregroundStyle(.green)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(AppTheme.Spacing.large)
-                .background {
-                    RoundedRectangle(cornerRadius: 8)
-                        .fill(Color.green.opacity(0.12))
-                }
+                .appTintedCardSurface(.green)
         } else {
             VStack(alignment: .leading, spacing: 10) {
                 Label("Warnungen", systemImage: "exclamationmark.triangle.fill")
@@ -149,10 +137,7 @@ struct SessionSummaryView: View {
                 }
             }
             .padding(AppTheme.Spacing.large)
-            .background {
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(Color.orange.opacity(0.12))
-            }
+            .appTintedCardSurface(.orange)
         }
     }
 
@@ -234,10 +219,7 @@ private struct ExerciseSummaryRow: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(AppTheme.Spacing.large)
-        .background {
-            RoundedRectangle(cornerRadius: 8)
-                .fill(Color(.secondarySystemGroupedBackground))
-        }
+        .appCardSurface()
     }
 }
 

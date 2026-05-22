@@ -54,7 +54,7 @@ struct AnalyticsView: View {
                         }
                         .padding(AppTheme.Spacing.screen)
                     }
-                    .background(Color(.systemGroupedBackground))
+                    .appGroupedBackground()
                 }
             }
             .navigationTitle("Analyse")
@@ -264,10 +264,7 @@ private struct AnalyticsChartCard<Content: View>: View {
             }
         }
         .padding(AppTheme.Spacing.large)
-        .background {
-            RoundedRectangle(cornerRadius: 8)
-                .fill(Color(.secondarySystemGroupedBackground))
-        }
+        .appCardSurface()
     }
 }
 

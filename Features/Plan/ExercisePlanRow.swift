@@ -11,10 +11,7 @@ struct ExercisePlanRow: View {
                     .font(.subheadline.weight(.bold))
                     .foregroundStyle(.secondary)
                     .frame(width: 28, height: 28)
-                    .background {
-                        Circle()
-                            .fill(Color(.tertiarySystemGroupedBackground))
-                    }
+                    .appCircularControlSurface()
 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(plannedExercise.exercise?.name ?? "Unbekannte Übung")
@@ -49,10 +46,7 @@ struct ExercisePlanRow: View {
             }
         }
         .padding(AppTheme.Spacing.large)
-        .background {
-            RoundedRectangle(cornerRadius: 8)
-                .fill(Color(.secondarySystemGroupedBackground))
-        }
+        .appCardSurface()
     }
 }
 
@@ -74,10 +68,7 @@ private struct PlanValuePill: View {
         .frame(maxWidth: .infinity, minHeight: 48, alignment: .leading)
         .padding(.horizontal, 10)
         .padding(.vertical, 8)
-        .background {
-            RoundedRectangle(cornerRadius: 8)
-                .fill(Color(.tertiarySystemGroupedBackground))
-        }
+        .appControlSurface()
     }
 
     private var displayValue: String {
@@ -96,5 +87,5 @@ private struct PlanValuePill: View {
 
     ExercisePlanRow(plannedExercise: exercise)
         .padding()
-        .background(Color(.systemGroupedBackground))
+        .appGroupedBackground()
 }

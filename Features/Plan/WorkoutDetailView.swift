@@ -41,10 +41,7 @@ struct WorkoutDetailView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(AppTheme.Spacing.large)
-                .background {
-                    RoundedRectangle(cornerRadius: 8)
-                        .fill(Color(.secondarySystemGroupedBackground))
-                }
+                .appCardSurface()
 
                 ForEach(exercises, id: \.id) { exercise in
                     ExercisePlanRow(plannedExercise: exercise)
@@ -52,7 +49,7 @@ struct WorkoutDetailView: View {
             }
             .padding(AppTheme.Spacing.screen)
         }
-        .background(Color(.systemGroupedBackground))
+        .appGroupedBackground()
         .navigationTitle("Workout")
         .navigationBarTitleDisplayMode(.inline)
         .safeAreaInset(edge: .bottom) {
@@ -65,7 +62,7 @@ struct WorkoutDetailView: View {
             .buttonStyle(.borderedProminent)
             .controlSize(.large)
             .padding(AppTheme.Spacing.large)
-            .background(.regularMaterial)
+            .appFloatingBarSurface()
         }
         .navigationDestination(isPresented: activeSessionBinding) {
             if let activeSession {

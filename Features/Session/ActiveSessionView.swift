@@ -53,7 +53,7 @@ struct ActiveSessionView: View {
             }
             .padding(AppTheme.Spacing.screen)
         }
-        .background(Color(.systemGroupedBackground))
+        .appGroupedBackground()
         .navigationTitle("Aktive Session")
         .navigationBarTitleDisplayMode(.inline)
         .safeAreaInset(edge: .bottom) {
@@ -66,7 +66,7 @@ struct ActiveSessionView: View {
             .buttonStyle(.borderedProminent)
             .controlSize(.large)
             .padding(AppTheme.Spacing.large)
-            .background(.regularMaterial)
+            .appFloatingBarSurface()
         }
         .navigationDestination(isPresented: completedSessionBinding) {
             if let completedSession {
@@ -134,10 +134,7 @@ struct ActiveSessionView: View {
             .controlSize(.large)
         }
         .padding(AppTheme.Spacing.large)
-        .background {
-            RoundedRectangle(cornerRadius: 8)
-                .fill(Color(.secondarySystemGroupedBackground))
-        }
+        .appCardSurface()
     }
 
     private func moveSelection(by offset: Int) {
@@ -347,10 +344,7 @@ struct SetLogRow: View {
             }
         }
         .padding(AppTheme.Spacing.large)
-        .background {
-            RoundedRectangle(cornerRadius: 8)
-                .fill(setLog.isCompleted ? Color.green.opacity(0.12) : Color(.secondarySystemGroupedBackground))
-        }
+        .appSetLogSurface(isCompleted: setLog.isCompleted)
         .alert("Satz konnte nicht gespeichert werden", isPresented: saveErrorBinding) {
             Button("OK", role: .cancel) {
                 saveError = nil
@@ -387,10 +381,7 @@ struct SetLogRow: View {
             }
             .frame(minHeight: 50)
             .padding(.horizontal, 12)
-            .background {
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(Color(.tertiarySystemGroupedBackground))
-            }
+            .appControlSurface()
         }
     }
 
@@ -499,10 +490,7 @@ struct RIRPicker: View {
                 }
                 .frame(minHeight: 50)
                 .padding(.horizontal, 12)
-                .background {
-                    RoundedRectangle(cornerRadius: 8)
-                        .fill(Color(.tertiarySystemGroupedBackground))
-                }
+                .appControlSurface()
             }
             .buttonStyle(.plain)
         }
@@ -547,10 +535,7 @@ struct PainPicker: View {
                 }
                 .frame(minHeight: 50)
                 .padding(.horizontal, 12)
-                .background {
-                    RoundedRectangle(cornerRadius: 8)
-                        .fill(painColor.opacity(0.16))
-                }
+                .appPainControlSurface(painColor)
             }
             .buttonStyle(.plain)
         }
@@ -630,10 +615,7 @@ struct ExerciseHeaderCard: View {
             }
         }
         .padding(AppTheme.Spacing.large)
-        .background {
-            RoundedRectangle(cornerRadius: 8)
-                .fill(Color(.secondarySystemGroupedBackground))
-        }
+        .appCardSurface()
     }
 
     private func planValue(title: String, value: String?) -> some View {
@@ -650,10 +632,7 @@ struct ExerciseHeaderCard: View {
         .frame(maxWidth: .infinity, minHeight: 52, alignment: .leading)
         .padding(.horizontal, 10)
         .padding(.vertical, 8)
-        .background {
-            RoundedRectangle(cornerRadius: 8)
-                .fill(Color(.tertiarySystemGroupedBackground))
-        }
+        .appControlSurface()
     }
 
     private func displayValue(_ value: String?) -> String {

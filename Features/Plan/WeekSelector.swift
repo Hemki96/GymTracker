@@ -7,31 +7,38 @@ struct WeekSelector: View {
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 8) {
-                ForEach(weeks, id: \.id) { week in
-                    Button {
-                        selectedWeekNumber = week.weekNumber
-                    } label: {
-                        VStack(spacing: 4) {
-                            Text("Woche")
-                                .font(.caption2.weight(.medium))
-                            Text("\(week.weekNumber)")
-                                .font(.headline.weight(.semibold))
-                        }
-                        .frame(width: 72, height: 56)
-                    }
-                    .buttonStyle(.plain)
-                    .foregroundStyle(selectedWeekNumber == week.weekNumber ? .white : .primary)
-                    .background {
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(selectedWeekNumber == week.weekNumber ? Color.accentColor : Color(.secondarySystemGroupedBackground))
-                    }
-                    .accessibilityLabel("Woche \(week.weekNumber)")
-                    .accessibilityValue(selectedWeekNumber == week.weekNumber ? "Ausgewählt" : "")
+            if #available(iOS 26.0, macOS 26.0, *) {
+                GlassEffectContainer(spacing: 8) {
+                    weekButtons
                 }
+            } else {
+                weekButtons
             }
-            .padding(.horizontal, AppTheme.Spacing.screen)
         }
+    }
+
+    private var weekButtons: some View {
+        HStack(spacing: 8) {
+            ForEach(weeks, id: \.id) { week in
+                Button {
+                    selectedWeekNumber = week.weekNumber
+                } label: {
+                    VStack(spacing: 4) {
+                        Text("Woche")
+                            .font(.caption2.weight(.medium))
+                        Text("\(week.weekNumber)")
+                            .font(.headline.weight(.semibold))
+                    }
+                    .frame(width: 72, height: 56)
+                }
+                .buttonStyle(.plain)
+                .foregroundStyle(selectedWeekNumber == week.weekNumber ? .white : .primary)
+                .appWeekSelectionSurface(isSelected: selectedWeekNumber == week.weekNumber)
+                .accessibilityLabel("Woche \(week.weekNumber)")
+                .accessibilityValue(selectedWeekNumber == week.weekNumber ? "Ausgewählt" : "")
+            }
+        }
+        .padding(.horizontal, AppTheme.Spacing.screen)
     }
 }
 
@@ -41,5 +48,19 @@ struct WeekSelector: View {
 
     WeekSelector(weeks: weeks, selectedWeekNumber: .constant(1))
         .padding(.vertical)
-        .background(Color(.systemGroupedBackground))
+        .appGroupedBackground()
+}
+
+private extension View {
+    @ViewBuilder
+    func appWeekSelectionSurface(isSelected: Bool) -> some View {
+        if isSelected {
+            background {
+                RoundedRectangle(cornerRadius: 8, style: .continuous)
+                    .fill(Color.accentColor)
+            }
+        } else {
+            appControlSurface(fallbackColor: Color(.secondarySystemGroupedBackground))
+        }
+    }
 }

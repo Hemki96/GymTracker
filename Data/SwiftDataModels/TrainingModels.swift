@@ -10,6 +10,8 @@ final class TrainingBlock {
     var startDate: Date?
     var endDate: Date?
     var statusRaw: String
+    var isDemoPlan: Bool
+    var demoSourceIdentifier: String?
     var createdAt: Date
     var updatedAt: Date
 
@@ -29,6 +31,8 @@ final class TrainingBlock {
         startDate: Date? = nil,
         endDate: Date? = nil,
         status: BlockStatus = .planned,
+        isDemoPlan: Bool = false,
+        demoSourceIdentifier: String? = nil,
         createdAt: Date = .now,
         updatedAt: Date = .now,
         weeks: [TrainingWeek] = []
@@ -40,6 +44,8 @@ final class TrainingBlock {
         self.startDate = startDate
         self.endDate = endDate
         self.statusRaw = status.rawValue
+        self.isDemoPlan = isDemoPlan
+        self.demoSourceIdentifier = demoSourceIdentifier
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.weeks = weeks

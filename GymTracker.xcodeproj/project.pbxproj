@@ -21,7 +21,9 @@
 		9A0000010000000000000012 /* TrainingModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0000010000000000000112 /* TrainingModels.swift */; };
 		9A0000010000000000000013 /* TrainingModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0000010000000000000113 /* TrainingModelTests.swift */; };
 		9A0000010000000000000014 /* SeedDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0000010000000000000114 /* SeedDataService.swift */; };
+		9A0000010000000000000030 /* DemoDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0000010000000000000130 /* DemoDataService.swift */; };
 		9A0000010000000000000015 /* SeedDataServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0000010000000000000115 /* SeedDataServiceTests.swift */; };
+		9A000001000000000000002F /* DemoDataServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A000001000000000000012F /* DemoDataServiceTests.swift */; };
 		9A0000010000000000000016 /* seed_christian_b1_plan.json in Resources */ = {isa = PBXBuildFile; fileRef = 9A0000010000000000000116 /* seed_christian_b1_plan.json */; };
 		9A0000010000000000000017 /* PlanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0000010000000000000117 /* PlanView.swift */; };
 		9A0000010000000000000018 /* WeekSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0000010000000000000118 /* WeekSelector.swift */; };
@@ -74,7 +76,9 @@
 		9A0000010000000000000112 /* TrainingModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingModels.swift; sourceTree = "<group>"; };
 		9A0000010000000000000113 /* TrainingModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingModelTests.swift; sourceTree = "<group>"; };
 		9A0000010000000000000114 /* SeedDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedDataService.swift; sourceTree = "<group>"; };
+		9A0000010000000000000130 /* DemoDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoDataService.swift; sourceTree = "<group>"; };
 		9A0000010000000000000115 /* SeedDataServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedDataServiceTests.swift; sourceTree = "<group>"; };
+		9A000001000000000000012F /* DemoDataServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoDataServiceTests.swift; sourceTree = "<group>"; };
 		9A0000010000000000000116 /* seed_christian_b1_plan.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = seed_christian_b1_plan.json; sourceTree = "<group>"; };
 		9A0000010000000000000117 /* PlanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanView.swift; sourceTree = "<group>"; };
 		9A0000010000000000000118 /* WeekSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekSelector.swift; sourceTree = "<group>"; };
@@ -267,6 +271,7 @@
 			isa = PBXGroup;
 			children = (
 				9A0000010000000000000114 /* SeedDataService.swift */,
+				9A0000010000000000000130 /* DemoDataService.swift */,
 				9A0000010000000000000116 /* seed_christian_b1_plan.json */,
 			);
 			path = SeedData;
@@ -335,6 +340,7 @@
 			isa = PBXGroup;
 			children = (
 				9A0000010000000000000115 /* SeedDataServiceTests.swift */,
+				9A000001000000000000012F /* DemoDataServiceTests.swift */,
 			);
 			path = SeedDataTests;
 			sourceTree = "<group>";
@@ -498,6 +504,7 @@
 				9A0000010000000000000011 /* TrainingStatus.swift in Sources */,
 				9A0000010000000000000012 /* TrainingModels.swift in Sources */,
 				9A0000010000000000000014 /* SeedDataService.swift in Sources */,
+				9A0000010000000000000030 /* DemoDataService.swift in Sources */,
 				9A0000010000000000000017 /* PlanView.swift in Sources */,
 				9A0000010000000000000018 /* WeekSelector.swift in Sources */,
 				9A0000010000000000000019 /* WorkoutDayCard.swift in Sources */,
@@ -525,6 +532,7 @@
 				9A0000010000000000000010 /* DashboardViewModelTests.swift in Sources */,
 				9A0000010000000000000013 /* TrainingModelTests.swift in Sources */,
 				9A0000010000000000000015 /* SeedDataServiceTests.swift in Sources */,
+				9A000001000000000000002F /* DemoDataServiceTests.swift in Sources */,
 				9A000001000000000000001E /* SessionStartServiceTests.swift in Sources */,
 				9A0000010000000000000029 /* SessionCompletionServiceTests.swift in Sources */,
 				9A0000010000000000000023 /* VolumeCalculatorTests.swift in Sources */,

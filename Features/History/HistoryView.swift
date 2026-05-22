@@ -60,7 +60,7 @@ struct SessionHistoryDetailView: View {
             }
             .padding(AppTheme.Spacing.screen)
         }
-        .background(Color(.systemGroupedBackground))
+        .appGroupedBackground()
         .navigationTitle("Sessiondetails")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -88,10 +88,7 @@ struct SessionHistoryDetailView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(AppTheme.Spacing.large)
-        .background {
-            RoundedRectangle(cornerRadius: 8)
-                .fill(Color(.secondarySystemGroupedBackground))
-        }
+        .appCardSurface()
     }
 
     private var metricGrid: some View {
@@ -117,10 +114,7 @@ struct SessionHistoryDetailView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             .padding(AppTheme.Spacing.large)
-            .background {
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(Color(.secondarySystemGroupedBackground))
-            }
+            .appCardSurface()
         }
     }
 
@@ -141,10 +135,7 @@ struct SessionHistoryDetailView: View {
                 }
             }
             .padding(AppTheme.Spacing.large)
-            .background {
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(Color.orange.opacity(0.12))
-            }
+            .appTintedCardSurface(.orange)
         }
     }
 
@@ -245,7 +236,7 @@ struct ExerciseProgressView: View {
             }
             .padding(AppTheme.Spacing.screen)
         }
-        .background(Color(.systemGroupedBackground))
+        .appGroupedBackground()
         .navigationTitle("Übungsdetails")
         .navigationBarTitleDisplayMode(.inline)
     }
@@ -263,10 +254,7 @@ struct ExerciseProgressView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(AppTheme.Spacing.large)
-        .background {
-            RoundedRectangle(cornerRadius: 8)
-                .fill(Color(.secondarySystemGroupedBackground))
-        }
+        .appCardSurface()
     }
 
     @ViewBuilder
@@ -298,10 +286,7 @@ struct ExerciseProgressView: View {
                 }
             }
             .padding(AppTheme.Spacing.large)
-            .background {
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(Color(.secondarySystemGroupedBackground))
-            }
+            .appCardSurface()
         }
     }
 
@@ -443,10 +428,7 @@ private struct SessionExerciseHistoryRow: View {
             }
         }
         .padding(AppTheme.Spacing.large)
-        .background {
-            RoundedRectangle(cornerRadius: 8)
-                .fill(Color(.secondarySystemGroupedBackground))
-        }
+        .appCardSurface()
     }
 
     private var setRows: [String] {
@@ -522,10 +504,7 @@ private struct ExerciseProgressEntryRow: View {
             }
         }
         .padding(AppTheme.Spacing.large)
-        .background {
-            RoundedRectangle(cornerRadius: 8)
-                .fill(Color(.secondarySystemGroupedBackground))
-        }
+        .appCardSurface()
     }
 }
 
@@ -551,10 +530,7 @@ private struct HistoryMetricCard: View {
         }
         .frame(maxWidth: .infinity, minHeight: 112, alignment: .leading)
         .padding(AppTheme.Spacing.large)
-        .background {
-            RoundedRectangle(cornerRadius: 8)
-                .fill(Color(.secondarySystemGroupedBackground))
-        }
+        .appCardSurface()
     }
 }
 
@@ -576,10 +552,7 @@ private struct CompactHistoryValue: View {
         .frame(maxWidth: .infinity, minHeight: 52, alignment: .leading)
         .padding(.horizontal, 10)
         .padding(.vertical, 8)
-        .background {
-            RoundedRectangle(cornerRadius: 8)
-                .fill(Color(.tertiarySystemGroupedBackground))
-        }
+        .appControlSurface()
     }
 }
 

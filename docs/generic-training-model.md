@@ -16,6 +16,7 @@ Alle persistierten Entitaeten besitzen stabile `UUID`-IDs. Geplante Daten bleibe
 ## Services
 
 - `SeedDataService` importiert beliebige wohlgeformte Fixtures und erzeugt `PlannedSet`-Eintraege aus den jeweiligen Planwerten.
+- `DemoDataService` kapselt den optionalen Christian-B1-Beispielplan, markiert ihn als Demo, kann ihn loeschen und als nicht markierten eigenen Plan duplizieren.
 - `SessionStartService` erzeugt Set-Entwuerfe bevorzugt aus `PlannedSet`. Nur alte Plaene ohne `PlannedSet` fallen auf `setsPrescription`/`repsPrescription` zurueck.
 - `SessionCompletionService` bewertet RIR- und Schmerz-Ziele satzgenau, wenn `PlannedSet`-Targets vorhanden sind.
 - `TrainingExportService` exportiert ungetrackte Sessions satzgenau aus `PlannedSet` und getrackte Sessions aus den `CompletedSet`-Daten.
