@@ -49,6 +49,16 @@
 		9A000001000000000000002E /* TrainingExportServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A000001000000000000012E /* TrainingExportServiceTests.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		9A0000010000000000000702 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9A0000010000000000000801 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9A0000010000000000000501;
+			remoteInfo = GymTracker;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		9A0000010000000000000101 /* GymTrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GymTrackerApp.swift; sourceTree = "<group>"; };
 		9A0000010000000000000102 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
@@ -95,8 +105,20 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		9A0000010000000000000301 /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
-		9A0000010000000000000302 /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		9A0000010000000000000301 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9A0000010000000000000302 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -113,42 +135,272 @@
 			);
 			sourceTree = "<group>";
 		};
-		9A0000010000000000000402 /* App */ = {isa = PBXGroup; children = (9A0000010000000000000101 /* GymTrackerApp.swift */, 9A0000010000000000000102 /* AppEnvironment.swift */); path = App; sourceTree = "<group>"; };
-		9A0000010000000000000403 /* Domain */ = {isa = PBXGroup; children = (9A0000010000000000000409 /* Models */, 9A0000010000000000000410 /* Enums */, 9A0000010000000000000411 /* ValueObjects */, 9A0000010000000000000412 /* Services */); path = Domain; sourceTree = "<group>"; };
-		9A0000010000000000000404 /* Data */ = {isa = PBXGroup; children = (9A0000010000000000000413 /* SwiftDataModels */, 9A0000010000000000000414 /* Repositories */, 9A0000010000000000000415 /* SeedData */, 9A0000010000000000000416 /* Export */); path = Data; sourceTree = "<group>"; };
-		9A0000010000000000000405 /* Features */ = {isa = PBXGroup; children = (9A0000010000000000000417 /* Dashboard */, 9A0000010000000000000424 /* Plan */, 9A0000010000000000000426 /* Session */, 9A0000010000000000000427 /* History */, 9A0000010000000000000428 /* Analytics */); path = Features; sourceTree = "<group>"; };
-		9A0000010000000000000406 /* DesignSystem */ = {isa = PBXGroup; children = (9A0000010000000000000418 /* Components */, 9A0000010000000000000419 /* Theme */, 9A0000010000000000000420 /* Formatters */); path = DesignSystem; sourceTree = "<group>"; };
-		9A0000010000000000000407 /* Tests */ = {isa = PBXGroup; children = (9A0000010000000000000421 /* ViewModelTests */, 9A0000010000000000000422 /* DomainModelTests */, 9A0000010000000000000423 /* SeedDataTests */, 9A0000010000000000000425 /* SessionTests */); path = Tests; sourceTree = "<group>"; };
-		9A0000010000000000000408 /* Products */ = {isa = PBXGroup; children = (9A0000010000000000000201 /* GymTracker.app */, 9A0000010000000000000202 /* GymTrackerTests.xctest */); name = Products; sourceTree = "<group>"; };
-		9A0000010000000000000409 /* Models */ = {isa = PBXGroup; children = (9A0000010000000000000103 /* DashboardSummary.swift */); path = Models; sourceTree = "<group>"; };
-		9A0000010000000000000410 /* Enums */ = {isa = PBXGroup; children = (9A0000010000000000000111 /* TrainingStatus.swift */); path = Enums; sourceTree = "<group>"; };
-		9A0000010000000000000411 /* ValueObjects */ = {isa = PBXGroup; children = (); path = ValueObjects; sourceTree = "<group>"; };
-		9A0000010000000000000412 /* Services */ = {isa = PBXGroup; children = (9A000001000000000000011D /* SessionStartService.swift */, 9A0000010000000000000126 /* SessionCompletionService.swift */, 9A0000010000000000000120 /* VolumeCalculator.swift */, 9A0000010000000000000121 /* PainThresholdEvaluator.swift */, 9A0000010000000000000122 /* RIRAnalyzer.swift */, 9A000001000000000000012A /* ChartDataMapper.swift */, 9A000001000000000000012D /* TrainingExportService.swift */); path = Services; sourceTree = "<group>"; };
-		9A0000010000000000000413 /* SwiftDataModels */ = {isa = PBXGroup; children = (9A0000010000000000000104 /* PersistentTrainingMarker.swift */, 9A0000010000000000000105 /* GymTrackerModelContainer.swift */, 9A0000010000000000000112 /* TrainingModels.swift */); path = SwiftDataModels; sourceTree = "<group>"; };
-		9A0000010000000000000414 /* Repositories */ = {isa = PBXGroup; children = (9A0000010000000000000106 /* RepositoryProtocols.swift */); path = Repositories; sourceTree = "<group>"; };
-		9A0000010000000000000415 /* SeedData */ = {isa = PBXGroup; children = (9A0000010000000000000114 /* SeedDataService.swift */, 9A0000010000000000000116 /* seed_christian_b1_plan.json */); path = SeedData; sourceTree = "<group>"; };
-		9A0000010000000000000416 /* Export */ = {isa = PBXGroup; children = (); path = Export; sourceTree = "<group>"; };
-		9A0000010000000000000417 /* Dashboard */ = {isa = PBXGroup; children = (9A0000010000000000000107 /* DashboardView.swift */, 9A0000010000000000000108 /* DashboardViewModel.swift */); path = Dashboard; sourceTree = "<group>"; };
-		9A0000010000000000000418 /* Components */ = {isa = PBXGroup; children = (); path = Components; sourceTree = "<group>"; };
-		9A0000010000000000000419 /* Theme */ = {isa = PBXGroup; children = (9A0000010000000000000109 /* AppTheme.swift */); path = Theme; sourceTree = "<group>"; };
-		9A0000010000000000000420 /* Formatters */ = {isa = PBXGroup; children = (); path = Formatters; sourceTree = "<group>"; };
-		9A0000010000000000000421 /* ViewModelTests */ = {isa = PBXGroup; children = (9A0000010000000000000110 /* DashboardViewModelTests.swift */); path = ViewModelTests; sourceTree = "<group>"; };
-		9A0000010000000000000422 /* DomainModelTests */ = {isa = PBXGroup; children = (9A0000010000000000000113 /* TrainingModelTests.swift */, 9A0000010000000000000123 /* VolumeCalculatorTests.swift */, 9A0000010000000000000124 /* PainThresholdEvaluatorTests.swift */, 9A0000010000000000000125 /* RIRAnalyzerTests.swift */, 9A000001000000000000012C /* ChartDataMapperTests.swift */, 9A000001000000000000012E /* TrainingExportServiceTests.swift */); path = DomainModelTests; sourceTree = "<group>"; };
-		9A0000010000000000000423 /* SeedDataTests */ = {isa = PBXGroup; children = (9A0000010000000000000115 /* SeedDataServiceTests.swift */); path = SeedDataTests; sourceTree = "<group>"; };
-		9A0000010000000000000424 /* Plan */ = {isa = PBXGroup; children = (9A0000010000000000000117 /* PlanView.swift */, 9A0000010000000000000118 /* WeekSelector.swift */, 9A0000010000000000000119 /* WorkoutDayCard.swift */, 9A000001000000000000011A /* WorkoutDetailView.swift */, 9A000001000000000000011B /* ExercisePlanRow.swift */, 9A000001000000000000011C /* PlanPreviewData.swift */); path = Plan; sourceTree = "<group>"; };
-		9A0000010000000000000425 /* SessionTests */ = {isa = PBXGroup; children = (9A000001000000000000011E /* SessionStartServiceTests.swift */, 9A0000010000000000000129 /* SessionCompletionServiceTests.swift */); path = SessionTests; sourceTree = "<group>"; };
-		9A0000010000000000000426 /* Session */ = {isa = PBXGroup; children = (9A000001000000000000011F /* ActiveSessionView.swift */, 9A0000010000000000000127 /* SessionSummaryView.swift */); path = Session; sourceTree = "<group>"; };
-		9A0000010000000000000427 /* History */ = {isa = PBXGroup; children = (9A0000010000000000000128 /* HistoryView.swift */); path = History; sourceTree = "<group>"; };
-		9A0000010000000000000428 /* Analytics */ = {isa = PBXGroup; children = (9A000001000000000000012B /* AnalyticsView.swift */); path = Analytics; sourceTree = "<group>"; };
+		9A0000010000000000000402 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				9A0000010000000000000101 /* GymTrackerApp.swift */,
+				9A0000010000000000000102 /* AppEnvironment.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		9A0000010000000000000403 /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				9A0000010000000000000409 /* Models */,
+				9A0000010000000000000410 /* Enums */,
+				9A0000010000000000000411 /* ValueObjects */,
+				9A0000010000000000000412 /* Services */,
+			);
+			path = Domain;
+			sourceTree = "<group>";
+		};
+		9A0000010000000000000404 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				9A0000010000000000000413 /* SwiftDataModels */,
+				9A0000010000000000000414 /* Repositories */,
+				9A0000010000000000000415 /* SeedData */,
+				9A0000010000000000000416 /* Export */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		9A0000010000000000000405 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				9A0000010000000000000417 /* Dashboard */,
+				9A0000010000000000000424 /* Plan */,
+				9A0000010000000000000426 /* Session */,
+				9A0000010000000000000427 /* History */,
+				9A0000010000000000000428 /* Analytics */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		9A0000010000000000000406 /* DesignSystem */ = {
+			isa = PBXGroup;
+			children = (
+				9A0000010000000000000418 /* Components */,
+				9A0000010000000000000419 /* Theme */,
+				9A0000010000000000000420 /* Formatters */,
+			);
+			path = DesignSystem;
+			sourceTree = "<group>";
+		};
+		9A0000010000000000000407 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				9A0000010000000000000421 /* ViewModelTests */,
+				9A0000010000000000000422 /* DomainModelTests */,
+				9A0000010000000000000423 /* SeedDataTests */,
+				9A0000010000000000000425 /* SessionTests */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		9A0000010000000000000408 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9A0000010000000000000201 /* GymTracker.app */,
+				9A0000010000000000000202 /* GymTrackerTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		9A0000010000000000000409 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				9A0000010000000000000103 /* DashboardSummary.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		9A0000010000000000000410 /* Enums */ = {
+			isa = PBXGroup;
+			children = (
+				9A0000010000000000000111 /* TrainingStatus.swift */,
+			);
+			path = Enums;
+			sourceTree = "<group>";
+		};
+		9A0000010000000000000411 /* ValueObjects */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ValueObjects;
+			sourceTree = "<group>";
+		};
+		9A0000010000000000000412 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				9A000001000000000000011D /* SessionStartService.swift */,
+				9A0000010000000000000126 /* SessionCompletionService.swift */,
+				9A0000010000000000000120 /* VolumeCalculator.swift */,
+				9A0000010000000000000121 /* PainThresholdEvaluator.swift */,
+				9A0000010000000000000122 /* RIRAnalyzer.swift */,
+				9A000001000000000000012A /* ChartDataMapper.swift */,
+				9A000001000000000000012D /* TrainingExportService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		9A0000010000000000000413 /* SwiftDataModels */ = {
+			isa = PBXGroup;
+			children = (
+				9A0000010000000000000104 /* PersistentTrainingMarker.swift */,
+				9A0000010000000000000105 /* GymTrackerModelContainer.swift */,
+				9A0000010000000000000112 /* TrainingModels.swift */,
+			);
+			path = SwiftDataModels;
+			sourceTree = "<group>";
+		};
+		9A0000010000000000000414 /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				9A0000010000000000000106 /* RepositoryProtocols.swift */,
+			);
+			path = Repositories;
+			sourceTree = "<group>";
+		};
+		9A0000010000000000000415 /* SeedData */ = {
+			isa = PBXGroup;
+			children = (
+				9A0000010000000000000114 /* SeedDataService.swift */,
+				9A0000010000000000000116 /* seed_christian_b1_plan.json */,
+			);
+			path = SeedData;
+			sourceTree = "<group>";
+		};
+		9A0000010000000000000416 /* Export */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Export;
+			sourceTree = "<group>";
+		};
+		9A0000010000000000000417 /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				9A0000010000000000000107 /* DashboardView.swift */,
+				9A0000010000000000000108 /* DashboardViewModel.swift */,
+			);
+			path = Dashboard;
+			sourceTree = "<group>";
+		};
+		9A0000010000000000000418 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		9A0000010000000000000419 /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				9A0000010000000000000109 /* AppTheme.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
+		9A0000010000000000000420 /* Formatters */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Formatters;
+			sourceTree = "<group>";
+		};
+		9A0000010000000000000421 /* ViewModelTests */ = {
+			isa = PBXGroup;
+			children = (
+				9A0000010000000000000110 /* DashboardViewModelTests.swift */,
+			);
+			path = ViewModelTests;
+			sourceTree = "<group>";
+		};
+		9A0000010000000000000422 /* DomainModelTests */ = {
+			isa = PBXGroup;
+			children = (
+				9A0000010000000000000113 /* TrainingModelTests.swift */,
+				9A0000010000000000000123 /* VolumeCalculatorTests.swift */,
+				9A0000010000000000000124 /* PainThresholdEvaluatorTests.swift */,
+				9A0000010000000000000125 /* RIRAnalyzerTests.swift */,
+				9A000001000000000000012C /* ChartDataMapperTests.swift */,
+				9A000001000000000000012E /* TrainingExportServiceTests.swift */,
+			);
+			path = DomainModelTests;
+			sourceTree = "<group>";
+		};
+		9A0000010000000000000423 /* SeedDataTests */ = {
+			isa = PBXGroup;
+			children = (
+				9A0000010000000000000115 /* SeedDataServiceTests.swift */,
+			);
+			path = SeedDataTests;
+			sourceTree = "<group>";
+		};
+		9A0000010000000000000424 /* Plan */ = {
+			isa = PBXGroup;
+			children = (
+				9A0000010000000000000117 /* PlanView.swift */,
+				9A0000010000000000000118 /* WeekSelector.swift */,
+				9A0000010000000000000119 /* WorkoutDayCard.swift */,
+				9A000001000000000000011A /* WorkoutDetailView.swift */,
+				9A000001000000000000011B /* ExercisePlanRow.swift */,
+				9A000001000000000000011C /* PlanPreviewData.swift */,
+			);
+			path = Plan;
+			sourceTree = "<group>";
+		};
+		9A0000010000000000000425 /* SessionTests */ = {
+			isa = PBXGroup;
+			children = (
+				9A000001000000000000011E /* SessionStartServiceTests.swift */,
+				9A0000010000000000000129 /* SessionCompletionServiceTests.swift */,
+			);
+			path = SessionTests;
+			sourceTree = "<group>";
+		};
+		9A0000010000000000000426 /* Session */ = {
+			isa = PBXGroup;
+			children = (
+				9A000001000000000000011F /* ActiveSessionView.swift */,
+				9A0000010000000000000127 /* SessionSummaryView.swift */,
+			);
+			path = Session;
+			sourceTree = "<group>";
+		};
+		9A0000010000000000000427 /* History */ = {
+			isa = PBXGroup;
+			children = (
+				9A0000010000000000000128 /* HistoryView.swift */,
+			);
+			path = History;
+			sourceTree = "<group>";
+		};
+		9A0000010000000000000428 /* Analytics */ = {
+			isa = PBXGroup;
+			children = (
+				9A000001000000000000012B /* AnalyticsView.swift */,
+			);
+			path = Analytics;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
 		9A0000010000000000000501 /* GymTracker */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9A0000010000000000000902 /* Build configuration list for PBXNativeTarget "GymTracker" */;
-			buildPhases = (9A0000010000000000000601 /* Sources */, 9A0000010000000000000301 /* Frameworks */, 9A0000010000000000000602 /* Resources */);
-			buildRules = ();
-			dependencies = ();
+			buildPhases = (
+				9A0000010000000000000601 /* Sources */,
+				9A0000010000000000000301 /* Frameworks */,
+				9A0000010000000000000602 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
 			name = GymTracker;
 			productName = GymTracker;
 			productReference = 9A0000010000000000000201 /* GymTracker.app */;
@@ -157,9 +409,16 @@
 		9A0000010000000000000502 /* GymTrackerTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9A0000010000000000000903 /* Build configuration list for PBXNativeTarget "GymTrackerTests" */;
-			buildPhases = (9A0000010000000000000603 /* Sources */, 9A0000010000000000000302 /* Frameworks */, 9A0000010000000000000604 /* Resources */);
-			buildRules = ();
-			dependencies = (9A0000010000000000000701 /* PBXTargetDependency */);
+			buildPhases = (
+				9A0000010000000000000603 /* Sources */,
+				9A0000010000000000000302 /* Frameworks */,
+				9A0000010000000000000604 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9A0000010000000000000701 /* PBXTargetDependency */,
+			);
 			name = GymTrackerTests;
 			productName = GymTrackerTests;
 			productReference = 9A0000010000000000000202 /* GymTrackerTests.xctest */;
@@ -175,55 +434,350 @@
 				LastSwiftUpdateCheck = 2650;
 				LastUpgradeCheck = 2650;
 				TargetAttributes = {
-					9A0000010000000000000501 = {CreatedOnToolsVersion = 26.5; };
-					9A0000010000000000000502 = {CreatedOnToolsVersion = 26.5; TestTargetID = 9A0000010000000000000501; };
+					9A0000010000000000000501 = {
+						CreatedOnToolsVersion = 26.5;
+					};
+					9A0000010000000000000502 = {
+						CreatedOnToolsVersion = 26.5;
+						TestTargetID = 9A0000010000000000000501;
+					};
 				};
 			};
 			buildConfigurationList = 9A0000010000000000000901 /* Build configuration list for PBXProject "GymTracker" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
-			knownRegions = (en, Base);
+			knownRegions = (
+				en,
+				Base,
+			);
 			mainGroup = 9A0000010000000000000401;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 9A0000010000000000000408 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
-			targets = (9A0000010000000000000501 /* GymTracker */, 9A0000010000000000000502 /* GymTrackerTests */);
+			targets = (
+				9A0000010000000000000501 /* GymTracker */,
+				9A0000010000000000000502 /* GymTrackerTests */,
+			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		9A0000010000000000000602 /* Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (9A0000010000000000000016 /* seed_christian_b1_plan.json in Resources */); runOnlyForDeploymentPostprocessing = 0; };
-		9A0000010000000000000604 /* Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		9A0000010000000000000602 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9A0000010000000000000016 /* seed_christian_b1_plan.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9A0000010000000000000604 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		9A0000010000000000000601 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (9A0000010000000000000001 /* GymTrackerApp.swift in Sources */, 9A0000010000000000000002 /* AppEnvironment.swift in Sources */, 9A0000010000000000000003 /* DashboardSummary.swift in Sources */, 9A0000010000000000000004 /* PersistentTrainingMarker.swift in Sources */, 9A0000010000000000000005 /* GymTrackerModelContainer.swift in Sources */, 9A0000010000000000000006 /* RepositoryProtocols.swift in Sources */, 9A0000010000000000000007 /* DashboardView.swift in Sources */, 9A0000010000000000000008 /* DashboardViewModel.swift in Sources */, 9A0000010000000000000009 /* AppTheme.swift in Sources */, 9A0000010000000000000011 /* TrainingStatus.swift in Sources */, 9A0000010000000000000012 /* TrainingModels.swift in Sources */, 9A0000010000000000000014 /* SeedDataService.swift in Sources */, 9A0000010000000000000017 /* PlanView.swift in Sources */, 9A0000010000000000000018 /* WeekSelector.swift in Sources */, 9A0000010000000000000019 /* WorkoutDayCard.swift in Sources */, 9A000001000000000000001A /* WorkoutDetailView.swift in Sources */, 9A000001000000000000001B /* ExercisePlanRow.swift in Sources */, 9A000001000000000000001C /* PlanPreviewData.swift in Sources */, 9A000001000000000000001D /* SessionStartService.swift in Sources */, 9A0000010000000000000026 /* SessionCompletionService.swift in Sources */, 9A000001000000000000001F /* ActiveSessionView.swift in Sources */, 9A0000010000000000000027 /* SessionSummaryView.swift in Sources */, 9A0000010000000000000028 /* HistoryView.swift in Sources */, 9A000001000000000000002B /* AnalyticsView.swift in Sources */, 9A0000010000000000000020 /* VolumeCalculator.swift in Sources */, 9A0000010000000000000021 /* PainThresholdEvaluator.swift in Sources */, 9A0000010000000000000022 /* RIRAnalyzer.swift in Sources */, 9A000001000000000000002A /* ChartDataMapper.swift in Sources */, 9A000001000000000000002D /* TrainingExportService.swift in Sources */); runOnlyForDeploymentPostprocessing = 0; };
-		9A0000010000000000000603 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (9A0000010000000000000010 /* DashboardViewModelTests.swift in Sources */, 9A0000010000000000000013 /* TrainingModelTests.swift in Sources */, 9A0000010000000000000015 /* SeedDataServiceTests.swift in Sources */, 9A000001000000000000001E /* SessionStartServiceTests.swift in Sources */, 9A0000010000000000000029 /* SessionCompletionServiceTests.swift in Sources */, 9A0000010000000000000023 /* VolumeCalculatorTests.swift in Sources */, 9A0000010000000000000024 /* PainThresholdEvaluatorTests.swift in Sources */, 9A0000010000000000000025 /* RIRAnalyzerTests.swift in Sources */, 9A000001000000000000002C /* ChartDataMapperTests.swift in Sources */, 9A000001000000000000002E /* TrainingExportServiceTests.swift in Sources */); runOnlyForDeploymentPostprocessing = 0; };
+		9A0000010000000000000601 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9A0000010000000000000001 /* GymTrackerApp.swift in Sources */,
+				9A0000010000000000000002 /* AppEnvironment.swift in Sources */,
+				9A0000010000000000000003 /* DashboardSummary.swift in Sources */,
+				9A0000010000000000000004 /* PersistentTrainingMarker.swift in Sources */,
+				9A0000010000000000000005 /* GymTrackerModelContainer.swift in Sources */,
+				9A0000010000000000000006 /* RepositoryProtocols.swift in Sources */,
+				9A0000010000000000000007 /* DashboardView.swift in Sources */,
+				9A0000010000000000000008 /* DashboardViewModel.swift in Sources */,
+				9A0000010000000000000009 /* AppTheme.swift in Sources */,
+				9A0000010000000000000011 /* TrainingStatus.swift in Sources */,
+				9A0000010000000000000012 /* TrainingModels.swift in Sources */,
+				9A0000010000000000000014 /* SeedDataService.swift in Sources */,
+				9A0000010000000000000017 /* PlanView.swift in Sources */,
+				9A0000010000000000000018 /* WeekSelector.swift in Sources */,
+				9A0000010000000000000019 /* WorkoutDayCard.swift in Sources */,
+				9A000001000000000000001A /* WorkoutDetailView.swift in Sources */,
+				9A000001000000000000001B /* ExercisePlanRow.swift in Sources */,
+				9A000001000000000000001C /* PlanPreviewData.swift in Sources */,
+				9A000001000000000000001D /* SessionStartService.swift in Sources */,
+				9A0000010000000000000026 /* SessionCompletionService.swift in Sources */,
+				9A000001000000000000001F /* ActiveSessionView.swift in Sources */,
+				9A0000010000000000000027 /* SessionSummaryView.swift in Sources */,
+				9A0000010000000000000028 /* HistoryView.swift in Sources */,
+				9A000001000000000000002B /* AnalyticsView.swift in Sources */,
+				9A0000010000000000000020 /* VolumeCalculator.swift in Sources */,
+				9A0000010000000000000021 /* PainThresholdEvaluator.swift in Sources */,
+				9A0000010000000000000022 /* RIRAnalyzer.swift in Sources */,
+				9A000001000000000000002A /* ChartDataMapper.swift in Sources */,
+				9A000001000000000000002D /* TrainingExportService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9A0000010000000000000603 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9A0000010000000000000010 /* DashboardViewModelTests.swift in Sources */,
+				9A0000010000000000000013 /* TrainingModelTests.swift in Sources */,
+				9A0000010000000000000015 /* SeedDataServiceTests.swift in Sources */,
+				9A000001000000000000001E /* SessionStartServiceTests.swift in Sources */,
+				9A0000010000000000000029 /* SessionCompletionServiceTests.swift in Sources */,
+				9A0000010000000000000023 /* VolumeCalculatorTests.swift in Sources */,
+				9A0000010000000000000024 /* PainThresholdEvaluatorTests.swift in Sources */,
+				9A0000010000000000000025 /* RIRAnalyzerTests.swift in Sources */,
+				9A000001000000000000002C /* ChartDataMapperTests.swift in Sources */,
+				9A000001000000000000002E /* TrainingExportServiceTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		9A0000010000000000000701 /* PBXTargetDependency */ = {isa = PBXTargetDependency; target = 9A0000010000000000000501 /* GymTracker */; targetProxy = 9A0000010000000000000702 /* PBXContainerItemProxy */; };
+		9A0000010000000000000701 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9A0000010000000000000501 /* GymTracker */;
+			targetProxy = 9A0000010000000000000702 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
-/* Begin PBXContainerItemProxy section */
-		9A0000010000000000000702 /* PBXContainerItemProxy */ = {isa = PBXContainerItemProxy; containerPortal = 9A0000010000000000000801 /* Project object */; proxyType = 1; remoteGlobalIDString = 9A0000010000000000000501; remoteInfo = GymTracker; };
-/* End PBXContainerItemProxy section */
-
 /* Begin XCBuildConfiguration section */
-		9A0000010000000000000A01 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = {ALWAYS_SEARCH_USER_PATHS = NO; CLANG_ANALYZER_NONNULL = YES; CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE; CLANG_CXX_LANGUAGE_STANDARD = "gnu++20"; CLANG_ENABLE_MODULES = YES; CLANG_ENABLE_OBJC_ARC = YES; CLANG_ENABLE_OBJC_WEAK = YES; CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES; CLANG_WARN_BOOL_CONVERSION = YES; CLANG_WARN_COMMA = YES; CLANG_WARN_CONSTANT_CONVERSION = YES; CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES; CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR; CLANG_WARN_DOCUMENTATION_COMMENTS = YES; CLANG_WARN_EMPTY_BODY = YES; CLANG_WARN_ENUM_CONVERSION = YES; CLANG_WARN_INFINITE_RECURSION = YES; CLANG_WARN_INT_CONVERSION = YES; CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES; CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES; CLANG_WARN_OBJC_LITERAL_CONVERSION = YES; CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR; CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES; CLANG_WARN_RANGE_LOOP_ANALYSIS = YES; CLANG_WARN_STRICT_PROTOTYPES = YES; CLANG_WARN_SUSPICIOUS_MOVE = YES; CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE; CLANG_WARN_UNREACHABLE_CODE = YES; CLANG_WARN__DUPLICATE_METHOD_MATCH = YES; COPY_PHASE_STRIP = NO; DEBUG_INFORMATION_FORMAT = dwarf; ENABLE_STRICT_OBJC_MSGSEND = YES; ENABLE_TESTABILITY = YES; ENABLE_USER_SCRIPT_SANDBOXING = YES; GCC_C_LANGUAGE_STANDARD = gnu17; GCC_DYNAMIC_NO_PIC = NO; GCC_NO_COMMON_BLOCKS = YES; GCC_OPTIMIZATION_LEVEL = 0; GCC_PREPROCESSOR_DEFINITIONS = ("DEBUG=1", "$(inherited)"); GCC_WARN_64_TO_32_BIT_CONVERSION = YES; GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR; GCC_WARN_UNDECLARED_SELECTOR = YES; GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE; GCC_WARN_UNUSED_FUNCTION = YES; GCC_WARN_UNUSED_VARIABLE = YES; IPHONEOS_DEPLOYMENT_TARGET = 18.0; MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE; MTL_FAST_MATH = YES; ONLY_ACTIVE_ARCH = YES; SDKROOT = iphoneos; SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG; SWIFT_OPTIMIZATION_LEVEL = "-Onone"; }; name = Debug; };
-		9A0000010000000000000A02 /* Release */ = {isa = XCBuildConfiguration; buildSettings = {ALWAYS_SEARCH_USER_PATHS = NO; CLANG_ANALYZER_NONNULL = YES; CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE; CLANG_CXX_LANGUAGE_STANDARD = "gnu++20"; CLANG_ENABLE_MODULES = YES; CLANG_ENABLE_OBJC_ARC = YES; CLANG_ENABLE_OBJC_WEAK = YES; CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES; CLANG_WARN_BOOL_CONVERSION = YES; CLANG_WARN_COMMA = YES; CLANG_WARN_CONSTANT_CONVERSION = YES; CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES; CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR; CLANG_WARN_DOCUMENTATION_COMMENTS = YES; CLANG_WARN_EMPTY_BODY = YES; CLANG_WARN_ENUM_CONVERSION = YES; CLANG_WARN_INFINITE_RECURSION = YES; CLANG_WARN_INT_CONVERSION = YES; CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES; CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES; CLANG_WARN_OBJC_LITERAL_CONVERSION = YES; CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR; CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES; CLANG_WARN_RANGE_LOOP_ANALYSIS = YES; CLANG_WARN_STRICT_PROTOTYPES = YES; CLANG_WARN_SUSPICIOUS_MOVE = YES; CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE; CLANG_WARN_UNREACHABLE_CODE = YES; CLANG_WARN__DUPLICATE_METHOD_MATCH = YES; COPY_PHASE_STRIP = NO; DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym"; ENABLE_NS_ASSERTIONS = NO; ENABLE_STRICT_OBJC_MSGSEND = YES; ENABLE_USER_SCRIPT_SANDBOXING = YES; GCC_C_LANGUAGE_STANDARD = gnu17; GCC_NO_COMMON_BLOCKS = YES; GCC_WARN_64_TO_32_BIT_CONVERSION = YES; GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR; GCC_WARN_UNDECLARED_SELECTOR = YES; GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE; GCC_WARN_UNUSED_FUNCTION = YES; GCC_WARN_UNUSED_VARIABLE = YES; IPHONEOS_DEPLOYMENT_TARGET = 18.0; MTL_ENABLE_DEBUG_INFO = NO; MTL_FAST_MATH = YES; SDKROOT = iphoneos; SWIFT_COMPILATION_MODE = wholemodule; VALIDATE_PRODUCT = YES; }; name = Release; };
-		9A0000010000000000000A03 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = {ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon; CODE_SIGN_STYLE = Automatic; CURRENT_PROJECT_VERSION = 1; DEVELOPMENT_ASSET_PATHS = ""; DEVELOPMENT_TEAM = ""; ENABLE_PREVIEWS = YES; GENERATE_INFOPLIST_FILE = YES; INFOPLIST_KEY_CFBundleDisplayName = GymTracker; INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES; INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES; INFOPLIST_KEY_UILaunchScreen_Generation = YES; INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"; INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"; MARKETING_VERSION = 1.0; PRODUCT_BUNDLE_IDENTIFIER = com.example.GymTracker; PRODUCT_NAME = "$(TARGET_NAME)"; SWIFT_EMIT_LOC_STRINGS = YES; SWIFT_VERSION = 6.0; TARGETED_DEVICE_FAMILY = "1,2"; }; name = Debug; };
-		9A0000010000000000000A04 /* Release */ = {isa = XCBuildConfiguration; buildSettings = {ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon; CODE_SIGN_STYLE = Automatic; CURRENT_PROJECT_VERSION = 1; DEVELOPMENT_ASSET_PATHS = ""; DEVELOPMENT_TEAM = ""; ENABLE_PREVIEWS = YES; GENERATE_INFOPLIST_FILE = YES; INFOPLIST_KEY_CFBundleDisplayName = GymTracker; INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES; INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES; INFOPLIST_KEY_UILaunchScreen_Generation = YES; INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"; INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"; MARKETING_VERSION = 1.0; PRODUCT_BUNDLE_IDENTIFIER = com.example.GymTracker; PRODUCT_NAME = "$(TARGET_NAME)"; SWIFT_EMIT_LOC_STRINGS = YES; SWIFT_VERSION = 6.0; TARGETED_DEVICE_FAMILY = "1,2"; }; name = Release; };
-		9A0000010000000000000A05 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = {BUNDLE_LOADER = "$(TEST_HOST)"; CODE_SIGN_STYLE = Automatic; CURRENT_PROJECT_VERSION = 1; DEVELOPMENT_TEAM = ""; GENERATE_INFOPLIST_FILE = YES; MARKETING_VERSION = 1.0; PRODUCT_BUNDLE_IDENTIFIER = com.example.GymTrackerTests; PRODUCT_NAME = "$(TARGET_NAME)"; SWIFT_VERSION = 6.0; TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GymTracker.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/GymTracker"; }; name = Debug; };
-		9A0000010000000000000A06 /* Release */ = {isa = XCBuildConfiguration; buildSettings = {BUNDLE_LOADER = "$(TEST_HOST)"; CODE_SIGN_STYLE = Automatic; CURRENT_PROJECT_VERSION = 1; DEVELOPMENT_TEAM = ""; GENERATE_INFOPLIST_FILE = YES; MARKETING_VERSION = 1.0; PRODUCT_BUNDLE_IDENTIFIER = com.example.GymTrackerTests; PRODUCT_NAME = "$(TARGET_NAME)"; SWIFT_VERSION = 6.0; TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GymTracker.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/GymTracker"; }; name = Release; };
+		9A0000010000000000000A01 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		9A0000010000000000000A02 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		9A0000010000000000000A03 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = 9558ZS5LJW;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = GymTracker;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = de.christianhemker.gymtracker;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		9A0000010000000000000A04 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = 9558ZS5LJW;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = GymTracker;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = de.christianhemker.gymtracker;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		9A0000010000000000000A05 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9558ZS5LJW;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = de.christianhemker.gymtracker;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 6.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GymTracker.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/GymTracker";
+			};
+			name = Debug;
+		};
+		9A0000010000000000000A06 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9558ZS5LJW;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = de.christianhemker.gymtracker;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 6.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GymTracker.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/GymTracker";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		9A0000010000000000000901 /* Build configuration list for PBXProject "GymTracker" */ = {isa = XCConfigurationList; buildConfigurations = (9A0000010000000000000A01 /* Debug */, 9A0000010000000000000A02 /* Release */); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
-		9A0000010000000000000902 /* Build configuration list for PBXNativeTarget "GymTracker" */ = {isa = XCConfigurationList; buildConfigurations = (9A0000010000000000000A03 /* Debug */, 9A0000010000000000000A04 /* Release */); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
-		9A0000010000000000000903 /* Build configuration list for PBXNativeTarget "GymTrackerTests" */ = {isa = XCConfigurationList; buildConfigurations = (9A0000010000000000000A05 /* Debug */, 9A0000010000000000000A06 /* Release */); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		9A0000010000000000000901 /* Build configuration list for PBXProject "GymTracker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9A0000010000000000000A01 /* Debug */,
+				9A0000010000000000000A02 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9A0000010000000000000902 /* Build configuration list for PBXNativeTarget "GymTracker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9A0000010000000000000A03 /* Debug */,
+				9A0000010000000000000A04 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9A0000010000000000000903 /* Build configuration list for PBXNativeTarget "GymTrackerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9A0000010000000000000A05 /* Debug */,
+				9A0000010000000000000A06 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 	};
 	rootObject = 9A0000010000000000000801 /* Project object */;
