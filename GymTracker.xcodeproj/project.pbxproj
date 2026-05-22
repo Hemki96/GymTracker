@@ -17,6 +17,9 @@
 		9A0000010000000000000008 /* DashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0000010000000000000108 /* DashboardViewModel.swift */; };
 		9A0000010000000000000009 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0000010000000000000109 /* AppTheme.swift */; };
 		9A0000010000000000000010 /* DashboardViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0000010000000000000110 /* DashboardViewModelTests.swift */; };
+		9A0000010000000000000011 /* TrainingStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0000010000000000000111 /* TrainingStatus.swift */; };
+		9A0000010000000000000012 /* TrainingModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0000010000000000000112 /* TrainingModels.swift */; };
+		9A0000010000000000000013 /* TrainingModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0000010000000000000113 /* TrainingModelTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +33,9 @@
 		9A0000010000000000000108 /* DashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModel.swift; sourceTree = "<group>"; };
 		9A0000010000000000000109 /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
 		9A0000010000000000000110 /* DashboardViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModelTests.swift; sourceTree = "<group>"; };
+		9A0000010000000000000111 /* TrainingStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingStatus.swift; sourceTree = "<group>"; };
+		9A0000010000000000000112 /* TrainingModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingModels.swift; sourceTree = "<group>"; };
+		9A0000010000000000000113 /* TrainingModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingModelTests.swift; sourceTree = "<group>"; };
 		9A0000010000000000000201 /* GymTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GymTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A0000010000000000000202 /* GymTrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GymTrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -58,13 +64,13 @@
 		9A0000010000000000000404 /* Data */ = {isa = PBXGroup; children = (9A0000010000000000000413 /* SwiftDataModels */, 9A0000010000000000000414 /* Repositories */, 9A0000010000000000000415 /* SeedData */, 9A0000010000000000000416 /* Export */); path = Data; sourceTree = "<group>"; };
 		9A0000010000000000000405 /* Features */ = {isa = PBXGroup; children = (9A0000010000000000000417 /* Dashboard */); path = Features; sourceTree = "<group>"; };
 		9A0000010000000000000406 /* DesignSystem */ = {isa = PBXGroup; children = (9A0000010000000000000418 /* Components */, 9A0000010000000000000419 /* Theme */, 9A0000010000000000000420 /* Formatters */); path = DesignSystem; sourceTree = "<group>"; };
-		9A0000010000000000000407 /* Tests */ = {isa = PBXGroup; children = (9A0000010000000000000421 /* ViewModelTests */); path = Tests; sourceTree = "<group>"; };
+		9A0000010000000000000407 /* Tests */ = {isa = PBXGroup; children = (9A0000010000000000000421 /* ViewModelTests */, 9A0000010000000000000422 /* DomainModelTests */); path = Tests; sourceTree = "<group>"; };
 		9A0000010000000000000408 /* Products */ = {isa = PBXGroup; children = (9A0000010000000000000201 /* GymTracker.app */, 9A0000010000000000000202 /* GymTrackerTests.xctest */); name = Products; sourceTree = "<group>"; };
 		9A0000010000000000000409 /* Models */ = {isa = PBXGroup; children = (9A0000010000000000000103 /* DashboardSummary.swift */); path = Models; sourceTree = "<group>"; };
-		9A0000010000000000000410 /* Enums */ = {isa = PBXGroup; children = (); path = Enums; sourceTree = "<group>"; };
+		9A0000010000000000000410 /* Enums */ = {isa = PBXGroup; children = (9A0000010000000000000111 /* TrainingStatus.swift */); path = Enums; sourceTree = "<group>"; };
 		9A0000010000000000000411 /* ValueObjects */ = {isa = PBXGroup; children = (); path = ValueObjects; sourceTree = "<group>"; };
 		9A0000010000000000000412 /* Services */ = {isa = PBXGroup; children = (); path = Services; sourceTree = "<group>"; };
-		9A0000010000000000000413 /* SwiftDataModels */ = {isa = PBXGroup; children = (9A0000010000000000000104 /* PersistentTrainingMarker.swift */, 9A0000010000000000000105 /* GymTrackerModelContainer.swift */); path = SwiftDataModels; sourceTree = "<group>"; };
+		9A0000010000000000000413 /* SwiftDataModels */ = {isa = PBXGroup; children = (9A0000010000000000000104 /* PersistentTrainingMarker.swift */, 9A0000010000000000000105 /* GymTrackerModelContainer.swift */, 9A0000010000000000000112 /* TrainingModels.swift */); path = SwiftDataModels; sourceTree = "<group>"; };
 		9A0000010000000000000414 /* Repositories */ = {isa = PBXGroup; children = (9A0000010000000000000106 /* RepositoryProtocols.swift */); path = Repositories; sourceTree = "<group>"; };
 		9A0000010000000000000415 /* SeedData */ = {isa = PBXGroup; children = (); path = SeedData; sourceTree = "<group>"; };
 		9A0000010000000000000416 /* Export */ = {isa = PBXGroup; children = (); path = Export; sourceTree = "<group>"; };
@@ -73,6 +79,7 @@
 		9A0000010000000000000419 /* Theme */ = {isa = PBXGroup; children = (9A0000010000000000000109 /* AppTheme.swift */); path = Theme; sourceTree = "<group>"; };
 		9A0000010000000000000420 /* Formatters */ = {isa = PBXGroup; children = (); path = Formatters; sourceTree = "<group>"; };
 		9A0000010000000000000421 /* ViewModelTests */ = {isa = PBXGroup; children = (9A0000010000000000000110 /* DashboardViewModelTests.swift */); path = ViewModelTests; sourceTree = "<group>"; };
+		9A0000010000000000000422 /* DomainModelTests */ = {isa = PBXGroup; children = (9A0000010000000000000113 /* TrainingModelTests.swift */); path = DomainModelTests; sourceTree = "<group>"; };
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -132,8 +139,8 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		9A0000010000000000000601 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (9A0000010000000000000001 /* GymTrackerApp.swift in Sources */, 9A0000010000000000000002 /* AppEnvironment.swift in Sources */, 9A0000010000000000000003 /* DashboardSummary.swift in Sources */, 9A0000010000000000000004 /* PersistentTrainingMarker.swift in Sources */, 9A0000010000000000000005 /* GymTrackerModelContainer.swift in Sources */, 9A0000010000000000000006 /* RepositoryProtocols.swift in Sources */, 9A0000010000000000000007 /* DashboardView.swift in Sources */, 9A0000010000000000000008 /* DashboardViewModel.swift in Sources */, 9A0000010000000000000009 /* AppTheme.swift in Sources */); runOnlyForDeploymentPostprocessing = 0; };
-		9A0000010000000000000603 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (9A0000010000000000000010 /* DashboardViewModelTests.swift in Sources */); runOnlyForDeploymentPostprocessing = 0; };
+		9A0000010000000000000601 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (9A0000010000000000000001 /* GymTrackerApp.swift in Sources */, 9A0000010000000000000002 /* AppEnvironment.swift in Sources */, 9A0000010000000000000003 /* DashboardSummary.swift in Sources */, 9A0000010000000000000004 /* PersistentTrainingMarker.swift in Sources */, 9A0000010000000000000005 /* GymTrackerModelContainer.swift in Sources */, 9A0000010000000000000006 /* RepositoryProtocols.swift in Sources */, 9A0000010000000000000007 /* DashboardView.swift in Sources */, 9A0000010000000000000008 /* DashboardViewModel.swift in Sources */, 9A0000010000000000000009 /* AppTheme.swift in Sources */, 9A0000010000000000000011 /* TrainingStatus.swift in Sources */, 9A0000010000000000000012 /* TrainingModels.swift in Sources */); runOnlyForDeploymentPostprocessing = 0; };
+		9A0000010000000000000603 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (9A0000010000000000000010 /* DashboardViewModelTests.swift in Sources */, 9A0000010000000000000013 /* TrainingModelTests.swift in Sources */); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
