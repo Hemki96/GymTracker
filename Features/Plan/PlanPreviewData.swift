@@ -10,6 +10,7 @@ enum PlanPreviewData {
             WorkoutPlan.self,
             Exercise.self,
             PlannedExercise.self,
+            PlannedSet.self,
             SessionLog.self,
             ExerciseLog.self,
             SetLog.self

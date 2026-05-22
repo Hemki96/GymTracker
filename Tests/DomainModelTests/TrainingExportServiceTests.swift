@@ -33,6 +33,34 @@ struct TrainingExportServiceTests {
     }
 
     @Test
+    func csvExportUsesPlannedSetsForUntrackedSessions() {
+        let block = TrainingPlan(name: "Variable Plan", goal: "General")
+        let week = TrainingWeek(weekNumber: 3, title: "Free Week", block: block)
+        let workout = TrainingSession(dayNumber: 9, title: "Two Set Day", sortOrder: 9, week: week)
+        let exercise = Exercise(name: "Loaded Carry")
+        let plannedExercise = PlannedExercise(
+            sortOrder: 1,
+            setsPrescription: "not numeric",
+            repsPrescription: "fallback",
+            plannedWeightText: "fallback",
+            workoutPlan: workout,
+            exercise: exercise
+        )
+        plannedExercise.plannedSets = [
+            PlannedSet(setNumber: 2, repsText: "60 m", weightText: "32 kg", plannedExercise: plannedExercise),
+            PlannedSet(setNumber: 1, repsText: "40 m", weightText: "24 kg", plannedExercise: plannedExercise)
+        ]
+        block.weeks = [week]
+        week.workoutPlans = [workout]
+        workout.plannedExercises = [plannedExercise]
+
+        let lines = TrainingExportService().csv(for: block).components(separatedBy: "\n")
+
+        #expect(lines.contains("Variable Plan,3,9,Two Set Day,,Loaded Carry,not numeric,fallback,fallback,,,1,40 m,24 kg,,,,,,,nein,"))
+        #expect(lines.contains("Variable Plan,3,9,Two Set Day,,Loaded Carry,not numeric,fallback,fallback,,,2,60 m,32 kg,,,,,,,nein,"))
+    }
+
+    @Test
     func exportFileNamesUseDateAndBlockName() throws {
         let graph = makeTrainingGraph(blockName: "Strength Block Aufbau")
         let service = TrainingExportService()

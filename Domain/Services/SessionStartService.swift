@@ -85,15 +85,32 @@ struct SessionStartService {
             plannedExercise: plannedExercise
         )
 
-        exerciseLog.setLogs = (1...plannedSetCount(from: plannedExercise.setsPrescription)).map { setNumber in
-            SetLog(
-                setNumber: setNumber,
-                plannedRepsText: plannedExercise.repsPrescription,
-                plannedWeightText: plannedExercise.plannedWeightText,
-                createdAt: date,
-                updatedAt: date,
-                exerciseLog: exerciseLog
-            )
+        let plannedSets = plannedExercise.plannedSets.sorted { $0.setNumber < $1.setNumber }
+
+        if plannedSets.isEmpty {
+            exerciseLog.setLogs = (1...plannedSetCount(from: plannedExercise.setsPrescription)).map { setNumber in
+                SetLog(
+                    setNumber: setNumber,
+                    plannedRepsText: plannedExercise.repsPrescription,
+                    plannedWeightText: plannedExercise.plannedWeightText,
+                    createdAt: date,
+                    updatedAt: date,
+                    exerciseLog: exerciseLog
+                )
+            }
+        } else {
+            exerciseLog.setLogs = plannedSets.map { plannedSet in
+                SetLog(
+                    setNumber: plannedSet.setNumber,
+                    plannedRepsText: plannedSet.repsText ?? plannedExercise.repsPrescription,
+                    plannedWeightText: plannedSet.weightText ?? plannedExercise.plannedWeightText,
+                    isWarmup: plannedSet.isWarmup,
+                    createdAt: date,
+                    updatedAt: date,
+                    exerciseLog: exerciseLog,
+                    plannedSet: plannedSet
+                )
+            }
         }
 
         return exerciseLog

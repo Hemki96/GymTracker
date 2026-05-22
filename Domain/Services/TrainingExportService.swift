@@ -167,12 +167,27 @@ struct TrainingExportService {
         }
 
         guard !matchingLogs.isEmpty else {
-            return [baseRow(
-                block: block,
-                week: week,
-                workout: workout,
-                plannedExercise: plannedExercise
-            ) + Array(repeating: "", count: 11)]
+            let planRow = baseRow(block: block, week: week, workout: workout, plannedExercise: plannedExercise)
+            let plannedSets = plannedExercise.plannedSets.sorted { $0.setNumber < $1.setNumber }
+            guard !plannedSets.isEmpty else {
+                return [planRow + Array(repeating: "", count: 11)]
+            }
+
+            return plannedSets.map { plannedSet in
+                planRow + [
+                    "\(plannedSet.setNumber)",
+                    plannedSet.repsText ?? "",
+                    plannedSet.weightText ?? "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "nein",
+                    plannedSet.notes ?? ""
+                ]
+            }
         }
 
         return matchingLogs.flatMap { session, exerciseLog in

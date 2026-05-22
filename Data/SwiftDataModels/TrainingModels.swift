@@ -195,6 +195,9 @@ final class PlannedExercise {
     var workoutPlan: WorkoutPlan?
     var exercise: Exercise?
 
+    @Relationship(deleteRule: .cascade, inverse: \PlannedSet.plannedExercise)
+    var plannedSets: [PlannedSet]
+
     @Relationship(deleteRule: .cascade, inverse: \ExerciseLog.plannedExercise)
     var exerciseLogs: [ExerciseLog]
 
@@ -213,6 +216,7 @@ final class PlannedExercise {
         updatedAt: Date = .now,
         workoutPlan: WorkoutPlan? = nil,
         exercise: Exercise? = nil,
+        plannedSets: [PlannedSet] = [],
         exerciseLogs: [ExerciseLog] = []
     ) {
         self.id = id
@@ -229,7 +233,54 @@ final class PlannedExercise {
         self.updatedAt = updatedAt
         self.workoutPlan = workoutPlan
         self.exercise = exercise
+        self.plannedSets = plannedSets
         self.exerciseLogs = exerciseLogs
+    }
+}
+
+@Model
+final class PlannedSet {
+    @Attribute(.unique) var id: UUID
+    var setNumber: Int
+    var repsText: String?
+    var weightText: String?
+    var targetRIRText: String?
+    var painTargetText: String?
+    var notes: String?
+    var isWarmup: Bool
+    var createdAt: Date
+    var updatedAt: Date
+    var plannedExercise: PlannedExercise?
+
+    @Relationship(deleteRule: .nullify, inverse: \SetLog.plannedSet)
+    var setLogs: [SetLog]
+
+    init(
+        id: UUID = UUID(),
+        setNumber: Int,
+        repsText: String? = nil,
+        weightText: String? = nil,
+        targetRIRText: String? = nil,
+        painTargetText: String? = nil,
+        notes: String? = nil,
+        isWarmup: Bool = false,
+        createdAt: Date = .now,
+        updatedAt: Date = .now,
+        plannedExercise: PlannedExercise? = nil,
+        setLogs: [SetLog] = []
+    ) {
+        self.id = id
+        self.setNumber = setNumber
+        self.repsText = repsText
+        self.weightText = weightText
+        self.targetRIRText = targetRIRText
+        self.painTargetText = painTargetText
+        self.notes = notes
+        self.isWarmup = isWarmup
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+        self.plannedExercise = plannedExercise
+        self.setLogs = setLogs
     }
 }
 
@@ -352,6 +403,7 @@ final class SetLog {
     var createdAt: Date
     var updatedAt: Date
     var exerciseLog: ExerciseLog?
+    var plannedSet: PlannedSet?
 
     init(
         id: UUID = UUID(),
@@ -367,7 +419,8 @@ final class SetLog {
         isCompleted: Bool = false,
         createdAt: Date = .now,
         updatedAt: Date = .now,
-        exerciseLog: ExerciseLog? = nil
+        exerciseLog: ExerciseLog? = nil,
+        plannedSet: PlannedSet? = nil
     ) {
         self.id = id
         self.setNumber = setNumber
@@ -383,5 +436,12 @@ final class SetLog {
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.exerciseLog = exerciseLog
+        self.plannedSet = plannedSet
     }
 }
+
+typealias TrainingPlan = TrainingBlock
+typealias TrainingSession = WorkoutPlan
+typealias CompletedSession = SessionLog
+typealias CompletedExercise = ExerciseLog
+typealias CompletedSet = SetLog

@@ -88,13 +88,13 @@ struct SessionCompletionService {
             for setLog in exerciseLog.setLogs.sorted(by: { $0.setNumber < $1.setNumber }) where setLog.isCompleted {
                 appendPainWarning(
                     for: setLog,
-                    plannedExercise: plannedExercise,
+                    targetText: setLog.plannedSet?.painTargetText ?? plannedExercise.painTargetText,
                     exerciseName: exerciseName,
                     to: &warnings
                 )
                 appendRIRWarning(
                     for: setLog,
-                    plannedExercise: plannedExercise,
+                    targetText: setLog.plannedSet?.targetRIRText ?? plannedExercise.targetRIRText,
                     exerciseName: exerciseName,
                     to: &warnings
                 )
@@ -106,11 +106,11 @@ struct SessionCompletionService {
 
     private func appendPainWarning(
         for setLog: SetLog,
-        plannedExercise: PlannedExercise,
+        targetText: String?,
         exerciseName: String,
         to warnings: inout [String]
     ) {
-        switch painEvaluator.evaluate(actualPain: setLog.pain, targetText: plannedExercise.painTargetText) {
+        switch painEvaluator.evaluate(actualPain: setLog.pain, targetText: targetText) {
         case let .warning(actualPain, maxPain):
             warnings.append("\(exerciseName), Satz \(setLog.setNumber): Schmerz \(actualPain)/10 ueber Ziel max \(maxPain)/10.")
         case let .invalidActualPain(actualPain):
@@ -128,11 +128,11 @@ struct SessionCompletionService {
 
     private func appendRIRWarning(
         for setLog: SetLog,
-        plannedExercise: PlannedExercise,
+        targetText: String?,
         exerciseName: String,
         to warnings: inout [String]
     ) {
-        switch rirAnalyzer.evaluate(actualRIR: setLog.rir, targetText: plannedExercise.targetRIRText) {
+        switch rirAnalyzer.evaluate(actualRIR: setLog.rir, targetText: targetText) {
         case let .tooEasy(actualRIR, range):
             warnings.append("\(exerciseName), Satz \(setLog.setNumber): RIR \(format(actualRIR)) ueber Ziel \(format(range)).")
         case let .tooHeavy(actualRIR, range):
@@ -171,17 +171,19 @@ struct SessionEditingService {
         let setLogs = sortedSetLogs(exerciseLog.setLogs)
         let lastSet = setLogs.last
         let plannedExercise = exerciseLog.plannedExercise
+        let nextPlannedSet = plannedExercise?.plannedSets.first { $0.setNumber == setLogs.count + 1 }
         let setLog = SetLog(
             setNumber: setLogs.count + 1,
-            plannedRepsText: plannedExercise?.repsPrescription,
+            plannedRepsText: nextPlannedSet?.repsText ?? plannedExercise?.repsPrescription,
             loggedReps: lastSet?.loggedReps,
-            plannedWeightText: plannedExercise?.plannedWeightText,
+            plannedWeightText: nextPlannedSet?.weightText ?? plannedExercise?.plannedWeightText,
             loggedWeightKg: lastSet?.loggedWeightKg,
             rir: lastSet?.rir,
             pain: lastSet?.pain,
             createdAt: date,
             updatedAt: date,
-            exerciseLog: exerciseLog
+            exerciseLog: exerciseLog,
+            plannedSet: nextPlannedSet
         )
 
         exerciseLog.setLogs.append(setLog)

@@ -39,6 +39,7 @@ struct SeedDataServiceTests {
         let weeks = try context.fetch(FetchDescriptor<TrainingWeek>())
         let workoutPlans = try context.fetch(FetchDescriptor<WorkoutPlan>())
         let plannedExercises = try context.fetch(FetchDescriptor<PlannedExercise>())
+        let plannedSets = try context.fetch(FetchDescriptor<PlannedSet>())
         let exercises = try context.fetch(FetchDescriptor<Exercise>())
         let markers = try context.fetch(FetchDescriptor<PersistentTrainingMarker>())
 
@@ -46,6 +47,7 @@ struct SeedDataServiceTests {
         #expect(weeks.count == 6)
         #expect(workoutPlans.count == 18)
         #expect(plannedExercises.count == 108)
+        #expect(plannedSets.count > plannedExercises.count)
         #expect(exercises.count == 16)
         #expect(markers.count == 1)
     }
@@ -69,6 +71,9 @@ struct SeedDataServiceTests {
         #expect(firstExercise.cueing == "Auf Druck unter den Fußsohlen achten")
         #expect(firstExercise.tempo == "kontrolliert langsam mit Pause")
         #expect(firstExercise.setsPrescription == "5")
+        #expect(firstExercise.plannedSets.count == 5)
+        #expect(firstExercise.plannedSets.allSatisfy { $0.repsText == "5" })
+        #expect(firstExercise.plannedSets.allSatisfy { $0.targetRIRText == "2-3" })
         #expect(firstExercise.repsPrescription == "5")
         #expect(firstExercise.plannedWeightText == "80")
         #expect(firstExercise.targetRIRText == "2-3")
@@ -167,6 +172,7 @@ struct SeedDataServiceTests {
             WorkoutPlan.self,
             Exercise.self,
             PlannedExercise.self,
+            PlannedSet.self,
             SessionLog.self,
             ExerciseLog.self,
             SetLog.self

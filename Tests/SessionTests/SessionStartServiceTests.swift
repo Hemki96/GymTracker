@@ -48,6 +48,52 @@ struct SessionStartServiceTests {
     }
 
     @Test
+    func startSessionCreatesCompletedSetDraftsFromPlannedSetsWhenProvided() throws {
+        let container = try makeInMemoryContainer()
+        let context = ModelContext(container)
+        let workoutPlan = TrainingSession(dayNumber: 42, title: "Generic Day", sortOrder: 42)
+        let exercise = Exercise(name: "Carries")
+        let plannedExercise = PlannedExercise(
+            sortOrder: 1,
+            setsPrescription: "ignore this text",
+            repsPrescription: "fallback reps",
+            plannedWeightText: "fallback load",
+            workoutPlan: workoutPlan,
+            exercise: exercise
+        )
+        let firstSet = PlannedSet(
+            setNumber: 10,
+            repsText: "40 m",
+            weightText: "24 kg",
+            targetRIRText: "steady",
+            painTargetText: "no sharp pain",
+            plannedExercise: plannedExercise
+        )
+        let secondSet = PlannedSet(
+            setNumber: 20,
+            repsText: "60 m",
+            weightText: "32 kg",
+            targetRIRText: "hard finish",
+            painTargetText: "athlete call",
+            plannedExercise: plannedExercise
+        )
+        plannedExercise.plannedSets = [secondSet, firstSet]
+        workoutPlan.plannedExercises = [plannedExercise]
+        context.insert(workoutPlan)
+
+        let session = try SessionStartService(context: context).startSession(from: workoutPlan)
+
+        let exerciseLog = try #require(session.exerciseLogs.first)
+        let setLogs = exerciseLog.setLogs.sorted { $0.setNumber < $1.setNumber }
+        #expect(setLogs.count == 2)
+        #expect(setLogs.map(\.setNumber) == [10, 20])
+        #expect(setLogs.map(\.plannedRepsText) == ["40 m", "60 m"])
+        #expect(setLogs.map(\.plannedWeightText) == ["24 kg", "32 kg"])
+        #expect(setLogs[0].plannedSet === firstSet)
+        #expect(setLogs[1].plannedSet === secondSet)
+    }
+
+    @Test
     func activeSessionCanBeFoundAfterContextRestart() throws {
         let container = try makeInMemoryContainer()
         let setupContext = ModelContext(container)
@@ -151,6 +197,7 @@ struct SessionStartServiceTests {
             WorkoutPlan.self,
             Exercise.self,
             PlannedExercise.self,
+            PlannedSet.self,
             SessionLog.self,
             ExerciseLog.self,
             SetLog.self

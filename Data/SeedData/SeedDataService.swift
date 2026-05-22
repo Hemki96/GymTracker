@@ -100,6 +100,10 @@ struct SeedDataService {
                         notes: normalizedOptional(exerciseFixture.notes),
                         exercise: exercise
                     )
+                    plannedExercise.plannedSets = makePlannedSets(
+                        from: exerciseFixture,
+                        for: plannedExercise
+                    )
                     workoutPlan.plannedExercises.append(plannedExercise)
                 }
 
@@ -198,6 +202,31 @@ struct SeedDataService {
 
     private func normalizedOptional(_ value: String) -> String? {
         value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : value
+    }
+
+    private func makePlannedSets(
+        from exercise: SeedPlannedExercise,
+        for plannedExercise: PlannedExercise
+    ) -> [PlannedSet] {
+        (1...plannedSetCount(from: exercise.sets)).map { setNumber in
+            PlannedSet(
+                setNumber: setNumber,
+                repsText: normalizedOptional(exercise.reps),
+                weightText: normalizedOptional(exercise.plannedWeight),
+                targetRIRText: normalizedOptional(exercise.targetRIR),
+                painTargetText: normalizedOptional(exercise.painTarget),
+                plannedExercise: plannedExercise
+            )
+        }
+    }
+
+    private func plannedSetCount(from prescription: String) -> Int {
+        let firstNumber = prescription
+            .split { !$0.isNumber }
+            .first
+            .flatMap { Int($0) }
+
+        return max(firstNumber ?? 1, 1)
     }
 
     private func category(for _: String) -> ExerciseCategory {

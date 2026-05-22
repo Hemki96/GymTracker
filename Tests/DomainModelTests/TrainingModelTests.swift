@@ -121,6 +121,99 @@ struct TrainingModelTests {
         #expect(persistedExerciseLog.setLogs.first?.loggedWeightKg == 80)
     }
 
+    @Test
+    func genericPlanSupportsVariableShapeAndSeparatePlannedAndCompletedData() throws {
+        let planID = UUID()
+        let weekID = UUID()
+        let sessionID = UUID()
+        let exerciseID = UUID()
+        let plannedSetID = UUID()
+        let completedSessionID = UUID()
+        let completedExerciseID = UUID()
+        let completedSetID = UUID()
+
+        let plan = TrainingPlan(
+            id: planID,
+            name: "Any Plan",
+            athleteName: nil,
+            goal: "Move better"
+        )
+        let week = TrainingWeek(id: weekID, weekNumber: 9, title: "Deload")
+        let plannedSession = TrainingSession(
+            id: sessionID,
+            dayNumber: 4,
+            title: "Optional Mobility",
+            sortOrder: 99
+        )
+        let exercise = Exercise(id: exerciseID, name: "Custom Movement")
+        let plannedExercise = PlannedExercise(
+            sortOrder: 12,
+            setsPrescription: "custom",
+            repsPrescription: "as prescribed",
+            targetRIRText: "coach note",
+            painTargetText: "athlete-defined",
+            workoutPlan: plannedSession,
+            exercise: exercise
+        )
+        let plannedSet = PlannedSet(
+            id: plannedSetID,
+            setNumber: 7,
+            repsText: "30 sec",
+            weightText: "band",
+            targetRIRText: "easy",
+            painTargetText: "stop on symptoms",
+            plannedExercise: plannedExercise
+        )
+        let completedSession = CompletedSession(
+            id: completedSessionID,
+            status: .completed,
+            workoutPlan: plannedSession
+        )
+        let completedExercise = CompletedExercise(
+            id: completedExerciseID,
+            isCompleted: true,
+            sessionLog: completedSession,
+            plannedExercise: plannedExercise
+        )
+        let completedSet = CompletedSet(
+            id: completedSetID,
+            setNumber: plannedSet.setNumber,
+            plannedRepsText: plannedSet.repsText,
+            loggedReps: nil,
+            plannedWeightText: plannedSet.weightText,
+            loggedWeightKg: nil,
+            rir: 4.5,
+            pain: 11,
+            isCompleted: true,
+            exerciseLog: completedExercise,
+            plannedSet: plannedSet
+        )
+
+        plan.weeks = [week]
+        week.workoutPlans = [plannedSession]
+        plannedSession.plannedExercises = [plannedExercise]
+        plannedExercise.plannedSets = [plannedSet]
+        plannedSession.sessionLogs = [completedSession]
+        completedSession.exerciseLogs = [completedExercise]
+        completedExercise.setLogs = [completedSet]
+
+        #expect(plan.id == planID)
+        #expect(week.id == weekID)
+        #expect(plannedSession.id == sessionID)
+        #expect(exercise.id == exerciseID)
+        #expect(plannedSet.id == plannedSetID)
+        #expect(completedSession.id == completedSessionID)
+        #expect(completedExercise.id == completedExerciseID)
+        #expect(completedSet.id == completedSetID)
+        #expect(plan.weeks.count == 1)
+        #expect(week.workoutPlans.count == 1)
+        #expect(plannedSession.plannedExercises.count == 1)
+        #expect(plannedExercise.plannedSets.count == 1)
+        #expect(completedExercise.setLogs.first?.plannedSet === plannedSet)
+        #expect(completedSet.rir == 4.5)
+        #expect(completedSet.pain == 11)
+    }
+
     private func makeInMemoryContainer() throws -> ModelContainer {
         let schema = Schema([
             PersistentTrainingMarker.self,
@@ -129,6 +222,7 @@ struct TrainingModelTests {
             WorkoutPlan.self,
             Exercise.self,
             PlannedExercise.self,
+            PlannedSet.self,
             SessionLog.self,
             ExerciseLog.self,
             SetLog.self
