@@ -1,0 +1,24 @@
+{
+  "source": "/Users/christian/Documents/GitHub/GymTracker/Features/Plan/WorkoutDayCard.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Tag %lld",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 22
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld Übungen",
+        "location": {
+          "startingColumn": 23,
+          "startingLine": 44
+        }
+      }
+    ]
+  },
+  "version": 1
+}

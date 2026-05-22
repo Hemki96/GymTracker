@@ -1,0 +1,40 @@
+{
+  "source": "/Users/christian/Documents/GitHub/GymTracker/Features/Plan/PlanView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Trainingsplan",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 63
+        }
+      },
+      {
+        "comment": "",
+        "key": "Der Trainingsplan wurde noch nicht importiert.",
+        "location": {
+          "startingColumn": 47,
+          "startingLine": 32
+        }
+      },
+      {
+        "comment": "",
+        "key": "Kein Plan vorhanden",
+        "location": {
+          "startingColumn": 29,
+          "startingLine": 30
+        }
+      },
+      {
+        "comment": "",
+        "key": "Tag 1 bis Tag 3",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 43
+        }
+      }
+    ]
+  },
+  "version": 1
+}
