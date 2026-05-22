@@ -7,7 +7,7 @@ struct GymTrackerApp: App {
 
     var body: some Scene {
         WindowGroup {
-            DashboardView(viewModel: environment.makeDashboardViewModel())
+            PlanView()
         }
         .modelContainer(environment.modelContainer)
     }
