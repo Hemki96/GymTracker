@@ -2,7 +2,11 @@ import SwiftData
 import SwiftUI
 
 struct WorkoutDetailView: View {
+    @Environment(\.modelContext) private var modelContext
+
     let workout: WorkoutPlan
+    @State private var activeSession: SessionLog?
+    @State private var sessionStartError: String?
 
     private var weekNumber: Int {
         workout.week?.weekNumber ?? 0
@@ -51,6 +55,71 @@ struct WorkoutDetailView: View {
         .background(Color(.systemGroupedBackground))
         .navigationTitle("Workout")
         .navigationBarTitleDisplayMode(.inline)
+        .safeAreaInset(edge: .bottom) {
+            Button {
+                startOrResumeSession()
+            } label: {
+                Label(sessionButtonTitle, systemImage: "play.circle.fill")
+                    .frame(maxWidth: .infinity, minHeight: 52)
+            }
+            .buttonStyle(.borderedProminent)
+            .controlSize(.large)
+            .padding(AppTheme.Spacing.large)
+            .background(.regularMaterial)
+        }
+        .navigationDestination(isPresented: activeSessionBinding) {
+            if let activeSession {
+                ActiveSessionView(sessionLog: activeSession)
+            }
+        }
+        .alert("Session kann nicht gestartet werden", isPresented: errorBinding) {
+            Button("OK", role: .cancel) {
+                sessionStartError = nil
+            }
+        } message: {
+            Text(sessionStartError ?? "")
+        }
+    }
+
+    private var sessionButtonTitle: String {
+        workout.sessionLogs.contains { $0.status == .active } ? "Session fortsetzen" : "Training starten"
+    }
+
+    private var errorBinding: Binding<Bool> {
+        Binding {
+            sessionStartError != nil
+        } set: { isPresented in
+            if !isPresented {
+                sessionStartError = nil
+            }
+        }
+    }
+
+    private var activeSessionBinding: Binding<Bool> {
+        Binding {
+            activeSession != nil
+        } set: { isPresented in
+            if !isPresented {
+                activeSession = nil
+            }
+        }
+    }
+
+    private func startOrResumeSession() {
+        if let existingSession = workout.sessionLogs.first(where: { $0.status == .active }) {
+            activeSession = existingSession
+            return
+        }
+
+        let service = SessionStartService(context: modelContext)
+
+        do {
+            activeSession = try service.startSession(from: workout)
+        } catch SessionStartError.activeSessionAlreadyExists {
+            sessionStartError = "Es läuft bereits eine andere aktive Session. Beende diese zuerst oder öffne sie über den aktuellen Workout-Kontext."
+        } catch {
+            sessionStartError = "Die Session konnte nicht gespeichert werden."
+        }
     }
 }
 
