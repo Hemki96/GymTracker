@@ -1,0 +1,1450 @@
+{
+  "source": "Trainingsplan Christian Hemker B1.xlsx",
+  "trainingBlock": {
+    "name": "Wettkampfvorbereitung bis 20.06.2026",
+    "athleteName": "Christian Hemker",
+    "goal": "Belastbarkeitsaufbau Knie + Kraftsteigerung",
+    "weeks": [
+      {
+        "weekNumber": 1,
+        "title": "Woche 1",
+        "days": [
+          {
+            "dayNumber": 1,
+            "title": "Tag 1",
+            "exercises": [
+              {
+                "sortOrder": 1,
+                "name": "Kniebeugen",
+                "cueing": "Auf Druck unter den Fußsohlen achten",
+                "tempo": "kontrolliert langsam mit Pause",
+                "sets": "5",
+                "reps": "5",
+                "plannedWeight": "80",
+                "targetRIR": "2-3",
+                "painTarget": "max 3/10",
+                "notes": "Barfuß"
+              },
+              {
+                "sortOrder": 2,
+                "name": "Bulgarian Split Squats",
+                "cueing": "Auf Druck unter den Fußsohlen achten",
+                "tempo": "kontrolliert langsam",
+                "sets": "3",
+                "reps": "6-10",
+                "plannedWeight": "10",
+                "targetRIR": "3-4",
+                "painTarget": "max 3/10",
+                "notes": "Barfuß"
+              },
+              {
+                "sortOrder": 3,
+                "name": "Latziehen",
+                "cueing": "",
+                "tempo": "explosiv hoch",
+                "sets": "5",
+                "reps": "5",
+                "plannedWeight": "50",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 4,
+                "name": "Lu Raises",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "6-10",
+                "plannedWeight": "5/5",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 5,
+                "name": "Ab Wheel",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "AMRAP",
+                "plannedWeight": "-",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 6,
+                "name": "Hyperextensions mit Glute Fokus",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "6-10",
+                "plannedWeight": "8",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              }
+            ]
+          },
+          {
+            "dayNumber": 2,
+            "title": "Tag 2",
+            "exercises": [
+              {
+                "sortOrder": 1,
+                "name": "Kreuzheben mit Trapbar",
+                "cueing": "",
+                "tempo": "etwas explosiv vom Boden, wenn das Knie es erlaubt",
+                "sets": "5",
+                "reps": "5",
+                "plannedWeight": "80",
+                "targetRIR": "3-4",
+                "painTarget": "max 3/10",
+                "notes": ""
+              },
+              {
+                "sortOrder": 2,
+                "name": "Rudern mit V-Griff",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "6-8",
+                "plannedWeight": "40",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 3,
+                "name": "Überzüge mit Kurzhantel",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "6-8",
+                "plannedWeight": "18",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 4,
+                "name": "Pallof Rotations",
+                "cueing": "",
+                "tempo": "",
+                "sets": "4",
+                "reps": "8-12",
+                "plannedWeight": "",
+                "targetRIR": "2-3",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 5,
+                "name": "Beinbeuger",
+                "cueing": "",
+                "tempo": "",
+                "sets": "4",
+                "reps": "8-12",
+                "plannedWeight": "60",
+                "targetRIR": "2-3",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 6,
+                "name": "Beinstrecker",
+                "cueing": "",
+                "tempo": "",
+                "sets": "4",
+                "reps": "8-12",
+                "plannedWeight": "",
+                "targetRIR": "2-3",
+                "painTarget": "max 3/10",
+                "notes": ""
+              }
+            ]
+          },
+          {
+            "dayNumber": 3,
+            "title": "Tag 3",
+            "exercises": [
+              {
+                "sortOrder": 1,
+                "name": "Kniebeugen",
+                "cueing": "Auf Druck unter den Fußsohlen achten",
+                "tempo": "kontrolliert langsam mit Pause",
+                "sets": "5",
+                "reps": "5",
+                "plannedWeight": "",
+                "targetRIR": "2-3",
+                "painTarget": "max 3/10",
+                "notes": ""
+              },
+              {
+                "sortOrder": 2,
+                "name": "Bulgarian Split Squats",
+                "cueing": "Auf Druck unter den Fußsohlen achten",
+                "tempo": "kontrolliert langsam",
+                "sets": "3",
+                "reps": "6-10",
+                "plannedWeight": "",
+                "targetRIR": "3",
+                "painTarget": "max 3/10",
+                "notes": ""
+              },
+              {
+                "sortOrder": 3,
+                "name": "Klimmzüge (mit Zusatzgewicht)",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "5",
+                "plannedWeight": "",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 4,
+                "name": "Kurzhantel über Kopf drücken, stehend",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "6-8",
+                "plannedWeight": "",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 5,
+                "name": "Hollow Body Hold",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "ALAP",
+                "plannedWeight": "",
+                "targetRIR": "7RPE",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 6,
+                "name": "Superman Hold",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "ALAP",
+                "plannedWeight": "",
+                "targetRIR": "7RPE",
+                "painTarget": "",
+                "notes": ""
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "weekNumber": 2,
+        "title": "Woche 2",
+        "days": [
+          {
+            "dayNumber": 1,
+            "title": "Tag 1",
+            "exercises": [
+              {
+                "sortOrder": 1,
+                "name": "Kniebeugen",
+                "cueing": "Auf Druck unter den Fußsohlen achten",
+                "tempo": "kontrolliert langsam mit Pause",
+                "sets": "5",
+                "reps": "4",
+                "plannedWeight": "3x90/2x80",
+                "targetRIR": "2-3",
+                "painTarget": "max 3/10",
+                "notes": "Barfuß"
+              },
+              {
+                "sortOrder": 2,
+                "name": "Bulgarian Split Squats",
+                "cueing": "Auf Druck unter den Fußsohlen achten",
+                "tempo": "kontrolliert langsam",
+                "sets": "3",
+                "reps": "6-10",
+                "plannedWeight": "10",
+                "targetRIR": "3-4",
+                "painTarget": "max 3/10",
+                "notes": "Barfuß"
+              },
+              {
+                "sortOrder": 3,
+                "name": "Latziehen",
+                "cueing": "",
+                "tempo": "explosiv hoch",
+                "sets": "5",
+                "reps": "3",
+                "plannedWeight": "55",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 4,
+                "name": "Lu Raises",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "6-10",
+                "plannedWeight": "5/5",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 5,
+                "name": "Ab Wheel",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "AMRAP",
+                "plannedWeight": "8/",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 6,
+                "name": "Hyperextensions mit Glute Fokus",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "6-10",
+                "plannedWeight": "",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              }
+            ]
+          },
+          {
+            "dayNumber": 2,
+            "title": "Tag 2",
+            "exercises": [
+              {
+                "sortOrder": 1,
+                "name": "Kreuzheben mit Trapbar",
+                "cueing": "",
+                "tempo": "etwas explosiv vom Boden, wenn das Knie es erlaubt",
+                "sets": "5",
+                "reps": "4",
+                "plannedWeight": "70",
+                "targetRIR": "3-4",
+                "painTarget": "max 3/10",
+                "notes": ""
+              },
+              {
+                "sortOrder": 2,
+                "name": "Rudern mit V-Griff",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "6-8",
+                "plannedWeight": "40",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 3,
+                "name": "Überzüge mit Kurzhantel",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "6-8",
+                "plannedWeight": "18",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 4,
+                "name": "Pallof Rotations",
+                "cueing": "",
+                "tempo": "",
+                "sets": "4",
+                "reps": "8-12",
+                "plannedWeight": "",
+                "targetRIR": "2-3",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 5,
+                "name": "Beinbeuger",
+                "cueing": "",
+                "tempo": "",
+                "sets": "4",
+                "reps": "8-12",
+                "plannedWeight": "65",
+                "targetRIR": "2-3",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 6,
+                "name": "Beinstrecker",
+                "cueing": "",
+                "tempo": "",
+                "sets": "4",
+                "reps": "8-12",
+                "plannedWeight": "",
+                "targetRIR": "2-3",
+                "painTarget": "max 3/10",
+                "notes": ""
+              }
+            ]
+          },
+          {
+            "dayNumber": 3,
+            "title": "Tag 3",
+            "exercises": [
+              {
+                "sortOrder": 1,
+                "name": "Kniebeugen",
+                "cueing": "Auf Druck unter den Fußsohlen achten",
+                "tempo": "kontrolliert langsam mit Pause",
+                "sets": "5",
+                "reps": "4",
+                "plannedWeight": "80",
+                "targetRIR": "2-3",
+                "painTarget": "max 3/10",
+                "notes": ""
+              },
+              {
+                "sortOrder": 2,
+                "name": "Bulgarian Split Squats",
+                "cueing": "Auf Druck unter den Fußsohlen achten",
+                "tempo": "kontrolliert langsam",
+                "sets": "3",
+                "reps": "6-10",
+                "plannedWeight": "",
+                "targetRIR": "3",
+                "painTarget": "max 3/10",
+                "notes": ""
+              },
+              {
+                "sortOrder": 3,
+                "name": "Klimmzüge (mit Zusatzgewicht)",
+                "cueing": "",
+                "tempo": "explosiv hoch",
+                "sets": "3",
+                "reps": "5",
+                "plannedWeight": "5",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": "Nur 3 Wiederholungen mit dem Gewicht"
+              },
+              {
+                "sortOrder": 4,
+                "name": "Kurzhantel über Kopf drücken, stehend",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "6-8",
+                "plannedWeight": "12",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 5,
+                "name": "Hollow Body Hold",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "ALAP",
+                "plannedWeight": "",
+                "targetRIR": "7RPE",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 6,
+                "name": "Superman Hold",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "ALAP",
+                "plannedWeight": "",
+                "targetRIR": "7RPE",
+                "painTarget": "",
+                "notes": ""
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "weekNumber": 3,
+        "title": "Woche 3",
+        "days": [
+          {
+            "dayNumber": 1,
+            "title": "Tag 1",
+            "exercises": [
+              {
+                "sortOrder": 1,
+                "name": "Kniebeugen",
+                "cueing": "Auf Druck unter den Fußsohlen achten",
+                "tempo": "kontrolliert langsam mit Pause",
+                "sets": "5",
+                "reps": "3",
+                "plannedWeight": "100",
+                "targetRIR": "2-3",
+                "painTarget": "max 3/10",
+                "notes": "Barfuß"
+              },
+              {
+                "sortOrder": 2,
+                "name": "Bulgarian Split Squats",
+                "cueing": "Auf Druck unter den Fußsohlen achten",
+                "tempo": "kontrolliert langsam",
+                "sets": "3",
+                "reps": "6-10",
+                "plannedWeight": "12",
+                "targetRIR": "3-4",
+                "painTarget": "max 3/10",
+                "notes": "Barfuß"
+              },
+              {
+                "sortOrder": 3,
+                "name": "Latziehen",
+                "cueing": "",
+                "tempo": "explosiv hoch",
+                "sets": "5",
+                "reps": "1",
+                "plannedWeight": "60",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 4,
+                "name": "Lu Raises",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "6-10",
+                "plannedWeight": "5/5",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 5,
+                "name": "Ab Wheel",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "AMRAP",
+                "plannedWeight": "",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 6,
+                "name": "Hyperextensions mit Glute Fokus",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "6-10",
+                "plannedWeight": "",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              }
+            ]
+          },
+          {
+            "dayNumber": 2,
+            "title": "Tag 2",
+            "exercises": [
+              {
+                "sortOrder": 1,
+                "name": "Kreuzheben mit Trapbar",
+                "cueing": "",
+                "tempo": "etwas explosiv vom Boden, wenn das Knie es erlaubt",
+                "sets": "5",
+                "reps": "3",
+                "plannedWeight": "80",
+                "targetRIR": "3-4",
+                "painTarget": "max 3/10",
+                "notes": ""
+              },
+              {
+                "sortOrder": 2,
+                "name": "Rudern mit V-Griff",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "6-8",
+                "plannedWeight": "40",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 3,
+                "name": "Überzüge mit Kurzhantel",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "6-8",
+                "plannedWeight": "18",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 4,
+                "name": "Pallof Rotations",
+                "cueing": "",
+                "tempo": "",
+                "sets": "4",
+                "reps": "8-12",
+                "plannedWeight": "",
+                "targetRIR": "2-3",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 5,
+                "name": "Beinbeuger",
+                "cueing": "",
+                "tempo": "",
+                "sets": "4",
+                "reps": "8-12",
+                "plannedWeight": "",
+                "targetRIR": "2-3",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 6,
+                "name": "Beinstrecker",
+                "cueing": "",
+                "tempo": "",
+                "sets": "4",
+                "reps": "8-12",
+                "plannedWeight": "35",
+                "targetRIR": "2-3",
+                "painTarget": "max 3/10",
+                "notes": ""
+              }
+            ]
+          },
+          {
+            "dayNumber": 3,
+            "title": "Tag 3",
+            "exercises": [
+              {
+                "sortOrder": 1,
+                "name": "Kniebeugen",
+                "cueing": "Auf Druck unter den Fußsohlen achten",
+                "tempo": "kontrolliert langsam mit Pause",
+                "sets": "5",
+                "reps": "3",
+                "plannedWeight": "",
+                "targetRIR": "2-3",
+                "painTarget": "max 3/10",
+                "notes": ""
+              },
+              {
+                "sortOrder": 2,
+                "name": "Bulgarian Split Squats",
+                "cueing": "Auf Druck unter den Fußsohlen achten",
+                "tempo": "kontrolliert langsam",
+                "sets": "3",
+                "reps": "6-10",
+                "plannedWeight": "",
+                "targetRIR": "3",
+                "painTarget": "max 3/10",
+                "notes": ""
+              },
+              {
+                "sortOrder": 3,
+                "name": "Klimmzüge (mit Zusatzgewicht)",
+                "cueing": "",
+                "tempo": "explosiv hoch",
+                "sets": "3",
+                "reps": "5",
+                "plannedWeight": "",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 4,
+                "name": "Kurzhantel über Kopf drücken, stehend",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "6-8",
+                "plannedWeight": "",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 5,
+                "name": "Hollow Body Hold",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "ALAP",
+                "plannedWeight": "",
+                "targetRIR": "7RPE",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 6,
+                "name": "Superman Hold",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "ALAP",
+                "plannedWeight": "",
+                "targetRIR": "7RPE",
+                "painTarget": "",
+                "notes": ""
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "weekNumber": 4,
+        "title": "Woche 4",
+        "days": [
+          {
+            "dayNumber": 1,
+            "title": "Tag 1",
+            "exercises": [
+              {
+                "sortOrder": 1,
+                "name": "Kniebeugen",
+                "cueing": "Auf Druck unter den Fußsohlen achten",
+                "tempo": "kontrolliert langsam mit Pause",
+                "sets": "5",
+                "reps": "5",
+                "plannedWeight": "",
+                "targetRIR": "2-3",
+                "painTarget": "max 3/10",
+                "notes": "Barfuß"
+              },
+              {
+                "sortOrder": 2,
+                "name": "Bulgarian Split Squats",
+                "cueing": "Auf Druck unter den Fußsohlen achten",
+                "tempo": "kontrolliert langsam",
+                "sets": "3",
+                "reps": "6-10",
+                "plannedWeight": "",
+                "targetRIR": "3-4",
+                "painTarget": "max 3/10",
+                "notes": "Barfuß"
+              },
+              {
+                "sortOrder": 3,
+                "name": "Latziehen",
+                "cueing": "",
+                "tempo": "explosiv hoch",
+                "sets": "5",
+                "reps": "5",
+                "plannedWeight": "",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 4,
+                "name": "Lu Raises",
+                "cueing": "",
+                "tempo": "",
+                "sets": "4",
+                "reps": "6-10",
+                "plannedWeight": "",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 5,
+                "name": "Ab Wheel",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "AMRAP",
+                "plannedWeight": "",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 6,
+                "name": "Hyperextensions mit Glute Fokus",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "6-10",
+                "plannedWeight": "",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              }
+            ]
+          },
+          {
+            "dayNumber": 2,
+            "title": "Tag 2",
+            "exercises": [
+              {
+                "sortOrder": 1,
+                "name": "Kreuzheben mit Trapbar",
+                "cueing": "",
+                "tempo": "etwas explosiv vom Boden, wenn das Knie es erlaubt",
+                "sets": "5",
+                "reps": "5",
+                "plannedWeight": "",
+                "targetRIR": "3-4",
+                "painTarget": "max 3/10",
+                "notes": ""
+              },
+              {
+                "sortOrder": 2,
+                "name": "Rudern mit V-Griff",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "6-8",
+                "plannedWeight": "",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 3,
+                "name": "Überzüge mit Kurzhantel",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "6-8",
+                "plannedWeight": "",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 4,
+                "name": "Pallof Rotations",
+                "cueing": "",
+                "tempo": "",
+                "sets": "4",
+                "reps": "8-12",
+                "plannedWeight": "",
+                "targetRIR": "2-3",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 5,
+                "name": "Beinbeuger",
+                "cueing": "",
+                "tempo": "",
+                "sets": "4",
+                "reps": "8-12",
+                "plannedWeight": "",
+                "targetRIR": "2-3",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 6,
+                "name": "Beinstrecker",
+                "cueing": "",
+                "tempo": "",
+                "sets": "4",
+                "reps": "8-12",
+                "plannedWeight": "",
+                "targetRIR": "2-3",
+                "painTarget": "max 3/10",
+                "notes": ""
+              }
+            ]
+          },
+          {
+            "dayNumber": 3,
+            "title": "Tag 3",
+            "exercises": [
+              {
+                "sortOrder": 1,
+                "name": "Kniebeugen",
+                "cueing": "Auf Druck unter den Fußsohlen achten",
+                "tempo": "kontrolliert langsam mit Pause",
+                "sets": "5",
+                "reps": "5",
+                "plannedWeight": "",
+                "targetRIR": "2-3",
+                "painTarget": "max 3/10",
+                "notes": ""
+              },
+              {
+                "sortOrder": 2,
+                "name": "Bulgarian Split Squats",
+                "cueing": "Auf Druck unter den Fußsohlen achten",
+                "tempo": "kontrolliert langsam",
+                "sets": "3",
+                "reps": "6-10",
+                "plannedWeight": "",
+                "targetRIR": "3",
+                "painTarget": "max 3/10",
+                "notes": ""
+              },
+              {
+                "sortOrder": 3,
+                "name": "Klimmzüge (mit Zusatzgewicht)",
+                "cueing": "",
+                "tempo": "explosiv hoch",
+                "sets": "3",
+                "reps": "5",
+                "plannedWeight": "",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 4,
+                "name": "Kurzhantel über Kopf drücken, stehend",
+                "cueing": "",
+                "tempo": "",
+                "sets": "4",
+                "reps": "6-8",
+                "plannedWeight": "",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 5,
+                "name": "Hollow Body Hold",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "ALAP",
+                "plannedWeight": "",
+                "targetRIR": "7RPE",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 6,
+                "name": "Superman Hold",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "ALAP",
+                "plannedWeight": "",
+                "targetRIR": "7RPE",
+                "painTarget": "",
+                "notes": ""
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "weekNumber": 5,
+        "title": "Woche 5",
+        "days": [
+          {
+            "dayNumber": 1,
+            "title": "Tag 1",
+            "exercises": [
+              {
+                "sortOrder": 1,
+                "name": "Kniebeugen",
+                "cueing": "Auf Druck unter den Fußsohlen achten",
+                "tempo": "kontrolliert langsam mit Pause",
+                "sets": "5",
+                "reps": "4",
+                "plannedWeight": "",
+                "targetRIR": "2-3",
+                "painTarget": "max 3/10",
+                "notes": "Barfuß"
+              },
+              {
+                "sortOrder": 2,
+                "name": "Bulgarian Split Squats",
+                "cueing": "Auf Druck unter den Fußsohlen achten",
+                "tempo": "kontrolliert langsam",
+                "sets": "3",
+                "reps": "6-10",
+                "plannedWeight": "",
+                "targetRIR": "3-4",
+                "painTarget": "max 3/10",
+                "notes": "Barfuß"
+              },
+              {
+                "sortOrder": 3,
+                "name": "Latziehen",
+                "cueing": "",
+                "tempo": "explosiv hoch",
+                "sets": "5",
+                "reps": "3",
+                "plannedWeight": "",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 4,
+                "name": "Lu Raises",
+                "cueing": "",
+                "tempo": "",
+                "sets": "4",
+                "reps": "6-10",
+                "plannedWeight": "",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 5,
+                "name": "Ab Wheel",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "AMRAP",
+                "plannedWeight": "",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 6,
+                "name": "Hyperextensions mit Glute Fokus",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "6-10",
+                "plannedWeight": "",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              }
+            ]
+          },
+          {
+            "dayNumber": 2,
+            "title": "Tag 2",
+            "exercises": [
+              {
+                "sortOrder": 1,
+                "name": "Kreuzheben mit Trapbar",
+                "cueing": "",
+                "tempo": "etwas explosiv vom Boden, wenn das Knie es erlaubt",
+                "sets": "5",
+                "reps": "4",
+                "plannedWeight": "",
+                "targetRIR": "3-4",
+                "painTarget": "max 3/10",
+                "notes": ""
+              },
+              {
+                "sortOrder": 2,
+                "name": "Rudern mit V-Griff",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "6-8",
+                "plannedWeight": "",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 3,
+                "name": "Überzüge mit Kurzhantel",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "6-8",
+                "plannedWeight": "",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 4,
+                "name": "Pallof Rotations",
+                "cueing": "",
+                "tempo": "",
+                "sets": "4",
+                "reps": "8-12",
+                "plannedWeight": "",
+                "targetRIR": "2-3",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 5,
+                "name": "Beinbeuger",
+                "cueing": "",
+                "tempo": "",
+                "sets": "4",
+                "reps": "8-12",
+                "plannedWeight": "",
+                "targetRIR": "2-3",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 6,
+                "name": "Beinstrecker",
+                "cueing": "",
+                "tempo": "",
+                "sets": "4",
+                "reps": "8-12",
+                "plannedWeight": "",
+                "targetRIR": "2-3",
+                "painTarget": "max 3/10",
+                "notes": ""
+              }
+            ]
+          },
+          {
+            "dayNumber": 3,
+            "title": "Tag 3",
+            "exercises": [
+              {
+                "sortOrder": 1,
+                "name": "Kniebeugen",
+                "cueing": "Auf Druck unter den Fußsohlen achten",
+                "tempo": "kontrolliert langsam mit Pause",
+                "sets": "5",
+                "reps": "4",
+                "plannedWeight": "",
+                "targetRIR": "2-3",
+                "painTarget": "max 3/10",
+                "notes": ""
+              },
+              {
+                "sortOrder": 2,
+                "name": "Bulgarian Split Squats",
+                "cueing": "Auf Druck unter den Fußsohlen achten",
+                "tempo": "kontrolliert langsam",
+                "sets": "3",
+                "reps": "6-10",
+                "plannedWeight": "",
+                "targetRIR": "3",
+                "painTarget": "max 3/10",
+                "notes": ""
+              },
+              {
+                "sortOrder": 3,
+                "name": "Klimmzüge (mit Zusatzgewicht)",
+                "cueing": "",
+                "tempo": "explosiv hoch",
+                "sets": "3",
+                "reps": "5",
+                "plannedWeight": "",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 4,
+                "name": "Kurzhantel über Kopf drücken, stehend",
+                "cueing": "",
+                "tempo": "",
+                "sets": "4",
+                "reps": "6-8",
+                "plannedWeight": "",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 5,
+                "name": "Hollow Body Hold",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "ALAP",
+                "plannedWeight": "",
+                "targetRIR": "7RPE",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 6,
+                "name": "Superman Hold",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "ALAP",
+                "plannedWeight": "",
+                "targetRIR": "7RPE",
+                "painTarget": "",
+                "notes": ""
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "weekNumber": 6,
+        "title": "Woche 6",
+        "days": [
+          {
+            "dayNumber": 1,
+            "title": "Tag 1",
+            "exercises": [
+              {
+                "sortOrder": 1,
+                "name": "Kniebeugen",
+                "cueing": "Auf Druck unter den Fußsohlen achten",
+                "tempo": "kontrolliert langsam mit Pause",
+                "sets": "5",
+                "reps": "3",
+                "plannedWeight": "",
+                "targetRIR": "2-3",
+                "painTarget": "max 3/10",
+                "notes": "Barfuß"
+              },
+              {
+                "sortOrder": 2,
+                "name": "Bulgarian Split Squats",
+                "cueing": "Auf Druck unter den Fußsohlen achten",
+                "tempo": "kontrolliert langsam",
+                "sets": "3",
+                "reps": "6-10",
+                "plannedWeight": "",
+                "targetRIR": "3-4",
+                "painTarget": "max 3/10",
+                "notes": "Barfuß"
+              },
+              {
+                "sortOrder": 3,
+                "name": "Latziehen",
+                "cueing": "",
+                "tempo": "explosiv hoch",
+                "sets": "5",
+                "reps": "1",
+                "plannedWeight": "",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 4,
+                "name": "Lu Raises",
+                "cueing": "",
+                "tempo": "",
+                "sets": "4",
+                "reps": "6-10",
+                "plannedWeight": "",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 5,
+                "name": "Ab Wheel",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "AMRAP",
+                "plannedWeight": "",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 6,
+                "name": "Hyperextensions mit Glute Fokus",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "6-10",
+                "plannedWeight": "",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              }
+            ]
+          },
+          {
+            "dayNumber": 2,
+            "title": "Tag 2",
+            "exercises": [
+              {
+                "sortOrder": 1,
+                "name": "Kreuzheben mit Trapbar",
+                "cueing": "",
+                "tempo": "etwas explosiv vom Boden, wenn das Knie es erlaubt",
+                "sets": "5",
+                "reps": "3",
+                "plannedWeight": "",
+                "targetRIR": "3-4",
+                "painTarget": "max 3/10",
+                "notes": ""
+              },
+              {
+                "sortOrder": 2,
+                "name": "Rudern mit V-Griff",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "6-8",
+                "plannedWeight": "",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 3,
+                "name": "Überzüge mit Kurzhantel",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "6-8",
+                "plannedWeight": "",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 4,
+                "name": "Pallof Rotations",
+                "cueing": "",
+                "tempo": "",
+                "sets": "4",
+                "reps": "8-12",
+                "plannedWeight": "",
+                "targetRIR": "2-3",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 5,
+                "name": "Beinbeuger",
+                "cueing": "",
+                "tempo": "",
+                "sets": "4",
+                "reps": "8-12",
+                "plannedWeight": "",
+                "targetRIR": "2-3",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 6,
+                "name": "Beinstrecker",
+                "cueing": "",
+                "tempo": "",
+                "sets": "4",
+                "reps": "8-12",
+                "plannedWeight": "",
+                "targetRIR": "2-3",
+                "painTarget": "max 3/10",
+                "notes": ""
+              }
+            ]
+          },
+          {
+            "dayNumber": 3,
+            "title": "Tag 3",
+            "exercises": [
+              {
+                "sortOrder": 1,
+                "name": "Kniebeugen",
+                "cueing": "Auf Druck unter den Fußsohlen achten",
+                "tempo": "kontrolliert langsam mit Pause",
+                "sets": "5",
+                "reps": "3",
+                "plannedWeight": "",
+                "targetRIR": "2-3",
+                "painTarget": "max 3/10",
+                "notes": ""
+              },
+              {
+                "sortOrder": 2,
+                "name": "Bulgarian Split Squats",
+                "cueing": "Auf Druck unter den Fußsohlen achten",
+                "tempo": "kontrolliert langsam",
+                "sets": "3",
+                "reps": "6-10",
+                "plannedWeight": "",
+                "targetRIR": "3",
+                "painTarget": "max 3/10",
+                "notes": ""
+              },
+              {
+                "sortOrder": 3,
+                "name": "Klimmzüge (mit Zusatzgewicht)",
+                "cueing": "",
+                "tempo": "explosiv hoch",
+                "sets": "3",
+                "reps": "5",
+                "plannedWeight": "",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 4,
+                "name": "Kurzhantel über Kopf drücken, stehend",
+                "cueing": "",
+                "tempo": "",
+                "sets": "4",
+                "reps": "6-8",
+                "plannedWeight": "",
+                "targetRIR": "3-4",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 5,
+                "name": "Hollow Body Hold",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "ALAP",
+                "plannedWeight": "",
+                "targetRIR": "7RPE",
+                "painTarget": "",
+                "notes": ""
+              },
+              {
+                "sortOrder": 6,
+                "name": "Superman Hold",
+                "cueing": "",
+                "tempo": "",
+                "sets": "3",
+                "reps": "ALAP",
+                "plannedWeight": "",
+                "targetRIR": "7RPE",
+                "painTarget": "",
+                "notes": ""
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
