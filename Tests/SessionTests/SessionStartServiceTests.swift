@@ -3,6 +3,7 @@ import SwiftData
 import Testing
 @testable import GymTracker
 
+@Suite(.serialized)
 struct SessionStartServiceTests {
     @Test
     func startSessionCreatesActiveLogGraphFromWorkoutPlan() throws {
@@ -65,6 +66,24 @@ struct SessionStartServiceTests {
         #expect(activeSession.id == createdSession.id)
         #expect(activeSession.status == .active)
         #expect(activeSession.startedAt == startedAt)
+    }
+
+    @Test
+    func startOrResumeSessionReturnsExistingWorkoutSessionAfterContextRestart() throws {
+        let container = try makeInMemoryContainer()
+        let setupContext = ModelContext(container)
+        let workoutPlan = makeWorkoutPlan()
+        setupContext.insert(workoutPlan)
+        let createdSession = try SessionStartService(context: setupContext).startSession(from: workoutPlan)
+
+        let restartedContext = ModelContext(container)
+        let workouts = try restartedContext.fetch(FetchDescriptor<WorkoutPlan>())
+        let reloadedWorkout = try #require(workouts.first { $0.id == workoutPlan.id })
+        let resumedSession = try SessionStartService(context: restartedContext).startOrResumeSession(from: reloadedWorkout)
+
+        #expect(resumedSession.id == createdSession.id)
+        #expect(resumedSession.workoutPlan?.id == reloadedWorkout.id)
+        #expect(try restartedContext.fetch(FetchDescriptor<SessionLog>()).count == 1)
     }
 
     @Test

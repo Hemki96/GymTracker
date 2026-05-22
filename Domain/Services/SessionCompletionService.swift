@@ -158,3 +158,82 @@ struct SessionCompletionService {
             : "\(format(range.lowerBound))-\(format(range.upperBound))"
     }
 }
+
+struct SessionEditingService {
+    private let context: ModelContext
+
+    init(context: ModelContext) {
+        self.context = context
+    }
+
+    @discardableResult
+    func addSet(to exerciseLog: ExerciseLog, at date: Date = .now) throws -> SetLog {
+        let setLogs = sortedSetLogs(exerciseLog.setLogs)
+        let lastSet = setLogs.last
+        let plannedExercise = exerciseLog.plannedExercise
+        let setLog = SetLog(
+            setNumber: setLogs.count + 1,
+            plannedRepsText: plannedExercise?.repsPrescription,
+            loggedReps: lastSet?.loggedReps,
+            plannedWeightText: plannedExercise?.plannedWeightText,
+            loggedWeightKg: lastSet?.loggedWeightKg,
+            rir: lastSet?.rir,
+            pain: lastSet?.pain,
+            createdAt: date,
+            updatedAt: date,
+            exerciseLog: exerciseLog
+        )
+
+        exerciseLog.setLogs.append(setLog)
+        exerciseLog.updatedAt = date
+        exerciseLog.sessionLog?.updatedAt = date
+        context.insert(setLog)
+        try context.save()
+        return setLog
+    }
+
+    func deleteSet(_ setLog: SetLog, at date: Date = .now) throws {
+        guard let exerciseLog = setLog.exerciseLog else {
+            context.delete(setLog)
+            try context.save()
+            return
+        }
+
+        context.delete(setLog)
+        renumberSets(for: exerciseLog, excluding: setLog.id, at: date)
+        exerciseLog.updatedAt = date
+        exerciseLog.sessionLog?.updatedAt = date
+        SessionCompletionService(context: context).refreshSummary(for: exerciseLog.sessionLog)
+        try context.save()
+    }
+
+    func save(setLog: SetLog, at date: Date = .now) throws {
+        setLog.notes = setLog.notes?.trimmedNonEmpty
+        setLog.updatedAt = date
+        setLog.exerciseLog?.updatedAt = date
+        setLog.exerciseLog?.sessionLog?.updatedAt = date
+        if let sessionLog = setLog.exerciseLog?.sessionLog {
+            SessionCompletionService(context: context).refreshSummary(for: sessionLog)
+        }
+        try context.save()
+    }
+
+    private func renumberSets(for exerciseLog: ExerciseLog, excluding deletedID: UUID, at date: Date) {
+        let remainingSets = sortedSetLogs(exerciseLog.setLogs).filter { $0.id != deletedID }
+        for (index, setLog) in remainingSets.enumerated() {
+            setLog.setNumber = index + 1
+            setLog.updatedAt = date
+        }
+    }
+
+    private func sortedSetLogs(_ setLogs: [SetLog]) -> [SetLog] {
+        setLogs.sorted { $0.setNumber < $1.setNumber }
+    }
+}
+
+private extension SessionCompletionService {
+    func refreshSummary(for session: SessionLog?) {
+        guard let session else { return }
+        refreshSummary(for: session)
+    }
+}

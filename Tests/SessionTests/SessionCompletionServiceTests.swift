@@ -3,6 +3,7 @@ import SwiftData
 import Testing
 @testable import GymTracker
 
+@Suite(.serialized)
 struct SessionCompletionServiceTests {
     @Test
     func completeSessionStoresSummaryAndMarksWorkoutCompleted() throws {
@@ -54,7 +55,7 @@ struct SessionCompletionServiceTests {
 
         let session = try SessionStartService(context: context).startSession(from: workout)
         let squatLog = try #require(session.exerciseLogs.first { $0.plannedExercise?.exercise?.name == "Kniebeugen" })
-        let set = try #require(squatLog.setLogs.first)
+        let set = try #require(squatLog.setLogs.sorted { $0.setNumber < $1.setNumber }.first)
         set.loggedWeightKg = 80
         set.loggedReps = 5
         set.rir = 4
@@ -87,6 +88,41 @@ struct SessionCompletionServiceTests {
         let historySessions = try context.fetch(descriptor)
 
         #expect(historySessions.map(\.id) == [session.id])
+    }
+
+    @Test
+    func editingServiceAddsCopiesDeletesRenumbersAndRefreshesSummary() throws {
+        let container = try makeInMemoryContainer()
+        let context = ModelContext(container)
+        let workout = makeWorkoutPlan()
+        context.insert(workout)
+
+        let session = try SessionStartService(context: context).startSession(from: workout)
+        let exerciseLog = try #require(session.exerciseLogs.first)
+        let firstSet = try #require(exerciseLog.setLogs.first)
+        firstSet.loggedWeightKg = 80
+        firstSet.loggedReps = 5
+        firstSet.rir = 2
+        firstSet.pain = 1
+        firstSet.isCompleted = true
+        try SessionEditingService(context: context).save(setLog: firstSet)
+
+        let addedSet = try SessionEditingService(context: context).addSet(to: exerciseLog)
+
+        #expect(addedSet.setNumber == 3)
+        #expect(addedSet.loggedWeightKg == 80)
+        #expect(addedSet.loggedReps == 5)
+        #expect(addedSet.rir == 2)
+        #expect(addedSet.pain == 1)
+        #expect(session.totalVolumeKg == 400)
+
+        try SessionEditingService(context: context).deleteSet(firstSet)
+
+        let remainingNumbers = exerciseLog.setLogs
+            .filter { $0.id != firstSet.id }
+            .map(\.setNumber)
+            .sorted()
+        #expect(remainingNumbers == [1, 2])
     }
 
     private func makeWorkoutPlan() -> WorkoutPlan {

@@ -3,6 +3,7 @@ import SwiftData
 import Testing
 @testable import GymTracker
 
+@Suite(.serialized)
 struct TrainingModelTests {
     @Test
     func trainingBlockInitializesWithDefaultsAndRelationships() throws {
@@ -14,9 +15,9 @@ struct TrainingModelTests {
             goal: "Strength",
             status: .active,
             createdAt: createdAt,
-            updatedAt: createdAt,
-            weeks: [week]
+            updatedAt: createdAt
         )
+        week.block = block
 
         #expect(block.name == "Block A")
         #expect(block.athleteName == "Christian")
@@ -85,7 +86,7 @@ struct TrainingModelTests {
         )
         let sessionLog = SessionLog(status: .completed, workoutPlan: workoutPlan)
         let exerciseLog = ExerciseLog(isCompleted: true, sessionLog: sessionLog, plannedExercise: plannedExercise)
-        _ = SetLog(
+        let setLog = SetLog(
             setNumber: 1,
             plannedRepsText: "5-6",
             loggedReps: 6,
@@ -97,6 +98,10 @@ struct TrainingModelTests {
 
         block.weeks.append(week)
         week.workoutPlans.append(workoutPlan)
+        workoutPlan.plannedExercises.append(plannedExercise)
+        workoutPlan.sessionLogs.append(sessionLog)
+        sessionLog.exerciseLogs.append(exerciseLog)
+        exerciseLog.setLogs.append(setLog)
         context.insert(block)
         context.insert(exercise)
 
@@ -106,11 +111,14 @@ struct TrainingModelTests {
         #expect(blocks.count == 1)
         #expect(blocks[0].weeks.count == 1)
         #expect(blocks[0].weeks[0].workoutPlans.count == 1)
-        #expect(blocks[0].weeks[0].workoutPlans[0].plannedExercises.count == 1)
-        #expect(blocks[0].weeks[0].workoutPlans[0].sessionLogs.count == 1)
-        #expect(blocks[0].weeks[0].workoutPlans[0].sessionLogs[0].exerciseLogs.count == 1)
-        #expect(blocks[0].weeks[0].workoutPlans[0].sessionLogs[0].exerciseLogs[0].setLogs.count == 1)
-        #expect(blocks[0].weeks[0].workoutPlans[0].sessionLogs[0].exerciseLogs[0].setLogs[0].loggedWeightKg == 80)
+        let persistedWorkout = try #require(blocks[0].weeks[0].workoutPlans.first)
+        #expect(persistedWorkout.plannedExercises.count == 1)
+        #expect(persistedWorkout.sessionLogs.count == 1)
+        let persistedSession = try #require(persistedWorkout.sessionLogs.first)
+        #expect(persistedSession.exerciseLogs.count == 1)
+        let persistedExerciseLog = try #require(persistedSession.exerciseLogs.first)
+        #expect(persistedExerciseLog.setLogs.count == 1)
+        #expect(persistedExerciseLog.setLogs.first?.loggedWeightKg == 80)
     }
 
     private func makeInMemoryContainer() throws -> ModelContainer {

@@ -8,6 +8,7 @@ struct ActiveSessionView: View {
 
     @State private var selectedExerciseID: UUID?
     @State private var completedSession: SessionLog?
+    @State private var sessionError: String?
 
     private var exerciseLogs: [ExerciseLog] {
         sessionLog.exerciseLogs.sorted {
@@ -71,6 +72,13 @@ struct ActiveSessionView: View {
             if let completedSession {
                 SessionSummaryView(sessionLog: completedSession)
             }
+        }
+        .alert("Session konnte nicht gespeichert werden", isPresented: errorBinding) {
+            Button("OK", role: .cancel) {
+                sessionError = nil
+            }
+        } message: {
+            Text(sessionError ?? "")
         }
         .onAppear {
             selectedExerciseID = selectedExerciseID ?? exerciseLogs.first?.id
@@ -144,7 +152,11 @@ struct ActiveSessionView: View {
     private func saveSession() {
         sessionLog.updatedAt = .now
         SessionCompletionService(context: modelContext).refreshSummary(for: sessionLog)
-        try? modelContext.save()
+        do {
+            try modelContext.save()
+        } catch {
+            sessionError = "Deine Eingaben sind noch sichtbar, konnten aber nicht dauerhaft gespeichert werden."
+        }
     }
 
     private var completedSessionBinding: Binding<Bool> {
@@ -157,6 +169,16 @@ struct ActiveSessionView: View {
         }
     }
 
+    private var errorBinding: Binding<Bool> {
+        Binding {
+            sessionError != nil
+        } set: { isPresented in
+            if !isPresented {
+                sessionError = nil
+            }
+        }
+    }
+
     private func completeSession() {
         do {
             let completed = try SessionCompletionService(context: modelContext).completeSession(
@@ -165,7 +187,7 @@ struct ActiveSessionView: View {
             )
             completedSession = completed
         } catch {
-            try? modelContext.save()
+            sessionError = "Die Session konnte nicht abgeschlossen werden. Bitte prüfe die Eingaben und versuche es erneut."
         }
     }
 }
@@ -175,6 +197,7 @@ struct ExerciseTrackingView: View {
 
     let exerciseLog: ExerciseLog
     let onSave: () -> Void
+    @State private var editingError: String?
 
     private var setLogs: [SetLog] {
         exerciseLog.setLogs.sorted { $0.setNumber < $1.setNumber }
@@ -208,43 +231,40 @@ struct ExerciseTrackingView: View {
                 }
             }
         }
+        .alert("Satz konnte nicht gespeichert werden", isPresented: errorBinding) {
+            Button("OK", role: .cancel) {
+                editingError = nil
+            }
+        } message: {
+            Text(editingError ?? "")
+        }
     }
 
     private func addSet() {
-        let now = Date()
-        let lastSet = setLogs.last
-        let plannedExercise = exerciseLog.plannedExercise
-        let setLog = SetLog(
-            setNumber: setLogs.count + 1,
-            plannedRepsText: plannedExercise?.repsPrescription,
-            loggedReps: lastSet?.loggedReps,
-            plannedWeightText: plannedExercise?.plannedWeightText,
-            loggedWeightKg: lastSet?.loggedWeightKg,
-            rir: lastSet?.rir,
-            pain: lastSet?.pain,
-            createdAt: now,
-            updatedAt: now,
-            exerciseLog: exerciseLog
-        )
-
-        exerciseLog.setLogs.append(setLog)
-        exerciseLog.updatedAt = now
-        modelContext.insert(setLog)
-        onSave()
+        do {
+            try SessionEditingService(context: modelContext).addSet(to: exerciseLog)
+            onSave()
+        } catch {
+            editingError = "Der neue Satz konnte nicht dauerhaft gespeichert werden."
+        }
     }
 
     private func deleteSet(_ setLog: SetLog) {
-        modelContext.delete(setLog)
-        renumberSets(excluding: setLog.id)
-        exerciseLog.updatedAt = .now
-        onSave()
+        do {
+            try SessionEditingService(context: modelContext).deleteSet(setLog)
+            onSave()
+        } catch {
+            editingError = "Der Satz konnte nicht gelöscht werden."
+        }
     }
 
-    private func renumberSets(excluding deletedID: UUID) {
-        let remainingSets = setLogs.filter { $0.id != deletedID }
-        for (index, setLog) in remainingSets.enumerated() {
-            setLog.setNumber = index + 1
-            setLog.updatedAt = .now
+    private var errorBinding: Binding<Bool> {
+        Binding {
+            editingError != nil
+        } set: { isPresented in
+            if !isPresented {
+                editingError = nil
+            }
         }
     }
 }
@@ -254,6 +274,8 @@ struct SetLogRow: View {
     let canDelete: Bool
     let onDelete: () -> Void
     let onSave: () -> Void
+    @Environment(\.modelContext) private var modelContext
+    @State private var saveError: String?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
@@ -271,6 +293,7 @@ struct SetLogRow: View {
                 .buttonStyle(.borderedProminent)
                 .tint(setLog.isCompleted ? .green : .secondary)
                 .controlSize(.large)
+                .accessibilityLabel(setLog.isCompleted ? "Satz als offen markieren" : "Satz als erledigt markieren")
 
                 Spacer()
 
@@ -328,6 +351,13 @@ struct SetLogRow: View {
             RoundedRectangle(cornerRadius: 8)
                 .fill(setLog.isCompleted ? Color.green.opacity(0.12) : Color(.secondarySystemGroupedBackground))
         }
+        .alert("Satz konnte nicht gespeichert werden", isPresented: saveErrorBinding) {
+            Button("OK", role: .cancel) {
+                saveError = nil
+            }
+        } message: {
+            Text(saveError ?? "")
+        }
     }
 
     private func editableNumberField(
@@ -343,10 +373,11 @@ struct SetLogRow: View {
                 .foregroundStyle(.secondary)
 
             HStack {
-                TextField(placeholder, text: value)
+            TextField(placeholder, text: value)
                     .keyboardType(keyboard)
                     .font(.title3.weight(.semibold))
                     .minimumScaleFactor(0.82)
+                    .accessibilityLabel(title)
 
                 if let suffix {
                     Text(suffix)
@@ -417,9 +448,22 @@ struct SetLogRow: View {
     }
 
     private func save() {
-        setLog.updatedAt = .now
-        setLog.exerciseLog?.updatedAt = .now
-        onSave()
+        do {
+            try SessionEditingService(context: modelContext).save(setLog: setLog)
+            onSave()
+        } catch {
+            saveError = "Die Änderung bleibt sichtbar, konnte aber nicht dauerhaft gespeichert werden."
+        }
+    }
+
+    private var saveErrorBinding: Binding<Bool> {
+        Binding {
+            saveError != nil
+        } set: { isPresented in
+            if !isPresented {
+                saveError = nil
+            }
+        }
     }
 }
 

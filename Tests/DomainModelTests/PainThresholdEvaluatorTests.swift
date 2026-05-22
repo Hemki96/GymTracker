@@ -1,6 +1,7 @@
 import Testing
 @testable import GymTracker
 
+@Suite(.serialized)
 struct PainThresholdEvaluatorTests {
     private let evaluator = PainThresholdEvaluator()
 

@@ -3,6 +3,7 @@ import SwiftData
 import Testing
 @testable import GymTracker
 
+@Suite(.serialized)
 struct SeedDataServiceTests {
     @Test
     func christianHemkerB1FixtureHasExpectedShape() throws {
@@ -54,7 +55,7 @@ struct SeedDataServiceTests {
         let container = try makeInMemoryContainer()
         let context = ModelContext(container)
 
-        try SeedDataService().importChristianHemkerB1IfNeeded(into: context)
+        _ = try SeedDataService().importChristianHemkerB1IfNeeded(into: context)
 
         let block = try #require(try context.fetch(FetchDescriptor<TrainingBlock>()).first)
         let weekOne = try #require(block.weeks.first { $0.weekNumber == 1 })
@@ -78,6 +79,47 @@ struct SeedDataServiceTests {
         #expect(pullUp.tempo == "explosiv hoch")
         #expect(pullUp.plannedWeightText == "5")
         #expect(pullUp.notes == "Nur 3 Wiederholungen mit dem Gewicht")
+    }
+
+    @Test
+    func validationRejectsIncompleteFixture() throws {
+        let invalidFixture = ChristianHemkerB1SeedFixture(
+            source: "invalid.json",
+            trainingBlock: SeedTrainingBlock(
+                name: "Invalid",
+                athleteName: "Athlete",
+                goal: "Goal",
+                weeks: [
+                    SeedTrainingWeek(
+                        weekNumber: 1,
+                        title: "Woche 1",
+                        days: [
+                            SeedTrainingDay(
+                                dayNumber: 1,
+                                title: "Tag 1",
+                                exercises: []
+                            )
+                        ]
+                    )
+                ]
+            )
+        )
+
+        do {
+            _ = try SeedDataService().validate(invalidFixture)
+            Issue.record("Expected incomplete seed fixture to fail validation")
+        } catch let error as SeedDataService.SeedError {
+            #expect(error == .invalidFixture(
+                expectedWeeks: 6,
+                actualWeeks: 1,
+                expectedSessions: 18,
+                actualSessions: 1,
+                expectedExerciseRows: 108,
+                actualExerciseRows: 0
+            ))
+        } catch {
+            Issue.record("Unexpected error: \(error)")
+        }
     }
 
     private func makeInMemoryContainer() throws -> ModelContainer {

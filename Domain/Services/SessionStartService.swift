@@ -25,6 +25,24 @@ struct SessionStartService {
         return try context.fetch(descriptor).first
     }
 
+    func activeSession(for workoutPlan: WorkoutPlan) throws -> SessionLog? {
+        guard let activeSession = try activeSession(),
+              activeSession.workoutPlan?.id == workoutPlan.id else {
+            return nil
+        }
+
+        return activeSession
+    }
+
+    @discardableResult
+    func startOrResumeSession(from workoutPlan: WorkoutPlan, at startDate: Date = .now) throws -> SessionLog {
+        if let existingSession = try activeSession(for: workoutPlan) {
+            return existingSession
+        }
+
+        return try startSession(from: workoutPlan, at: startDate)
+    }
+
     @discardableResult
     func startSession(from workoutPlan: WorkoutPlan, at startDate: Date = .now) throws -> SessionLog {
         if try activeSession() != nil {

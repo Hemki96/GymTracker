@@ -2,6 +2,7 @@ import Foundation
 import Testing
 @testable import GymTracker
 
+@Suite(.serialized)
 struct ChartDataMapperTests {
     @Test
     func weeklyVolumeAggregatesCompletedSessionsByWeek() {

@@ -1,7 +1,7 @@
 import Foundation
 
 struct TrainingExportService {
-    enum ExportError: Error {
+    enum ExportError: Error, Equatable {
         case missingWorkoutPlan
         case missingTrainingBlock
     }

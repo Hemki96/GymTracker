@@ -106,15 +106,10 @@ struct WorkoutDetailView: View {
     }
 
     private func startOrResumeSession() {
-        if let existingSession = workout.sessionLogs.first(where: { $0.status == .active }) {
-            activeSession = existingSession
-            return
-        }
-
         let service = SessionStartService(context: modelContext)
 
         do {
-            activeSession = try service.startSession(from: workout)
+            activeSession = try service.startOrResumeSession(from: workout)
         } catch SessionStartError.activeSessionAlreadyExists {
             sessionStartError = "Es läuft bereits eine andere aktive Session. Beende diese zuerst oder öffne sie über den aktuellen Workout-Kontext."
         } catch {

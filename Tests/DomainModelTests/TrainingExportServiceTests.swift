@@ -2,6 +2,7 @@ import Foundation
 import Testing
 @testable import GymTracker
 
+@Suite(.serialized)
 struct TrainingExportServiceTests {
     @Test
     func markdownExportContainsPlanAndActualValues() throws {
@@ -41,6 +42,20 @@ struct TrainingExportServiceTests {
 
         #expect(sessionURL.lastPathComponent == "2026-05-20_block-b1-aufbau_unterkoerper-a.md")
         #expect(blockURL.lastPathComponent == "2026-05-01_block-b1-aufbau.csv")
+    }
+
+    @Test
+    func markdownExportFailsWithoutWorkoutPlan() {
+        let session = SessionLog(startedAt: Date(timeIntervalSince1970: 1_777_000_000))
+
+        do {
+            _ = try TrainingExportService().markdown(for: session)
+            Issue.record("Expected export without workout plan to fail")
+        } catch let error as TrainingExportService.ExportError {
+            #expect(error == .missingWorkoutPlan)
+        } catch {
+            Issue.record("Unexpected error: \(error)")
+        }
     }
 
     private func makeTrainingGraph(blockName: String = "Block B1") -> (
