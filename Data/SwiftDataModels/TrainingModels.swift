@@ -244,6 +244,7 @@ final class SessionLog {
     var maxPain: Int?
     var averageRIR: Double?
     var totalVolumeKg: Double?
+    var warningMessages: [String]
     var createdAt: Date
     var updatedAt: Date
     var workoutPlan: WorkoutPlan?
@@ -266,6 +267,7 @@ final class SessionLog {
         maxPain: Int? = nil,
         averageRIR: Double? = nil,
         totalVolumeKg: Double? = nil,
+        warningMessages: [String] = [],
         createdAt: Date = .now,
         updatedAt: Date = .now,
         workoutPlan: WorkoutPlan? = nil,
@@ -280,6 +282,7 @@ final class SessionLog {
         self.maxPain = maxPain
         self.averageRIR = averageRIR
         self.totalVolumeKg = totalVolumeKg
+        self.warningMessages = warningMessages
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.workoutPlan = workoutPlan

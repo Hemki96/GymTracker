@@ -7,6 +7,7 @@ struct ActiveSessionView: View {
     let sessionLog: SessionLog
 
     @State private var selectedExerciseID: UUID?
+    @State private var completedSession: SessionLog?
 
     private var exerciseLogs: [ExerciseLog] {
         sessionLog.exerciseLogs.sorted {
@@ -54,6 +55,23 @@ struct ActiveSessionView: View {
         .background(Color(.systemGroupedBackground))
         .navigationTitle("Aktive Session")
         .navigationBarTitleDisplayMode(.inline)
+        .safeAreaInset(edge: .bottom) {
+            Button {
+                completeSession()
+            } label: {
+                Label("Session abschließen", systemImage: "checkmark.circle.fill")
+                    .frame(maxWidth: .infinity, minHeight: 52)
+            }
+            .buttonStyle(.borderedProminent)
+            .controlSize(.large)
+            .padding(AppTheme.Spacing.large)
+            .background(.regularMaterial)
+        }
+        .navigationDestination(isPresented: completedSessionBinding) {
+            if let completedSession {
+                SessionSummaryView(sessionLog: completedSession)
+            }
+        }
         .onAppear {
             selectedExerciseID = selectedExerciseID ?? exerciseLogs.first?.id
         }
@@ -125,25 +143,30 @@ struct ActiveSessionView: View {
 
     private func saveSession() {
         sessionLog.updatedAt = .now
-        updateSessionSummary()
+        SessionCompletionService(context: modelContext).refreshSummary(for: sessionLog)
         try? modelContext.save()
     }
 
-    private func updateSessionSummary() {
-        let sets = sessionLog.exerciseLogs.flatMap(\.setLogs)
-        let completedSets = sets.filter(\.isCompleted)
-
-        sessionLog.maxPain = completedSets.compactMap(\.pain).max()
-
-        let rirValues = completedSets.compactMap(\.rir)
-        sessionLog.averageRIR = rirValues.isEmpty ? nil : rirValues.reduce(0, +) / Double(rirValues.count)
-
-        let volume = completedSets.reduce(0) { partialResult, setLog in
-            let weight = setLog.loggedWeightKg ?? 0
-            let reps = Double(setLog.loggedReps ?? 0)
-            return partialResult + weight * reps
+    private var completedSessionBinding: Binding<Bool> {
+        Binding {
+            completedSession != nil
+        } set: { isPresented in
+            if !isPresented {
+                completedSession = nil
+            }
         }
-        sessionLog.totalVolumeKg = volume > 0 ? volume : nil
+    }
+
+    private func completeSession() {
+        do {
+            let completed = try SessionCompletionService(context: modelContext).completeSession(
+                sessionLog,
+                note: sessionLog.overallNotes
+            )
+            completedSession = completed
+        } catch {
+            try? modelContext.save()
+        }
     }
 }
 
