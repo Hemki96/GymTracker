@@ -17,6 +17,11 @@ struct GymTrackerApp: App {
                     .tabItem {
                         Label("Historie", systemImage: "clock.arrow.circlepath")
                     }
+
+                AnalyticsView()
+                    .tabItem {
+                        Label("Analyse", systemImage: "chart.xyaxis.line")
+                    }
             }
         }
         .modelContainer(environment.modelContainer)
