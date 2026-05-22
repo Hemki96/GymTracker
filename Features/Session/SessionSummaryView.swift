@@ -7,6 +7,7 @@ struct SessionSummaryView: View {
     @Bindable var sessionLog: SessionLog
 
     @State private var noteText: String
+    @State private var exportURL: URL?
 
     init(sessionLog: SessionLog) {
         self.sessionLog = sessionLog
@@ -37,8 +38,19 @@ struct SessionSummaryView: View {
         .background(Color(.systemGroupedBackground))
         .navigationTitle("Session-Zusammenfassung")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            if let exportURL {
+                ShareLink(item: exportURL) {
+                    Label("Exportieren", systemImage: "square.and.arrow.up")
+                }
+            }
+        }
+        .task {
+            refreshExportURL()
+        }
         .onChange(of: noteText) { _, newValue in
             saveNote(newValue)
+            refreshExportURL()
         }
     }
 
@@ -188,6 +200,10 @@ struct SessionSummaryView: View {
         sessionLog.overallNotes = note.trimmedNonEmpty
         sessionLog.updatedAt = .now
         try? modelContext.save()
+    }
+
+    private func refreshExportURL() {
+        exportURL = try? TrainingExportService().fileURL(forSession: sessionLog)
     }
 }
 

@@ -37,6 +37,7 @@ struct HistoryView: View {
 
 struct SessionHistoryDetailView: View {
     let sessionLog: SessionLog
+    @State private var exportURL: URL?
 
     private var exerciseLogs: [ExerciseLog] {
         sessionLog.exerciseLogs.sorted {
@@ -62,6 +63,16 @@ struct SessionHistoryDetailView: View {
         .background(Color(.systemGroupedBackground))
         .navigationTitle("Sessiondetails")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            if let exportURL {
+                ShareLink(item: exportURL) {
+                    Label("Exportieren", systemImage: "square.and.arrow.up")
+                }
+            }
+        }
+        .task {
+            refreshExportURL()
+        }
     }
 
     private var header: some View {
@@ -184,6 +195,10 @@ struct SessionHistoryDetailView: View {
     private var maxPainText: String {
         guard let maxPain = sessionLog.maxPain else { return "-" }
         return "\(maxPain)/10"
+    }
+
+    private func refreshExportURL() {
+        exportURL = try? TrainingExportService().fileURL(forSession: sessionLog)
     }
 }
 

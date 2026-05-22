@@ -4,6 +4,7 @@ import SwiftUI
 struct PlanView: View {
     @Query(sort: \TrainingWeek.weekNumber) private var weeks: [TrainingWeek]
     @State private var selectedWeekNumber = 1
+    @State private var blockExportURL: URL?
 
     private var visibleWeeks: [TrainingWeek] {
         weeks
@@ -13,6 +14,10 @@ struct PlanView: View {
 
     private var selectedWeek: TrainingWeek? {
         visibleWeeks.first { $0.weekNumber == selectedWeekNumber } ?? visibleWeeks.first
+    }
+
+    private var selectedBlock: TrainingBlock? {
+        selectedWeek?.block ?? visibleWeeks.compactMap(\.block).first
     }
 
     private var workouts: [WorkoutPlan] {
@@ -61,7 +66,32 @@ struct PlanView: View {
             }
             .background(Color(.systemGroupedBackground))
             .navigationTitle("Trainingsplan")
+            .toolbar {
+                if let blockExportURL {
+                    ShareLink(item: blockExportURL) {
+                        Label("CSV exportieren", systemImage: "square.and.arrow.up")
+                    }
+                }
+            }
+            .task {
+                refreshBlockExportURL()
+            }
+            .onChange(of: selectedWeekNumber) { _, _ in
+                refreshBlockExportURL()
+            }
+            .onChange(of: weeks.count) { _, _ in
+                refreshBlockExportURL()
+            }
         }
+    }
+
+    private func refreshBlockExportURL() {
+        guard let selectedBlock else {
+            blockExportURL = nil
+            return
+        }
+
+        blockExportURL = try? TrainingExportService().fileURL(forBlock: selectedBlock)
     }
 }
 
