@@ -38,6 +38,24 @@ struct WorkoutDetailView: View {
                     Text("\(exercises.count) Übungen")
                         .font(.body)
                         .foregroundStyle(.secondary)
+
+                    if let focus = workout.focus, !focus.isEmpty {
+                        Label(focus, systemImage: "target")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+
+                    if let plannedDurationMinutes = workout.plannedDurationMinutes {
+                        Label("\(plannedDurationMinutes) Minuten geplant", systemImage: "clock")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+
+                    if let notes = workout.notes, !notes.isEmpty {
+                        Text(notes)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(AppTheme.Spacing.large)

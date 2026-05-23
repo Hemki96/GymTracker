@@ -40,8 +40,17 @@ struct WorkoutDayCard: View {
                     .lineLimit(2)
             }
 
+            if let focus = workout.focus, !focus.isEmpty {
+                Label(focus, systemImage: "target")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
             HStack(spacing: 8) {
                 Label("\(exercises.count) Übungen", systemImage: "list.bullet.clipboard")
+                if let plannedDurationMinutes = workout.plannedDurationMinutes {
+                    Label("\(plannedDurationMinutes) min", systemImage: "clock")
+                }
                 Spacer()
                 Image(systemName: "chevron.right")
                     .font(.footnote.weight(.semibold))

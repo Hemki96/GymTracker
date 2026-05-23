@@ -6,11 +6,12 @@ final class TrainingBlock {
     @Attribute(.unique) var id: UUID
     var name: String
     var athleteName: String?
+    var descriptionText: String?
     var goal: String
     var startDate: Date?
     var endDate: Date?
     var statusRaw: String
-    var isDemoPlan: Bool
+    var isDemoPlan: Bool = false
     var demoSourceIdentifier: String?
     var createdAt: Date
     var updatedAt: Date
@@ -27,6 +28,7 @@ final class TrainingBlock {
         id: UUID = UUID(),
         name: String,
         athleteName: String? = nil,
+        descriptionText: String? = nil,
         goal: String,
         startDate: Date? = nil,
         endDate: Date? = nil,
@@ -40,6 +42,7 @@ final class TrainingBlock {
         self.id = id
         self.name = name
         self.athleteName = athleteName
+        self.descriptionText = descriptionText
         self.goal = goal
         self.startDate = startDate
         self.endDate = endDate
@@ -94,6 +97,9 @@ final class WorkoutPlan {
     @Attribute(.unique) var id: UUID
     var dayNumber: Int
     var title: String
+    var focus: String?
+    var plannedDurationMinutes: Int?
+    var notes: String?
     var plannedDate: Date?
     var statusRaw: String
     var sortOrder: Int
@@ -116,6 +122,9 @@ final class WorkoutPlan {
         id: UUID = UUID(),
         dayNumber: Int,
         title: String,
+        focus: String? = nil,
+        plannedDurationMinutes: Int? = nil,
+        notes: String? = nil,
         plannedDate: Date? = nil,
         status: WorkoutStatus = .planned,
         sortOrder: Int,
@@ -128,6 +137,9 @@ final class WorkoutPlan {
         self.id = id
         self.dayNumber = dayNumber
         self.title = title
+        self.focus = focus
+        self.plannedDurationMinutes = plannedDurationMinutes
+        self.notes = notes
         self.plannedDate = plannedDate
         self.statusRaw = status.rawValue
         self.sortOrder = sortOrder
@@ -144,6 +156,8 @@ final class Exercise {
     @Attribute(.unique) var id: UUID
     var name: String
     var categoryRaw: String
+    var muscleGroup: String?
+    var equipment: String?
     var defaultCueing: String?
     var defaultTempo: String?
     var isUnilateral: Bool
@@ -163,6 +177,8 @@ final class Exercise {
         id: UUID = UUID(),
         name: String,
         category: ExerciseCategory = .unknown,
+        muscleGroup: String? = nil,
+        equipment: String? = nil,
         defaultCueing: String? = nil,
         defaultTempo: String? = nil,
         isUnilateral: Bool = false,
@@ -174,6 +190,8 @@ final class Exercise {
         self.id = id
         self.name = name
         self.categoryRaw = category.rawValue
+        self.muscleGroup = muscleGroup
+        self.equipment = equipment
         self.defaultCueing = defaultCueing
         self.defaultTempo = defaultTempo
         self.isUnilateral = isUnilateral
@@ -252,6 +270,9 @@ final class PlannedSet {
     var weightText: String?
     var targetRIRText: String?
     var painTargetText: String?
+    var restText: String?
+    var tempo: String?
+    var setTypeRaw: String?
     var notes: String?
     var isWarmup: Bool
     var createdAt: Date
@@ -268,6 +289,9 @@ final class PlannedSet {
         weightText: String? = nil,
         targetRIRText: String? = nil,
         painTargetText: String? = nil,
+        restText: String? = nil,
+        tempo: String? = nil,
+        setType: PlannedSetType = .working,
         notes: String? = nil,
         isWarmup: Bool = false,
         createdAt: Date = .now,
@@ -281,12 +305,28 @@ final class PlannedSet {
         self.weightText = weightText
         self.targetRIRText = targetRIRText
         self.painTargetText = painTargetText
+        self.restText = restText
+        self.tempo = tempo
+        self.setTypeRaw = setType.rawValue
         self.notes = notes
-        self.isWarmup = isWarmup
+        self.isWarmup = isWarmup || setType == .warmup
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.plannedExercise = plannedExercise
         self.setLogs = setLogs
+    }
+
+    var setType: PlannedSetType {
+        get {
+            if let setTypeRaw, let setType = PlannedSetType(rawValue: setTypeRaw) {
+                return setType
+            }
+            return isWarmup ? .warmup : .working
+        }
+        set {
+            setTypeRaw = newValue.rawValue
+            isWarmup = newValue == .warmup
+        }
     }
 }
 

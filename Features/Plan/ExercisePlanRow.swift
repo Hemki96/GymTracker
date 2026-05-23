@@ -17,6 +17,16 @@ struct ExercisePlanRow: View {
                     Text(plannedExercise.exercise?.name ?? "Unbekannte Übung")
                         .font(.headline)
 
+                    let details = [plannedExercise.exercise?.muscleGroup, plannedExercise.exercise?.equipment]
+                        .compactMap { $0 }
+                        .filter { !$0.isEmpty }
+                        .joined(separator: " · ")
+                    if !details.isEmpty {
+                        Text(details)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+
                     if let notes = plannedExercise.notes, !notes.isEmpty {
                         Text(notes)
                             .font(.subheadline)
@@ -44,9 +54,47 @@ struct ExercisePlanRow: View {
                         .foregroundStyle(.primary)
                 }
             }
+
+            if !sets.isEmpty {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Saetze")
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.secondary)
+                    ForEach(sets, id: \.id) { set in
+                        HStack(spacing: 8) {
+                            Text("\(set.setNumber)")
+                                .font(.caption.weight(.bold))
+                                .frame(width: 24, height: 24)
+                                .appCircularControlSurface()
+                            Text(setSummary(set))
+                                .font(.caption)
+                                .foregroundStyle(.primary)
+                            Spacer()
+                        }
+                    }
+                }
+            }
         }
         .padding(AppTheme.Spacing.large)
         .appCardSurface()
+    }
+
+    private var sets: [PlannedSet] {
+        plannedExercise.plannedSets.sorted { $0.setNumber < $1.setNumber }
+    }
+
+    private func setSummary(_ set: PlannedSet) -> String {
+        [
+            set.setType.title,
+            set.repsText,
+            set.weightText,
+            set.targetRIRText.map { "RIR \($0)" },
+            set.restText.map { "Pause \($0)" },
+            set.tempo.map { "Tempo \($0)" }
+        ]
+        .compactMap { $0 }
+        .filter { !$0.isEmpty }
+        .joined(separator: " · ")
     }
 }
 

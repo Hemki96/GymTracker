@@ -32,3 +32,26 @@ enum ExerciseCategory: String, Codable, CaseIterable {
     case upperBody
     case unknown
 }
+
+enum PlannedSetType: String, Codable, CaseIterable {
+    case working
+    case warmup
+    case backoff
+    case dropSet
+    case amrap
+
+    var title: String {
+        switch self {
+        case .working:
+            return "Arbeitssatz"
+        case .warmup:
+            return "Warm-up"
+        case .backoff:
+            return "Back-off"
+        case .dropSet:
+            return "Drop Set"
+        case .amrap:
+            return "AMRAP"
+        }
+    }
+}

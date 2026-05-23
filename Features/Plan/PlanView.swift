@@ -487,6 +487,7 @@ private struct PlanDetailView: View {
     @State private var selectedWeekNumber = 1
     @State private var blockExportURL: URL?
     @State private var errorMessage: String?
+    @State private var isEditingPlan = false
 
     private var selectedBlock: TrainingBlock? {
         blocks.first { $0.id == selectedBlockID }
@@ -517,7 +518,23 @@ private struct PlanDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    isEditingPlan = true
+                } label: {
+                    Label("Plan bearbeiten", systemImage: "slider.horizontal.3")
+                }
+                .disabled(selectedBlock == nil)
+            }
+
+            ToolbarItem(placement: .topBarTrailing) {
                 exportButton
+            }
+        }
+        .sheet(isPresented: $isEditingPlan) {
+            if let selectedBlock {
+                NavigationStack {
+                    TrainingPlanEditorView(plan: selectedBlock)
+                }
             }
         }
         .task {
@@ -596,6 +613,12 @@ private struct PlanDetailView: View {
 
             if !block.goal.isEmpty {
                 Text(block.goal)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+
+            if let description = block.descriptionText, !description.isEmpty {
+                Text(description)
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
