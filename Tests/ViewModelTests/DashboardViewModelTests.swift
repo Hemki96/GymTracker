@@ -16,6 +16,40 @@ struct DashboardViewModelTests {
 struct PlanViewPresentationTests {
     @Test
     @MainActor
+    func overviewShowsEmptyStateWhenNoPlansExist() throws {
+        let viewModel = PlanOverviewViewModel(plans: [])
+
+        #expect(viewModel.isEmpty)
+        #expect(viewModel.emptyTitle == "Noch kein Trainingsplan")
+        #expect(viewModel.sections.map { $0.plans.count } == [0, 0, 0])
+    }
+
+    @Test
+    @MainActor
+    func overviewGroupsPlansByLifecycleAndMarksDemoPlans() throws {
+        let active = TrainingPlan(name: "Kraftaufbau", goal: "Staerker werden", status: .active)
+        let draft = TrainingPlan(name: "Hypertrophie Entwurf", goal: "Muskelaufbau", status: .planned)
+        let archived = TrainingPlan(name: "Sommerblock", goal: "Erhaltung", status: .archived)
+        let demo = TrainingPlan(
+            name: "Demo Ganzkoerper",
+            goal: "Ausprobieren",
+            status: .planned,
+            isDemoPlan: true,
+            demoSourceIdentifier: "demo"
+        )
+
+        let viewModel = PlanOverviewViewModel(plans: [archived, demo, active, draft])
+
+        #expect(!viewModel.isEmpty)
+        #expect(viewModel.activePlans.map(\.name) == ["Kraftaufbau"])
+        #expect(viewModel.draftPlans.map(\.name) == ["Demo Ganzkoerper", "Hypertrophie Entwurf"])
+        #expect(viewModel.archivedPlans.map(\.name) == ["Sommerblock"])
+        #expect(viewModel.badgeText(for: demo) == "Demo")
+        #expect(viewModel.badgeText(for: draft) == "Entwurf")
+    }
+
+    @Test
+    @MainActor
     func visibleWeeksDoesNotAssumeFixedDemoWeekRange() {
         let weekSeven = TrainingWeek(weekNumber: 7, title: "Week 7")
         let weekEight = TrainingWeek(weekNumber: 8, title: "Week 8")

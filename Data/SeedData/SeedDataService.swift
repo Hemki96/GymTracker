@@ -63,6 +63,40 @@ struct SeedDataService {
             )
         }
 
+        return try importSeedFixture(
+            fixture,
+            into: context,
+            isDemoPlan: isDemoPlan,
+            demoSourceIdentifier: demoSourceIdentifier,
+            markerKey: markerKey
+        )
+    }
+
+    func importSeedPlan(
+        from url: URL,
+        into context: ModelContext,
+        isDemoPlan: Bool = false,
+        demoSourceIdentifier: String? = nil
+    ) throws -> ImportResult {
+        let data = try Data(contentsOf: url)
+        let fixture = try JSONDecoder().decode(SeedTrainingFixture.self, from: data)
+        return try importSeedFixture(
+            fixture,
+            into: context,
+            isDemoPlan: isDemoPlan,
+            demoSourceIdentifier: demoSourceIdentifier,
+            markerKey: nil
+        )
+    }
+
+    private func importSeedFixture(
+        _ fixture: SeedTrainingFixture,
+        into context: ModelContext,
+        isDemoPlan: Bool,
+        demoSourceIdentifier: String?,
+        markerKey: String?
+    ) throws -> ImportResult {
+        let summary = try validate(fixture)
         let blockFixture = fixture.trainingBlock
         let block = TrainingBlock(
             name: blockFixture.name,
@@ -127,7 +161,9 @@ struct SeedDataService {
         for exercise in exercisesByName.values {
             context.insert(exercise)
         }
-        context.insert(PersistentTrainingMarker(key: markerKey))
+        if let markerKey {
+            context.insert(PersistentTrainingMarker(key: markerKey))
+        }
 
         try context.save()
 

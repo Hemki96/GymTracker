@@ -30,6 +30,15 @@ enum PlanPreviewData {
     }()
 
     @MainActor
+    static let emptyContainer: ModelContainer = {
+        do {
+            return try makeContainer()
+        } catch {
+            fatalError("Failed to create empty plan preview data: \(error)")
+        }
+    }()
+
+    @MainActor
     private static func insertPreviewPlan(in context: ModelContext) {
         let squat = Exercise(name: "Goblet Squat", category: .squat)
         let row = Exercise(name: "Cable Row", category: .pull)
@@ -61,6 +70,23 @@ enum PlanPreviewData {
         context.insert(squat)
         context.insert(row)
         context.insert(press)
+    }
+
+    private static func makeContainer() throws -> ModelContainer {
+        let schema = Schema([
+            PersistentTrainingMarker.self,
+            TrainingBlock.self,
+            TrainingWeek.self,
+            WorkoutPlan.self,
+            Exercise.self,
+            PlannedExercise.self,
+            PlannedSet.self,
+            SessionLog.self,
+            ExerciseLog.self,
+            SetLog.self
+        ])
+        let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
+        return try ModelContainer(for: schema, configurations: [configuration])
     }
 
     private static func plannedExercise(
