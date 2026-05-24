@@ -53,6 +53,7 @@
 		9A000001000000000000002C /* ChartDataMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A000001000000000000012C /* ChartDataMapperTests.swift */; };
 		9A000001000000000000002D /* TrainingExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A000001000000000000012D /* TrainingExportService.swift */; };
 		9A000001000000000000002E /* TrainingExportServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A000001000000000000012E /* TrainingExportServiceTests.swift */; };
+		9A0000010000000000000036 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9A0000010000000000000136 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -112,6 +113,7 @@
 		9A000001000000000000012C /* ChartDataMapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartDataMapperTests.swift; sourceTree = "<group>"; };
 		9A000001000000000000012D /* TrainingExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingExportService.swift; sourceTree = "<group>"; };
 		9A000001000000000000012E /* TrainingExportServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingExportServiceTests.swift; sourceTree = "<group>"; };
+		9A0000010000000000000136 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9A0000010000000000000201 /* GymTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GymTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A0000010000000000000202 /* GymTrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GymTrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -142,6 +144,7 @@
 				9A0000010000000000000404 /* Data */,
 				9A0000010000000000000405 /* Features */,
 				9A0000010000000000000406 /* DesignSystem */,
+				9A0000010000000000000136 /* Assets.xcassets */,
 				9A0000010000000000000407 /* Tests */,
 				9A0000010000000000000408 /* Products */,
 			);
@@ -486,6 +489,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9A0000010000000000000036 /* Assets.xcassets in Resources */,
 				9A0000010000000000000016 /* seed_christian_b1_plan.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
