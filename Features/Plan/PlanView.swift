@@ -14,6 +14,10 @@ struct PlanView: View {
         PlanOverviewViewModel(plans: blocks)
     }
 
+    private var planActions: PlanActionService {
+        PlanActionService(context: modelContext)
+    }
+
     var body: some View {
         NavigationStack(path: $path) {
             Group {
@@ -161,15 +165,8 @@ struct PlanView: View {
     }
 
     private func createPlan() {
-        let plan = TrainingPlan(
-            name: "Neuer Trainingsplan",
-            goal: "",
-            status: .planned
-        )
-        modelContext.insert(plan)
-
         do {
-            try modelContext.save()
+            let plan = try planActions.createPlan()
             path.append(plan.id)
         } catch {
             errorMessage = error.localizedDescription
@@ -178,9 +175,7 @@ struct PlanView: View {
 
     private func loadDemoPlan() {
         do {
-            let knownIDs = Set(blocks.map(\.id))
-            _ = try DemoDataService().loadBundledDemoPlan(into: modelContext)
-            if let demo = newestPlan(excluding: knownIDs) ?? blocks.first(where: { $0.isDemoPlan }) {
+            if let demo = try planActions.loadDemoPlan(existingPlans: blocks) {
                 path.append(demo.id)
             }
         } catch {
@@ -190,17 +185,7 @@ struct PlanView: View {
 
     private func importPlan(from result: Result<[URL], Error>) {
         do {
-            guard let url = try result.get().first else { return }
-            let knownIDs = Set(blocks.map(\.id))
-            let didAccess = url.startAccessingSecurityScopedResource()
-            defer {
-                if didAccess {
-                    url.stopAccessingSecurityScopedResource()
-                }
-            }
-
-            _ = try SeedDataService().importSeedPlan(from: url, into: modelContext)
-            if let imported = newestPlan(excluding: knownIDs) {
+            if let imported = try planActions.importPlan(from: result, existingPlans: blocks) {
                 path.append(imported.id)
             }
         } catch {
@@ -210,7 +195,7 @@ struct PlanView: View {
 
     private func duplicate(_ plan: TrainingPlan) {
         do {
-            let copy = try DemoDataService().duplicateDemoPlan(plan, name: "\(plan.name) Kopie", in: modelContext)
+            let copy = try planActions.duplicate(plan)
             path.append(copy.id)
         } catch {
             errorMessage = error.localizedDescription
@@ -218,32 +203,21 @@ struct PlanView: View {
     }
 
     private func archive(_ plan: TrainingPlan) {
-        plan.status = .archived
-        plan.updatedAt = .now
-
         do {
-            try modelContext.save()
+            try planActions.archive(plan)
         } catch {
             errorMessage = error.localizedDescription
         }
     }
 
     private func delete(_ plan: TrainingPlan) {
-        modelContext.delete(plan)
         pendingDeletion = nil
 
         do {
-            try modelContext.save()
+            try planActions.delete(plan)
         } catch {
             errorMessage = error.localizedDescription
         }
-    }
-
-    private func newestPlan(excluding knownIDs: Set<UUID>) -> TrainingPlan? {
-        blocks
-            .filter { !knownIDs.contains($0.id) }
-            .sorted { $0.createdAt > $1.createdAt }
-            .first
     }
 
     static func visibleWeeks(from weeks: [TrainingWeek]) -> [TrainingWeek] {

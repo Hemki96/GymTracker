@@ -12,7 +12,6 @@
 		9A0000010000000000000003 /* DashboardSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0000010000000000000103 /* DashboardSummary.swift */; };
 		9A0000010000000000000004 /* PersistentTrainingMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0000010000000000000104 /* PersistentTrainingMarker.swift */; };
 		9A0000010000000000000005 /* GymTrackerModelContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0000010000000000000105 /* GymTrackerModelContainer.swift */; };
-		9A0000010000000000000006 /* RepositoryProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0000010000000000000106 /* RepositoryProtocols.swift */; };
 		9A0000010000000000000007 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0000010000000000000107 /* DashboardView.swift */; };
 		9A0000010000000000000008 /* DashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0000010000000000000108 /* DashboardViewModel.swift */; };
 		9A0000010000000000000009 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0000010000000000000109 /* AppTheme.swift */; };
@@ -34,6 +33,8 @@
 		9A0000010000000000000031 /* TrainingPlanEditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0000010000000000000131 /* TrainingPlanEditorViewModel.swift */; };
 		9A0000010000000000000032 /* PlanEditorForms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0000010000000000000132 /* PlanEditorForms.swift */; };
 		9A0000010000000000000033 /* PlanPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0000010000000000000133 /* PlanPresentation.swift */; };
+		9A0000010000000000000034 /* PlanActionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0000010000000000000134 /* PlanActionService.swift */; };
+		9A0000010000000000000035 /* PlanActionServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0000010000000000000135 /* PlanActionServiceTests.swift */; };
 		9A000001000000000000001D /* SessionStartService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A000001000000000000011D /* SessionStartService.swift */; };
 		9A000001000000000000001E /* SessionStartServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A000001000000000000011E /* SessionStartServiceTests.swift */; };
 		9A000001000000000000001F /* ActiveSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A000001000000000000011F /* ActiveSessionView.swift */; };
@@ -70,7 +71,6 @@
 		9A0000010000000000000103 /* DashboardSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardSummary.swift; sourceTree = "<group>"; };
 		9A0000010000000000000104 /* PersistentTrainingMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentTrainingMarker.swift; sourceTree = "<group>"; };
 		9A0000010000000000000105 /* GymTrackerModelContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GymTrackerModelContainer.swift; sourceTree = "<group>"; };
-		9A0000010000000000000106 /* RepositoryProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryProtocols.swift; sourceTree = "<group>"; };
 		9A0000010000000000000107 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		9A0000010000000000000108 /* DashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModel.swift; sourceTree = "<group>"; };
 		9A0000010000000000000109 /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
@@ -92,6 +92,8 @@
 		9A0000010000000000000131 /* TrainingPlanEditorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingPlanEditorViewModel.swift; sourceTree = "<group>"; };
 		9A0000010000000000000132 /* PlanEditorForms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanEditorForms.swift; sourceTree = "<group>"; };
 		9A0000010000000000000133 /* PlanPresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanPresentation.swift; sourceTree = "<group>"; };
+		9A0000010000000000000134 /* PlanActionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanActionService.swift; sourceTree = "<group>"; };
+		9A0000010000000000000135 /* PlanActionServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanActionServiceTests.swift; sourceTree = "<group>"; };
 		9A000001000000000000011D /* SessionStartService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionStartService.swift; sourceTree = "<group>"; };
 		9A000001000000000000011E /* SessionStartServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionStartServiceTests.swift; sourceTree = "<group>"; };
 		9A000001000000000000011F /* ActiveSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveSessionView.swift; sourceTree = "<group>"; };
@@ -169,7 +171,6 @@
 			isa = PBXGroup;
 			children = (
 				9A0000010000000000000413 /* SwiftDataModels */,
-				9A0000010000000000000414 /* Repositories */,
 				9A0000010000000000000415 /* SeedData */,
 				9A0000010000000000000416 /* Export */,
 			);
@@ -205,6 +206,7 @@
 				9A0000010000000000000422 /* DomainModelTests */,
 				9A0000010000000000000423 /* SeedDataTests */,
 				9A0000010000000000000425 /* SessionTests */,
+				9A0000010000000000000429 /* PlanTests */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -263,14 +265,6 @@
 				9A0000010000000000000112 /* TrainingModels.swift */,
 			);
 			path = SwiftDataModels;
-			sourceTree = "<group>";
-		};
-		9A0000010000000000000414 /* Repositories */ = {
-			isa = PBXGroup;
-			children = (
-				9A0000010000000000000106 /* RepositoryProtocols.swift */,
-			);
-			path = Repositories;
 			sourceTree = "<group>";
 		};
 		9A0000010000000000000415 /* SeedData */ = {
@@ -361,10 +355,19 @@
 				9A000001000000000000011B /* ExercisePlanRow.swift */,
 				9A000001000000000000011C /* PlanPreviewData.swift */,
 				9A0000010000000000000131 /* TrainingPlanEditorViewModel.swift */,
-				9A0000010000000000000132 /* PlanEditorForms.swift */,
-				9A0000010000000000000133 /* PlanPresentation.swift */,
+					9A0000010000000000000132 /* PlanEditorForms.swift */,
+					9A0000010000000000000133 /* PlanPresentation.swift */,
+					9A0000010000000000000134 /* PlanActionService.swift */,
+				);
+				path = Plan;
+				sourceTree = "<group>";
+			};
+		9A0000010000000000000429 /* PlanTests */ = {
+			isa = PBXGroup;
+			children = (
+				9A0000010000000000000135 /* PlanActionServiceTests.swift */,
 			);
-			path = Plan;
+			path = PlanTests;
 			sourceTree = "<group>";
 		};
 		9A0000010000000000000425 /* SessionTests */ = {
@@ -506,7 +509,6 @@
 				9A0000010000000000000003 /* DashboardSummary.swift in Sources */,
 				9A0000010000000000000004 /* PersistentTrainingMarker.swift in Sources */,
 				9A0000010000000000000005 /* GymTrackerModelContainer.swift in Sources */,
-				9A0000010000000000000006 /* RepositoryProtocols.swift in Sources */,
 				9A0000010000000000000007 /* DashboardView.swift in Sources */,
 				9A0000010000000000000008 /* DashboardViewModel.swift in Sources */,
 				9A0000010000000000000009 /* AppTheme.swift in Sources */,
@@ -521,8 +523,9 @@
 				9A000001000000000000001B /* ExercisePlanRow.swift in Sources */,
 				9A000001000000000000001C /* PlanPreviewData.swift in Sources */,
 				9A0000010000000000000031 /* TrainingPlanEditorViewModel.swift in Sources */,
-				9A0000010000000000000032 /* PlanEditorForms.swift in Sources */,
-				9A0000010000000000000033 /* PlanPresentation.swift in Sources */,
+					9A0000010000000000000032 /* PlanEditorForms.swift in Sources */,
+					9A0000010000000000000033 /* PlanPresentation.swift in Sources */,
+					9A0000010000000000000034 /* PlanActionService.swift in Sources */,
 				9A000001000000000000001D /* SessionStartService.swift in Sources */,
 				9A0000010000000000000026 /* SessionCompletionService.swift in Sources */,
 				9A000001000000000000001F /* ActiveSessionView.swift in Sources */,
@@ -550,9 +553,10 @@
 				9A0000010000000000000023 /* VolumeCalculatorTests.swift in Sources */,
 				9A0000010000000000000024 /* PainThresholdEvaluatorTests.swift in Sources */,
 				9A0000010000000000000025 /* RIRAnalyzerTests.swift in Sources */,
-				9A000001000000000000002C /* ChartDataMapperTests.swift in Sources */,
-				9A000001000000000000002E /* TrainingExportServiceTests.swift in Sources */,
-			);
+					9A000001000000000000002C /* ChartDataMapperTests.swift in Sources */,
+					9A000001000000000000002E /* TrainingExportServiceTests.swift in Sources */,
+					9A0000010000000000000035 /* PlanActionServiceTests.swift in Sources */,
+				);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */

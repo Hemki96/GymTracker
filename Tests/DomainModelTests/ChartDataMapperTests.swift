@@ -120,7 +120,11 @@ struct ChartDataMapperTests {
     private var gregorianCalendar: Calendar {
         var calendar = Calendar(identifier: .gregorian)
         calendar.locale = Locale(identifier: "de_DE")
-        calendar.timeZone = TimeZone(secondsFromGMT: 0)!
+        if let timeZone = TimeZone(secondsFromGMT: 0) {
+            calendar.timeZone = timeZone
+        } else {
+            Issue.record("UTC time zone fixture could not be created")
+        }
         calendar.firstWeekday = 2
         calendar.minimumDaysInFirstWeek = 4
         return calendar
@@ -133,7 +137,11 @@ struct ChartDataMapperTests {
         components.year = year
         components.month = month
         components.day = day
-        return components.date!
+        guard let date = components.date else {
+            Issue.record("Date fixture could not be created for \(year)-\(month)-\(day)")
+            return .distantPast
+        }
+        return date
     }
 
     private func makeSession(

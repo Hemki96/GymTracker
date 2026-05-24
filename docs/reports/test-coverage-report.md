@@ -2,7 +2,7 @@
 
 Datum: 2026-05-24
 Projekt: GymTracker iOS
-Status: Abschnitt 4 noch nicht gestartet; bestehende Tests in Abschnitt 1 dokumentiert und verifiziert
+Status: Abschnitt 4 noch nicht vollstaendig gestartet; erste neue Unit Tests fuer Refactoring-Schritt 2.2/2.3 ergaenzt und verifiziert
 
 ## Bestehende Testabdeckung
 
@@ -22,6 +22,7 @@ Vorhandene Testbereiche:
 - `Tests/SeedDataTests/SeedDataServiceTests.swift`
 - `Tests/SessionTests/SessionStartServiceTests.swift`
 - `Tests/SessionTests/SessionCompletionServiceTests.swift`
+- `Tests/PlanTests/PlanActionServiceTests.swift`
 - `Tests/ViewModelTests/DashboardViewModelTests.swift`
 
 ## Aktueller Testlauf
@@ -35,8 +36,8 @@ xcodebuild test -scheme GymTracker -project GymTracker.xcodeproj -destination 'p
 Ergebnis:
 
 - `TEST SUCCEEDED`
-- Xcode Result: `/Users/christian/Library/Developer/Xcode/DerivedData/GymTracker-cvgfjtxlfrvcxldhpjbonwcruhsg/Logs/Test/Test-GymTracker-2026.05.24_10-17-57-+0200.xcresult`
-- Alle in der Ausgabe sichtbaren Test-Suites bestanden: `TrainingPlanEditorViewModelTests`, `SessionCompletionServiceTests`, `SeedDataServiceTests`, `VolumeCalculatorTests`, `DashboardViewModelTests`, `SessionStartServiceTests`, `DemoDataServiceTests`, `PlanViewPresentationTests`, `PainThresholdEvaluatorTests`, `TrainingModelTests`, `ChartDataMapperTests`, `RIRAnalyzerTests`, `TrainingExportServiceTests`.
+- Xcode Result nach Refactoring 2.2/2.3: `/Users/christian/Library/Developer/Xcode/DerivedData/GymTracker-cvgfjtxlfrvcxldhpjbonwcruhsg/Logs/Test/Test-GymTracker-2026.05.24_13-32-29-+0200.xcresult`
+- Alle in der Ausgabe sichtbaren Test-Suites bestanden: `TrainingPlanEditorViewModelTests`, `SessionCompletionServiceTests`, `SeedDataServiceTests`, `VolumeCalculatorTests`, `DashboardViewModelTests`, `SessionStartServiceTests`, `DemoDataServiceTests`, `PlanViewPresentationTests`, `PlanActionServiceTests`, `PainThresholdEvaluatorTests`, `TrainingModelTests`, `ChartDataMapperTests`, `RIRAnalyzerTests`, `TrainingExportServiceTests`.
 
 Qualitative Abdeckung:
 
@@ -44,7 +45,7 @@ Qualitative Abdeckung:
 - SwiftData-Modellgraph: teilweise abgedeckt.
 - Seed-/Demo-Import: gut abgedeckt.
 - Session Start/Completion/Editing: gut abgedeckt.
-- Plan Presentation und Editor ViewModel: teilweise abgedeckt.
+- Plan Presentation, Plan Actions und Editor ViewModel: teilweise abgedeckt.
 - SwiftUI Views: nicht direkt ueber UI Tests abgedeckt.
 - Navigation: nicht ueber UI Tests abgedeckt.
 - Accessibility, Dynamic Type, Rotation, Dark Mode: keine automatisierten Tests gefunden.
@@ -57,6 +58,7 @@ Qualitative Abdeckung:
 - Tests fuer Navigation zwischen Plan, Workout, aktiver Session, Summary und History.
 - Tests fuer Empty States in History/Analytics.
 - Tests fuer Offline-/Import-Fehlerfaelle.
+- Tests fuer `PlanActionService.importPlan` inklusive leeres Ergebnis, fehlerhaftes JSON und Security-Scoped-URL-Verhalten.
 - Tests fuer SwiftData-Container-Fehlerpfade.
 - Tests fuer Accessibility Labels und Dynamic Type Layout.
 

@@ -2,13 +2,13 @@
 
 Datum: 2026-05-24
 Projekt: GymTracker iOS
-Status: Abschnitt 1 Projektanalyse abgeschlossen und verifiziert; Refactoring noch nicht gestartet
+Status: Abschnitt 2 Refactoring gestartet; Struktur-Hygiene und erste PlanView-Entkopplung abgeschlossen
 
 ## Executive Summary
 
 GymTracker ist als native SwiftUI-/SwiftData-App mit einer groben Feature-/Domain-/Data-Struktur aufgebaut. Die bestehende Richtung passt zur vorhandenen ADR `docs/adr/0001-native-swiftui-mvvm-swiftdata.md`: SwiftUI, MVVM, SwiftData, Domain Services und testbare fachliche Logik.
 
-Die Analyse zeigt aber klare Wartbarkeitsrisiken: mehrere SwiftUI-Dateien sind sehr gross, `PlanView` kapselt noch UI, SwiftData-Zugriff, Import, Demo-Load, Navigation und Fehlerzustand in einem Typ, `TrainingPlanEditorViewModel` ist eher ein grosser Editor-Service als ein fokussiertes ViewModel, und die geplante Repository-Schicht ist aktuell nur ein Platzhalter. Ein UI-Test-Target fehlt, Build-Artefakte sind versioniert, und es gibt keine Lint-/Format-Konfiguration.
+Die Analyse zeigt aber klare Wartbarkeitsrisiken: mehrere SwiftUI-Dateien sind sehr gross, `PlanView` kapselt weiterhin viel UI, Navigation und Fehlerzustand in einem Typ, die direkten Plan-Side-Effects wurden aber in Abschnitt 2.2/2.3 in `PlanActionService` verschoben und unit-getestet. `TrainingPlanEditorViewModel` ist eher ein grosser Editor-Service als ein fokussiertes ViewModel. Ein UI-Test-Target fehlt, und es gibt keine Lint-/Format-Konfiguration.
 
 ## Erledigte Analysepunkte
 
@@ -30,7 +30,7 @@ Top-Level-Struktur:
 - `App/`: App Root und `AppEnvironment`
 - `Features/`: SwiftUI Feature Screens und feature-nahe Presentation/ViewModel-Typen
 - `Domain/`: fachliche Services, Enums und kleine Domain Models
-- `Data/`: SwiftData-Modelle, Seed-/Demo-Daten, Repository-Platzhalter
+- `Data/`: SwiftData-Modelle, Seed-/Demo-Daten
 - `DesignSystem/`: Theme-Modifier und Design Tokens
 - `Tests/`: Unit Tests fuer Domain, SeedData, Sessions und ViewModels
 - `docs/`: Produkt-, Architektur-, QA- und Report-Dokumentation
@@ -78,6 +78,8 @@ Risiko: Veraltete Derived-/Build-Dateien koennen Merge-Konflikte, irrefuehrende 
 
 Empfehlung: `build/` aus Git entfernen, `.gitignore` ergaenzen und nur reproduzierbare Quellen, Fixtures und Projektdateien versionieren.
 
+Status: Behoben in Abschnitt 2.1.
+
 ### P2 - Grosse SwiftUI-Dateien mit gemischten Verantwortlichkeiten
 
 Fundstellen:
@@ -96,11 +98,13 @@ Empfehlung: Reine Presentation-/Formatter-/Mapper-Typen und kleine SwiftUI-Kompo
 
 Fundstelle: `Features/Plan/PlanView.swift:163`
 
-Beobachtung: `PlanView` erstellt Plaene, laedt Demo-Daten, importiert JSON, dupliziert, archiviert und loescht direkt ueber `modelContext`.
+Beobachtung: `PlanView` erstellte Plaene, lud Demo-Daten, importierte JSON, duplizierte, archivierte und loeschte direkt ueber `modelContext`.
 
 Risiko: Die View ist schwer isoliert testbar und mischt UI mit Persistenz-/Importlogik.
 
 Empfehlung: Plan-Aktionen in einen Plan-Service oder Store auslagern und nur UI-State in der View halten.
+
+Status: Teilweise behoben in Abschnitt 2.2/2.3. Die genannten Side Effects liegen jetzt in `PlanActionService` und sind mit Unit Tests abgesichert. Weitere View-Aufteilung bleibt offen.
 
 ### P2 - `TrainingPlanEditorViewModel` ist zu gross und service-artig
 
@@ -119,6 +123,8 @@ Fundstelle: `Data/Repositories/RepositoryProtocols.swift`
 Risiko: Die Architektur deutet eine Repository-Schicht an, waehrend Views und Services SwiftData direkt nutzen. Das ist als bewusste Architektur moeglich, aber aktuell inkonsistent dokumentiert.
 
 Empfehlung: Platzhalter entfernen oder konkrete Protokolle fuer Plan-/Session-/History-Zugriffe einfuehren.
+
+Status: Behoben in Abschnitt 2.1 durch Entfernen des leeren Platzhalters. Eine spaetere Store-/Repository-Entscheidung bleibt offen, aber es gibt keinen toten Protokolltyp mehr.
 
 ### P2 - AppEnvironment wird kaum genutzt
 
@@ -166,7 +172,66 @@ Empfehlung: Mit `#require` oder explizitem Guard stabilisieren.
 
 ## Refactorings
 
-Noch nicht gestartet in diesem Durchlauf. Abschnitt 2 wird erst begonnen, nachdem Abschnitt 1 dokumentiert, Build und Tests erfolgreich verifiziert sind.
+### 2.1 Struktur-Hygiene: Build-Artefakte entfernt
+
+Dateien:
+
+- `.gitignore`
+- `build/GymTracker.build/...` aus Git entfernt
+
+Begruendung:
+
+- `build/` enthielt 22 getrackte Xcode-Build-Artefakte.
+- Build-Ergebnisse gehoeren nicht in die Versionskontrolle.
+
+Ergebnis:
+
+- `git ls-files build | wc -l` ergibt `0`.
+- Lokaler `build/`-Ordner wurde entfernt.
+- Zukuenftige Build-, DerivedData-, xcresult-, xcuserstate- und DS_Store-Artefakte werden ignoriert.
+
+### 2.1 Dead Code: Leeres Repository-Protokoll entfernt
+
+Dateien:
+
+- `Data/Repositories/RepositoryProtocols.swift`
+- `GymTracker.xcodeproj/project.pbxproj`
+
+Begruendung:
+
+- Der Typ `TrainingRepository` hatte keine Anforderungen und keine Referenzen.
+- Ein leerer Repository-Platzhalter ist keine nutzbare Abstraktion und verschleiert die echte Architekturentscheidung.
+
+Ergebnis:
+
+- Datei geloescht.
+- Xcode-Projekt bereinigt.
+- `rg "RepositoryProtocols|TrainingRepository|Repositories"` findet keine Referenzen mehr.
+- Build erfolgreich.
+- Tests erfolgreich.
+
+### 2.2/2.3 SwiftUI/ViewModel: Plan-Aktionen aus `PlanView` extrahiert
+
+Dateien:
+
+- `Features/Plan/PlanActionService.swift`
+- `Features/Plan/PlanView.swift`
+- `Tests/PlanTests/PlanActionServiceTests.swift`
+- `GymTracker.xcodeproj/project.pbxproj`
+
+Begruendung:
+
+- Direkte SwiftData-Mutationen und Import-/Demo-Side-Effects in `PlanView` erschwerten Unit Tests und vergroesserten die View.
+- Ein kleiner Service reduziert die UI-Verantwortung und schafft eine testbare Grenze fuer Plan-Aktionen.
+
+Ergebnis:
+
+- `PlanActionService` kapselt Create, Demo-Load, Import, Duplicate, Archive und Delete.
+- `PlanView` delegiert diese Aktionen und bleibt fuer UI-State, Navigation und Alerts verantwortlich.
+- Vier neue Unit Tests decken Create, Archive, Delete und Duplicate ab.
+- RED/GREEN-Nachweis wurde dokumentiert.
+- Build erfolgreich.
+- Tests erfolgreich.
 
 ## Build- und Teststatus
 
@@ -179,6 +244,7 @@ Tests:
 
 - Befehl: `xcodebuild test -scheme GymTracker -project GymTracker.xcodeproj -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.6'`
 - Ergebnis: `TEST SUCCEEDED`
+- Letzter Testlauf nach Refactoring 2.2/2.3: `Test-GymTracker-2026.05.24_13-32-29-+0200.xcresult`
 
 Dokumentierte Warnungen:
 
@@ -189,14 +255,13 @@ Dokumentierte Warnungen:
 
 - Grosse View-Dateien sind das wichtigste Wartbarkeitsrisiko.
 - Fehlendes UI-Test-Target ist das wichtigste QA-Risiko.
-- Versionierte Build-Artefakte sind das wichtigste Repository-Hygiene-Risiko.
-- Direkter SwiftData-Zugriff in Views ist ein mittleres Architektur-Risiko, solange die Repository-Strategie unentschieden ist.
+- Versionierte Build-Artefakte waren das wichtigste Repository-Hygiene-Risiko und sind in Abschnitt 2.1 behoben.
+- Direkter SwiftData-Zugriff in Views ist reduziert, aber weiter ein mittleres Architektur-Risiko, solange die Store-/Repository-Strategie unentschieden ist.
 
 ## Priorisierung
 
 1. UI-Test-Target und Smoke Tests ergaenzen.
-2. `build/` aus Git entfernen und `.gitignore` einfuehren.
-3. `PlanView`, `ActiveSessionView` und `HistoryView` schrittweise aufteilen.
-4. `TrainingPlanEditorViewModel` in kleinere Services splitten.
-5. Repository-/SwiftData-Direktzugriff per ADR entscheiden.
-6. Testdateien splitten und Lint-/Format-Automation einfuehren.
+2. `PlanView`, `ActiveSessionView` und `HistoryView` schrittweise aufteilen.
+3. `TrainingPlanEditorViewModel` in kleinere Services splitten.
+4. Store-/Repository-/SwiftData-Direktzugriff per ADR entscheiden.
+5. Testdateien splitten und Lint-/Format-Automation einfuehren.

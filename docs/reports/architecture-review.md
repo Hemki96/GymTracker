@@ -13,7 +13,7 @@ Schichten:
 - App: `GymTrackerApp`, `AppEnvironment`
 - Features: SwiftUI Screens und feature-nahe Presentation/ViewModel-Typen
 - Domain: fachliche Services, Enums, kleine Models
-- Data: SwiftData-Modelle, Seed-/Demo-Daten, Repository-Platzhalter
+- Data: SwiftData-Modelle, Seed-/Demo-Daten
 - DesignSystem: Theme Tokens und Modifier
 - Tests: Swift Testing Unit Tests
 
@@ -47,7 +47,7 @@ Bewertung: Grundstruktur sauber, DI noch nicht konsequent.
 
 `Features/Plan`, `Features/Session`, `Features/History`, `Features/Analytics` und `Features/Dashboard` sind nach Produktbereichen gruppiert.
 
-Bewertung: Gute fachliche Gruppierung. Einige Feature-Dateien sind zu gross und enthalten gemischte Verantwortlichkeiten.
+Bewertung: Gute fachliche Gruppierung. Einige Feature-Dateien sind zu gross und enthalten gemischte Verantwortlichkeiten. `PlanActionService` reduziert seit Abschnitt 2.2/2.3 die Side Effects in `PlanView`.
 
 ### Domain
 
@@ -57,9 +57,9 @@ Bewertung: Staerkster Architekturteil; Services sind klein bis mittelgross und g
 
 ### Data
 
-SwiftData-Modelle liegen zentral in `TrainingModels.swift`; Seed-Importe sind in eigenen Services gekapselt. `RepositoryProtocols.swift` ist aktuell leer.
+SwiftData-Modelle liegen zentral in `TrainingModels.swift`; Seed-Importe sind in eigenen Services gekapselt. Der leere Repository-Platzhalter wurde in Abschnitt 2.1 entfernt.
 
-Bewertung: SwiftData-Modellgraph ist nachvollziehbar, aber gross. Repository-Strategie ist unentschieden.
+Bewertung: SwiftData-Modellgraph ist nachvollziehbar, aber gross. Repository-/Store-Strategie ist unentschieden; tote Repository-Platzhalter wurden entfernt.
 
 ### DesignSystem
 
@@ -71,26 +71,27 @@ Bewertung: Gute Basis, aber wiederverwendbare Komponenten sind noch kaum belegt.
 
 - [x] MVVM korrekt umgesetzt: teilweise. Views plus ViewModels/Presentation-Typen sind vorhanden.
 - [x] Separation of Concerns: teilweise gut in Domain, schwach in grossen SwiftUI Views.
-- [x] Dependency Injection vorhanden: minimal ueber `AppEnvironment`, Services erhalten `ModelContext` per Init.
+- [x] Dependency Injection vorhanden: minimal ueber `AppEnvironment`; Services wie `PlanActionService` erhalten `ModelContext` per Init.
 - [x] Services korrekt getrennt: ueberwiegend ja.
 - [x] State Management sauber: lokal nachvollziehbar, aber grosse Views halten viele `@State`- und SwiftData-Side-Effects.
 - [x] Navigation konsistent: SwiftUI `TabView` und `NavigationStack` werden konsistent genutzt.
 - [x] Reusable Components vorhanden: teilweise, z.B. Plan-Zeilen und Theme Modifier; Ausbau sinnvoll.
-- [x] Side Effects sauber gekapselt: teilweise. Domain Services ja, `PlanView` und Editor-Forms noch nicht ausreichend.
+- [x] Side Effects sauber gekapselt: teilweise. Domain Services ja; Plan-Aktionen sind begonnen gekapselt, Editor-Forms und weitere grosse Views noch nicht ausreichend.
 
 ## Risiken
 
-- `PlanView` mischt Navigation, UI, Import, Demo-Load, Persistenzmutation und Fehlerbehandlung.
+- `PlanView` mischt weiterhin Navigation, UI und Fehlerbehandlung; Import, Demo-Load und Persistenzmutation wurden teilweise in `PlanActionService` verschoben.
 - `HistoryView` und `ActiveSessionView` sind sehr gross und schwer isoliert testbar.
 - `TrainingPlanEditorViewModel` hat viele Verantwortlichkeiten in einem Typ.
-- Leere Repository-Schicht erzeugt Architektur-Unklarheit.
+- Die leere Repository-Schicht wurde in Abschnitt 2.1 entfernt; offen bleibt die bewusste Entscheidung zwischen Store-/Repository-Schicht und direktem SwiftData-Zugriff.
 - `fatalError` im Live-Container-Setup ist fuer Robustheit kritisch.
 - Kein UI-Test-Target deckt reale Nutzerfluesse ab.
+- Versionierte Build-Artefakte wurden in Abschnitt 2.1 bereinigt und sind kein offenes Architektur-/Repo-Hygiene-Risiko mehr.
 
 ## Empfehlungen
 
-1. Architekturentscheidung dokumentieren: SwiftData direkt in Views/Services oder Repository-Schicht einfuehren.
-2. `PlanView`-Side-Effects in Service/Store auslagern.
+1. Architekturentscheidung dokumentieren: SwiftData direkt in Views/Services oder Store-/Repository-Schicht einfuehren.
+2. Verbleibende `PlanView`-UI in kleinere Komponenten aufteilen und `PlanActionService` bei Import-/Fehlerpfaden weiter testen.
 3. `TrainingPlanEditorViewModel` in Validation, Reordering, Duplication und Sync-Services teilen.
 4. Grosse SwiftUI Views schrittweise in kleine Komponenten plus Presentation Mapper aufteilen.
 5. AppEnvironment als echte Composition Root ausbauen oder ungenutzte Factories entfernen.
@@ -100,9 +101,10 @@ Bewertung: Gute Basis, aber wiederverwendbare Komponenten sind noch kaum belegt.
 
 Kurzfristig:
 
-- `build/` aus Git entfernen.
+- `build/` aus Git entfernen. Status: erledigt in Abschnitt 2.1.
+- Leeren Repository-Platzhalter entfernen. Status: erledigt in Abschnitt 2.1.
 - Testdateien nach getesteten Typen splitten.
-- `PlanView`-Aktionen extrahieren.
+- `PlanView`-Aktionen extrahieren. Status: Create, Demo-Load, Import, Duplicate, Archive und Delete in `PlanActionService` verschoben.
 
 Mittelfristig:
 

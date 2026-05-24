@@ -5,7 +5,7 @@ Projekt: GymTracker iOS
 
 ## Aktueller Status
 
-Abschnitt 1 Projektanalyse ist abgeschlossen. Projektstruktur, Architektur, Datenfluss, Abhaengigkeiten, Code-Quality-Findings, Build und Tests wurden analysiert und dokumentiert.
+Abschnitt 2 Refactoring wurde gestartet. Struktur-Hygiene, Dead-Code-Bereinigung und erste PlanView-Entkopplung wurden in kleinen, verifizierten Schritten umgesetzt.
 
 ## Abgeschlossene Punkte
 
@@ -31,13 +31,18 @@ Abschnitt 1 Projektanalyse ist abgeschlossen. Projektstruktur, Architektur, Date
 - [x] 1.3 Error Handling pruefen
 - [x] 1.3 Magic Numbers und harte Strings pruefen
 - [x] 1.3 Naming und Struktur pruefen
+- [x] 2.1 Unnoetige Build-Artefakte aus Versionskontrolle entfernen
+- [x] 2.1 `.gitignore` fuer lokale Build-/DerivedData-Artefakte ergaenzen
+- [x] 2.1 Leeren Repository-Protokoll-Platzhalter entfernen
+- [x] 2.2/2.3 Plan-Side-Effects aus `PlanView` in `PlanActionService` extrahieren
+- [x] 4.2 Unit Tests fuer `PlanActionService` ergaenzen
 
 ## Offene Punkte
 
 - [x] Abschnitt 1 Build pruefen
 - [x] Abschnitt 1 Tests ausfuehren
 - [x] Abschnitt 1 Warnungen dokumentieren
-- [ ] Abschnitt 2 Refactoring
+- [ ] Abschnitt 2 Refactoring fortsetzen
 - [ ] Abschnitt 3 Performance Analyse
 - [ ] Abschnitt 4 Testing
 - [ ] Abschnitt 5 Build & Stabilitaet
@@ -47,7 +52,7 @@ Abschnitt 1 Projektanalyse ist abgeschlossen. Projektstruktur, Architektur, Date
 
 ## Build Status
 
-Erfolgreich.
+Erfolgreich nach Refactoring-Schritt 2.2/2.3.
 
 Ausgefuehrter Befehl:
 
@@ -63,7 +68,7 @@ Ergebnis:
 
 ## Test Status
 
-Erfolgreich.
+Erfolgreich nach Refactoring-Schritt 2.2/2.3.
 
 Ausgefuehrter Befehl:
 
@@ -74,8 +79,70 @@ xcodebuild test -scheme GymTracker -project GymTracker.xcodeproj -destination 'p
 Ergebnis:
 
 - `TEST SUCCEEDED`
-- Testlauf: `Test-GymTracker-2026.05.24_10-17-57-+0200.xcresult`
+- Testlauf: `Test-GymTracker-2026.05.24_13-32-29-+0200.xcresult`
 - Alle in der Ausgabe gelisteten Testfaelle bestanden.
+
+## Refactoring Log
+
+### 2026-05-24 - Abschnitt 2.1 Struktur-Hygiene
+
+Begruendung:
+
+- `build/` enthielt 22 getrackte Xcode-Build-Artefakte.
+- Build-Artefakte sind nicht reproduzierbare Quellen und verursachen unnoetige Diffs.
+
+Aenderungen:
+
+- `.gitignore` erstellt mit `build/`, `DerivedData/`, `*.xcresult`, `*.xcuserstate`, `*.DS_Store`.
+- `build/` aus dem Git-Index entfernt.
+- Lokalen `build/`-Ordner entfernt.
+
+Nachweis:
+
+- `git ls-files build | wc -l` ergibt `0`.
+- Build erfolgreich.
+- Tests erfolgreich.
+
+### 2026-05-24 - Abschnitt 2.1 Dead Code entfernt
+
+Begruendung:
+
+- `Data/Repositories/RepositoryProtocols.swift` enthielt nur `protocol TrainingRepository {}`.
+- Es gab keine Code-Referenzen auf `TrainingRepository`.
+- Der leere Platzhalter erzeugte Architektur-Unklarheit.
+
+Aenderungen:
+
+- `RepositoryProtocols.swift` geloescht.
+- Xcode-Projektverweise und Sources-Build-Phase bereinigt.
+- Leere `Repositories`-Projektgruppe entfernt.
+
+Nachweis:
+
+- `rg "RepositoryProtocols|TrainingRepository|Repositories" ...` findet keine Referenzen mehr.
+- Build erfolgreich.
+- Tests erfolgreich.
+
+### 2026-05-24 - Abschnitt 2.2/2.3 Plan-Aktionen extrahiert
+
+Begruendung:
+
+- `PlanView` fuehrte Persistenz-, Import-, Demo-Load-, Duplikat-, Archiv- und Delete-Aktionen direkt aus.
+- Die Side Effects waren dadurch nur ueber die View testbar und vergroesserten die View-Verantwortung.
+
+Aenderungen:
+
+- `Features/Plan/PlanActionService.swift` neu erstellt.
+- `PlanView` delegiert Plan-Aktionen an `PlanActionService` und behaelt UI-State, Navigation und Alerts.
+- `Tests/PlanTests/PlanActionServiceTests.swift` mit vier Unit Tests ergaenzt.
+- Xcode-Projekt um Service- und Testdatei erweitert.
+
+Nachweis:
+
+- RED: gezielter Testlauf schlug vor Implementierung erwartungsgemaess wegen fehlender `PlanActionService.swift` fehl.
+- GREEN: `xcodebuild test ... -only-testing:GymTrackerTests/PlanActionServiceTests` erfolgreich.
+- Voller Build erfolgreich.
+- Voller Testlauf erfolgreich: `Test-GymTracker-2026.05.24_13-32-29-+0200.xcresult`.
 
 ## Warnungen
 
@@ -89,8 +156,10 @@ Statische Analyse-Findings:
 - Mehrere grosse SwiftUI-Dateien ueber 500 Zeilen.
 - Kein UI-Test-Target.
 - Keine Lint-/Format-Konfiguration.
-- Versionierte Build-Artefakte im `build/`-Ordner.
+- Versionierte Build-Artefakte im `build/`-Ordner: behoben in Abschnitt 2.1.
 - `fatalError` bei Live-ModelContainer-Erstellung.
+- Leeres Repository-Protokoll: behoben in Abschnitt 2.1.
+- `PlanView`-Side-Effects teilweise behoben durch `PlanActionService`; weitere View-Aufteilung offen.
 
 ## Kurzbericht Abschnitt 1
 
