@@ -36,6 +36,8 @@ Abschnitt 2 Refactoring wurde gestartet. Struktur-Hygiene, Dead-Code-Bereinigung
 - [x] 2.1 Leeren Repository-Protokoll-Platzhalter entfernen
 - [x] 2.2/2.3 Plan-Side-Effects aus `PlanView` in `PlanActionService` extrahieren
 - [x] 4.2 Unit Tests fuer `PlanActionService` ergaenzen
+- [x] 5.1 Force-Unwraps in `ChartDataMapperTests` entfernen
+- [x] 6.2 Live-`fatalError` bei SwiftData-Container-Erstellung entfernen
 
 ## Offene Punkte
 
@@ -79,7 +81,7 @@ xcodebuild test -scheme GymTracker -project GymTracker.xcodeproj -destination 'p
 Ergebnis:
 
 - `TEST SUCCEEDED`
-- Testlauf: `Test-GymTracker-2026.05.24_13-32-29-+0200.xcresult`
+- Testlauf: `Test-GymTracker-2026.05.24_17-44-41-+0200.xcresult`
 - Alle in der Ausgabe gelisteten Testfaelle bestanden.
 
 ## Refactoring Log
@@ -144,6 +146,45 @@ Nachweis:
 - Voller Build erfolgreich.
 - Voller Testlauf erfolgreich: `Test-GymTracker-2026.05.24_13-32-29-+0200.xcresult`.
 
+### 2026-05-24 - Abschnitt 5.1 Test-Robustheit
+
+Begruendung:
+
+- `ChartDataMapperTests` enthielt zwei Force-Unwraps in Fixture-Helfern.
+- Ein Fixture-Fehler sollte als Test-Issue sichtbar werden statt per Crash abzubrechen.
+
+Aenderungen:
+
+- `TimeZone(secondsFromGMT: 0)!` durch kontrolliertes Optional-Handling mit `Issue.record` ersetzt.
+- `components.date!` durch Guard mit `Issue.record` und Fallback ersetzt.
+
+Nachweis:
+
+- Gezielter Testlauf `xcodebuild test ... -only-testing:GymTrackerTests/ChartDataMapperTests` erfolgreich: `Test-GymTracker-2026.05.24_17-40-21-+0200.xcresult`.
+- Voller Build erfolgreich.
+- Voller Testlauf erfolgreich: `Test-GymTracker-2026.05.24_17-41-12-+0200.xcresult`.
+
+### 2026-05-24 - Abschnitt 6.2 SwiftData-Startup-Robustheit
+
+Begruendung:
+
+- `GymTrackerModelContainer.make()` beendete die App bei Container-Fehlern per `fatalError`.
+- Ein produktiver App-Start sollte einen kontrollierten Fehlerzustand anzeigen koennen.
+
+Aenderungen:
+
+- `GymTrackerModelContainer.make(isStoredInMemoryOnly:)` wirft Fehler statt `fatalError`.
+- `AppEnvironment.live()` ist jetzt `throws`.
+- `GymTrackerApp` zeigt bei Startup-Fehlern `StartupFailureView` statt zu crashen.
+- `TrainingModelTests` enthaelt einen neuen In-Memory-Container-Smoke-Test.
+
+Nachweis:
+
+- RED: gezielter Testlauf schlug vor Implementierung erwartungsgemaess wegen fehlender `make(isStoredInMemoryOnly:)`-API fehl.
+- GREEN: gezielter Testlauf `TrainingModelTests/gymTrackerModelContainerCanCreateInMemoryContainer` erfolgreich: `Test-GymTracker-2026.05.24_17-44-07-+0200.xcresult`.
+- Voller Build erfolgreich.
+- Voller Testlauf erfolgreich: `Test-GymTracker-2026.05.24_17-44-41-+0200.xcresult`.
+
 ## Warnungen
 
 Aktuelle Build-/Test-Warnungen:
@@ -157,9 +198,10 @@ Statische Analyse-Findings:
 - Kein UI-Test-Target.
 - Keine Lint-/Format-Konfiguration.
 - Versionierte Build-Artefakte im `build/`-Ordner: behoben in Abschnitt 2.1.
-- `fatalError` bei Live-ModelContainer-Erstellung.
+- `fatalError` bei Live-ModelContainer-Erstellung: behoben in Abschnitt 6.2.
 - Leeres Repository-Protokoll: behoben in Abschnitt 2.1.
 - `PlanView`-Side-Effects teilweise behoben durch `PlanActionService`; weitere View-Aufteilung offen.
+- Force-Unwraps in `ChartDataMapperTests`: behoben in Abschnitt 5.1.
 
 ## Kurzbericht Abschnitt 1
 

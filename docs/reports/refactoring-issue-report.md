@@ -144,6 +144,8 @@ Risiko: Ein Container-Initialisierungsfehler beendet die App hart. Fuer Live-App
 
 Empfehlung: Fallible Factory oder App-Root-Fehlerzustand einfuehren; Preview-`fatalError` separat bewerten.
 
+Status: Behoben in Abschnitt 6.2 fuer den Live-App-Container. Preview-`fatalError` in `PlanPreviewData` bleibt separat zu bewerten.
+
 ### P3 - Tests sind teilweise in unpassenden Dateien gebuendelt
 
 Fundstelle: `Tests/ViewModelTests/DashboardViewModelTests.swift`
@@ -169,6 +171,8 @@ Fundstelle: `Tests/DomainModelTests/ChartDataMapperTests.swift`
 Risiko: In Tests akzeptabel, aber `TimeZone(secondsFromGMT: 0)!` und `components.date!` koennen bei spaeterer Anpassung unschoene Crashs erzeugen.
 
 Empfehlung: Mit `#require` oder explizitem Guard stabilisieren.
+
+Status: Behoben in Abschnitt 5.1 durch explizites Optional-Handling mit `Issue.record`.
 
 ## Refactorings
 
@@ -233,6 +237,48 @@ Ergebnis:
 - Build erfolgreich.
 - Tests erfolgreich.
 
+### 5.1 Test-Robustheit: Force-Unwraps entfernt
+
+Datei:
+
+- `Tests/DomainModelTests/ChartDataMapperTests.swift`
+
+Begruendung:
+
+- Force-Unwraps in Test-Fixtures koennen echte Fehlermeldungen verdecken.
+- Explizite Test-Issues sind in diesem Fall aussagekraeftiger als ein Crash.
+
+Ergebnis:
+
+- Zwei Force-Unwraps entfernt.
+- Gezielter Testlauf fuer `ChartDataMapperTests` erfolgreich.
+- Voller Build erfolgreich.
+- Voller Testlauf erfolgreich.
+
+### 6.2 Robustheit: Live-Container-`fatalError` entfernt
+
+Dateien:
+
+- `Data/SwiftDataModels/GymTrackerModelContainer.swift`
+- `App/AppEnvironment.swift`
+- `App/GymTrackerApp.swift`
+- `Tests/DomainModelTests/TrainingModelTests.swift`
+
+Begruendung:
+
+- Ein SwiftData-Containerfehler beim App-Start darf nicht unkontrolliert per `fatalError` crashen.
+- Eine werfende Factory und ein sichtbarer Startup-Fehlerzustand sind robuster und testbarer.
+
+Ergebnis:
+
+- `GymTrackerModelContainer.make(isStoredInMemoryOnly:)` wirft Fehler.
+- `AppEnvironment.live()` propagiert Container-Fehler.
+- `GymTrackerApp` zeigt `StartupFailureView`, falls die Live-Umgebung nicht erstellt werden kann.
+- Neuer Test `gymTrackerModelContainerCanCreateInMemoryContainer` prueft die Container-Factory mit In-Memory-Konfiguration.
+- RED/GREEN-Nachweis wurde dokumentiert.
+- Build erfolgreich.
+- Tests erfolgreich.
+
 ## Build- und Teststatus
 
 Build:
@@ -244,7 +290,7 @@ Tests:
 
 - Befehl: `xcodebuild test -scheme GymTracker -project GymTracker.xcodeproj -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.6'`
 - Ergebnis: `TEST SUCCEEDED`
-- Letzter Testlauf nach Refactoring 2.2/2.3: `Test-GymTracker-2026.05.24_13-32-29-+0200.xcresult`
+- Letzter Testlauf nach Refactoring 6.2: `Test-GymTracker-2026.05.24_17-44-41-+0200.xcresult`
 
 Dokumentierte Warnungen:
 
@@ -257,6 +303,7 @@ Dokumentierte Warnungen:
 - Fehlendes UI-Test-Target ist das wichtigste QA-Risiko.
 - Versionierte Build-Artefakte waren das wichtigste Repository-Hygiene-Risiko und sind in Abschnitt 2.1 behoben.
 - Direkter SwiftData-Zugriff in Views ist reduziert, aber weiter ein mittleres Architektur-Risiko, solange die Store-/Repository-Strategie unentschieden ist.
+- Preview-spezifische `fatalError`-Pfade in `PlanPreviewData` bleiben offen.
 
 ## Priorisierung
 

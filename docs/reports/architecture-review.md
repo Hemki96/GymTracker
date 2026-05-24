@@ -39,7 +39,7 @@ flowchart TD
 
 ### App
 
-`GymTrackerApp` erzeugt die Tab-Struktur und injiziert den `ModelContainer`. `AppEnvironment` existiert als DI-Einstieg, ist aber noch sehr klein.
+`GymTrackerApp` erzeugt die Tab-Struktur und injiziert den `ModelContainer`. `AppEnvironment` existiert als DI-Einstieg, ist aber noch sehr klein. Container-Initialisierungsfehler werden seit Abschnitt 6.2 als Startup-Fehlerzustand angezeigt.
 
 Bewertung: Grundstruktur sauber, DI noch nicht konsequent.
 
@@ -84,7 +84,7 @@ Bewertung: Gute Basis, aber wiederverwendbare Komponenten sind noch kaum belegt.
 - `HistoryView` und `ActiveSessionView` sind sehr gross und schwer isoliert testbar.
 - `TrainingPlanEditorViewModel` hat viele Verantwortlichkeiten in einem Typ.
 - Die leere Repository-Schicht wurde in Abschnitt 2.1 entfernt; offen bleibt die bewusste Entscheidung zwischen Store-/Repository-Schicht und direktem SwiftData-Zugriff.
-- `fatalError` im Live-Container-Setup ist fuer Robustheit kritisch.
+- Live-Container-Setup ist robuster, weil Container-Fehler nicht mehr per `fatalError` crashen. Preview-spezifische `fatalError`-Pfade bleiben offen.
 - Kein UI-Test-Target deckt reale Nutzerfluesse ab.
 - Versionierte Build-Artefakte wurden in Abschnitt 2.1 bereinigt und sind kein offenes Architektur-/Repo-Hygiene-Risiko mehr.
 
@@ -94,7 +94,7 @@ Bewertung: Gute Basis, aber wiederverwendbare Komponenten sind noch kaum belegt.
 2. Verbleibende `PlanView`-UI in kleinere Komponenten aufteilen und `PlanActionService` bei Import-/Fehlerpfaden weiter testen.
 3. `TrainingPlanEditorViewModel` in Validation, Reordering, Duplication und Sync-Services teilen.
 4. Grosse SwiftUI Views schrittweise in kleine Komponenten plus Presentation Mapper aufteilen.
-5. AppEnvironment als echte Composition Root ausbauen oder ungenutzte Factories entfernen.
+5. AppEnvironment als echte Composition Root ausbauen und Startup-Fehlerzustand weiter ausformulieren.
 6. UI-Test-Target fuer kritische User Flows einfuehren.
 
 ## Refactoring-Empfehlungen
@@ -109,7 +109,7 @@ Kurzfristig:
 Mittelfristig:
 
 - `ActiveSessionView` und `HistoryView` zerlegen.
-- SwiftData-Fehlerpfade robuster machen.
+- SwiftData-Fehlerpfade robuster machen. Status: Live-Container-Startup in Abschnitt 6.2 verbessert; weitere Speicher-/Importfehler offen.
 - Lint-/Format-Automation einfuehren.
 
 Langfristig:

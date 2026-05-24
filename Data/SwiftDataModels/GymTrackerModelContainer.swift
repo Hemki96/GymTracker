@@ -1,8 +1,21 @@
 import SwiftData
 
 enum GymTrackerModelContainer {
-    static func make() -> ModelContainer {
-        let schema = Schema([
+    static func make(isStoredInMemoryOnly: Bool = false) throws -> ModelContainer {
+        let schema = makeSchema()
+        let configuration = ModelConfiguration(
+            schema: schema,
+            isStoredInMemoryOnly: isStoredInMemoryOnly
+        )
+
+        return try ModelContainer(
+            for: schema,
+            configurations: [configuration]
+        )
+    }
+
+    private static func makeSchema() -> Schema {
+        Schema([
             PersistentTrainingMarker.self,
             TrainingBlock.self,
             TrainingWeek.self,
@@ -14,19 +27,5 @@ enum GymTrackerModelContainer {
             ExerciseLog.self,
             SetLog.self
         ])
-
-        let configuration = ModelConfiguration(
-            schema: schema,
-            isStoredInMemoryOnly: false
-        )
-
-        do {
-            return try ModelContainer(
-                for: schema,
-                configurations: [configuration]
-            )
-        } catch {
-            fatalError("Failed to create GymTracker SwiftData container: \(error)")
-        }
     }
 }

@@ -122,6 +122,19 @@ struct TrainingModelTests {
     }
 
     @Test
+    func gymTrackerModelContainerCanCreateInMemoryContainer() throws {
+        let container = try GymTrackerModelContainer.make(isStoredInMemoryOnly: true)
+        let context = ModelContext(container)
+        let block = TrainingBlock(name: "Container Smoke", goal: "Robust start")
+
+        context.insert(block)
+        try context.save()
+
+        let persistedBlocks: [TrainingBlock] = try context.fetch(FetchDescriptor<TrainingBlock>())
+        #expect(persistedBlocks.map(\.name) == ["Container Smoke"])
+    }
+
+    @Test
     func genericPlanSupportsVariableShapeAndSeparatePlannedAndCompletedData() throws {
         let planID = UUID()
         let weekID = UUID()

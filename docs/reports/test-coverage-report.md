@@ -2,7 +2,7 @@
 
 Datum: 2026-05-24
 Projekt: GymTracker iOS
-Status: Abschnitt 4 noch nicht vollstaendig gestartet; erste neue Unit Tests fuer Refactoring-Schritt 2.2/2.3 ergaenzt und verifiziert
+Status: Abschnitt 4 noch nicht vollstaendig gestartet; erste neue Unit Tests fuer Refactoring-Schritt 2.2/2.3 ergaenzt, Test-Fixtures in Abschnitt 5.1 robuster gemacht, Container-Factory in Abschnitt 6.2 abgesichert und verifiziert
 
 ## Bestehende Testabdeckung
 
@@ -36,13 +36,14 @@ xcodebuild test -scheme GymTracker -project GymTracker.xcodeproj -destination 'p
 Ergebnis:
 
 - `TEST SUCCEEDED`
-- Xcode Result nach Refactoring 2.2/2.3: `/Users/christian/Library/Developer/Xcode/DerivedData/GymTracker-cvgfjtxlfrvcxldhpjbonwcruhsg/Logs/Test/Test-GymTracker-2026.05.24_13-32-29-+0200.xcresult`
+- Xcode Result nach Refactoring 6.2: `/Users/christian/Library/Developer/Xcode/DerivedData/GymTracker-cvgfjtxlfrvcxldhpjbonwcruhsg/Logs/Test/Test-GymTracker-2026.05.24_17-44-41-+0200.xcresult`
 - Alle in der Ausgabe sichtbaren Test-Suites bestanden: `TrainingPlanEditorViewModelTests`, `SessionCompletionServiceTests`, `SeedDataServiceTests`, `VolumeCalculatorTests`, `DashboardViewModelTests`, `SessionStartServiceTests`, `DemoDataServiceTests`, `PlanViewPresentationTests`, `PlanActionServiceTests`, `PainThresholdEvaluatorTests`, `TrainingModelTests`, `ChartDataMapperTests`, `RIRAnalyzerTests`, `TrainingExportServiceTests`.
 
 Qualitative Abdeckung:
 
 - Domain Services: gut abgedeckt.
 - SwiftData-Modellgraph: teilweise abgedeckt.
+- SwiftData-Container-Factory: rudimentaer per In-Memory-Smoke-Test abgedeckt.
 - Seed-/Demo-Import: gut abgedeckt.
 - Session Start/Completion/Editing: gut abgedeckt.
 - Plan Presentation, Plan Actions und Editor ViewModel: teilweise abgedeckt.
@@ -59,7 +60,7 @@ Qualitative Abdeckung:
 - Tests fuer Empty States in History/Analytics.
 - Tests fuer Offline-/Import-Fehlerfaelle.
 - Tests fuer `PlanActionService.importPlan` inklusive leeres Ergebnis, fehlerhaftes JSON und Security-Scoped-URL-Verhalten.
-- Tests fuer SwiftData-Container-Fehlerpfade.
+- Tests fuer SwiftData-Container-Fehlerpfade. Status: erfolgreicher In-Memory-Factory-Pfad abgedeckt; Fehlerpfad der Live-Persistenz noch nicht simuliert.
 - Tests fuer Accessibility Labels und Dynamic Type Layout.
 
 ## Kritische Risiken
@@ -90,7 +91,7 @@ Verbesserungen:
 
 - Testdateien nach getesteten Komponenten splitten.
 - Gemeinsame Test-Fixtures fuer ModelContainer und Beispielplaene extrahieren.
-- Force-Unwraps in Tests durch `#require` ersetzen.
+- Force-Unwraps in Tests vermeiden. Status: zwei Force-Unwraps in `ChartDataMapperTests` entfernt; weitere Tests bleiben zu pruefen.
 - UI-Test-Target anlegen.
 - Coverage mit `xcodebuild test -enableCodeCoverage YES` regelmaessig messen.
 
