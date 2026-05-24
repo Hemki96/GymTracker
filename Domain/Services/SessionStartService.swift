@@ -6,11 +6,17 @@ enum SessionStartError: Error, Equatable {
 }
 
 struct SessionStartService {
+    // MARK: - Properties
+
     private let context: ModelContext
+
+    // MARK: - Lifecycle
 
     init(context: ModelContext) {
         self.context = context
     }
+
+    // MARK: - Queries
 
     func activeSession() throws -> SessionLog? {
         let activeRaw = SessionStatus.active.rawValue
@@ -34,8 +40,13 @@ struct SessionStartService {
         return activeSession
     }
 
+    // MARK: - Session Creation
+
     @discardableResult
     func startOrResumeSession(from workoutPlan: WorkoutPlan, at startDate: Date = .now) throws -> SessionLog {
+        // Resuming is deliberately scoped to the same workout. Starting another
+        // workout while any session is active is blocked in startSession so the
+        // app has one unambiguous live training state.
         if let existingSession = try activeSession(for: workoutPlan) {
             return existingSession
         }
@@ -49,6 +60,9 @@ struct SessionStartService {
             throw SessionStartError.activeSessionAlreadyExists
         }
 
+        // The session is a mutable training log derived from the plan. We copy
+        // prescriptions into SetLog rows so later plan edits do not rewrite what
+        // the athlete actually saw during this workout.
         let session = SessionLog(
             startedAt: startDate,
             status: .active,
@@ -73,6 +87,8 @@ struct SessionStartService {
         return session
     }
 
+    // MARK: - Helpers
+
     private func makeExerciseLog(
         from plannedExercise: PlannedExercise,
         session: SessionLog,
@@ -88,6 +104,9 @@ struct SessionStartService {
         let plannedSets = plannedExercise.plannedSets.sorted { $0.setNumber < $1.setNumber }
 
         if plannedSets.isEmpty {
+            // Imported plans sometimes only carry "3 x 8-10" style prescriptions.
+            // In that case we synthesize set rows from the first number so the
+            // live tracker remains fully editable.
             exerciseLog.setLogs = (1...plannedSetCount(from: plannedExercise.setsPrescription)).map { setNumber in
                 SetLog(
                     setNumber: setNumber,

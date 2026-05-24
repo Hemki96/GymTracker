@@ -164,6 +164,48 @@ struct SeedDataServiceTests {
         #expect(result.exerciseRows == 1)
     }
 
+    @Test
+    func validationRejectsInvalidNestedNumbersAndRequiredExerciseFields() throws {
+        let service = SeedDataService()
+        let cases: [(SeedTrainingFixture, SeedDataService.SeedError)] = [
+            (
+                makeFixture(weekNumber: 0),
+                .invalidFixture("Week numbers must be positive.")
+            ),
+            (
+                makeFixture(dayNumber: 0),
+                .invalidFixture("Day numbers must be positive.")
+            ),
+            (
+                makeFixture(sortOrder: 0),
+                .invalidFixture("Exercise sort order must be positive.")
+            ),
+            (
+                makeFixture(exerciseName: "   "),
+                .invalidFixture("Exercise name is required.")
+            ),
+            (
+                makeFixture(sets: "   "),
+                .invalidFixture("Sets prescription is required.")
+            ),
+            (
+                makeFixture(reps: "   "),
+                .invalidFixture("Reps prescription is required.")
+            )
+        ]
+
+        for (fixture, expectedError) in cases {
+            do {
+                _ = try service.validate(fixture)
+                Issue.record("Expected validation to fail for \(fixture.source)")
+            } catch let error as SeedDataService.SeedError {
+                #expect(error == expectedError)
+            } catch {
+                Issue.record("Unexpected error for \(fixture.source): \(error)")
+            }
+        }
+    }
+
     private func makeInMemoryContainer() throws -> ModelContainer {
         let schema = Schema([
             PersistentTrainingMarker.self,
@@ -179,5 +221,49 @@ struct SeedDataServiceTests {
         ])
         let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
         return try ModelContainer(for: schema, configurations: [configuration])
+    }
+
+    private func makeFixture(
+        weekNumber: Int = 1,
+        dayNumber: Int = 1,
+        sortOrder: Int = 1,
+        exerciseName: String = "Incline Press",
+        sets: String = "3",
+        reps: String = "8-10"
+    ) -> SeedTrainingFixture {
+        SeedTrainingFixture(
+            source: "case-\(weekNumber)-\(dayNumber)-\(sortOrder).json",
+            trainingBlock: SeedTrainingBlock(
+                name: "Generic Strength Block",
+                athleteName: nil,
+                goal: "General strength",
+                weeks: [
+                    SeedTrainingWeek(
+                        weekNumber: weekNumber,
+                        title: "Accumulation",
+                        days: [
+                            SeedTrainingDay(
+                                dayNumber: dayNumber,
+                                title: "Upper Body",
+                                exercises: [
+                                    SeedPlannedExercise(
+                                        sortOrder: sortOrder,
+                                        name: exerciseName,
+                                        cueing: "",
+                                        tempo: "",
+                                        sets: sets,
+                                        reps: reps,
+                                        plannedWeight: "",
+                                        targetRIR: "",
+                                        painTarget: "",
+                                        notes: ""
+                                    )
+                                ]
+                            )
+                        ]
+                    )
+                ]
+            )
+        )
     }
 }

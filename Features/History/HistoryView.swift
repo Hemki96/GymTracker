@@ -2,6 +2,11 @@ import SwiftData
 import SwiftUI
 
 struct HistoryView: View {
+    // MARK: - Queries
+
+    // History intentionally reads only completed sessions. Active sessions remain
+    // in the tracking flow until SessionCompletionService has cached summaries
+    // and warnings that this screen can present.
     @Query(
         filter: #Predicate<SessionLog> { session in
             session.statusRaw == "completed"
@@ -10,24 +15,32 @@ struct HistoryView: View {
         order: .reverse
     ) private var completedSessions: [SessionLog]
 
+    // MARK: - Body
+
     var body: some View {
         NavigationStack {
             Group {
                 if completedSessions.isEmpty {
-                    ContentUnavailableView(
-                        "Keine Historie",
-                        systemImage: "clock.arrow.circlepath",
-                        description: Text("Abgeschlossene Sessions erscheinen hier.")
+                    EmptyStateView(
+                        title: "Keine Historie",
+                        message: "Abgeschlossene Sessions erscheinen hier.",
+                        systemImage: "clock.arrow.circlepath"
                     )
                 } else {
-                    List(completedSessions, id: \.id) { session in
-                        NavigationLink {
-                            SessionHistoryDetailView(sessionLog: session)
-                        } label: {
-                            HistorySessionRow(sessionLog: session)
+                    ScrollView {
+                        LazyVStack(spacing: AppTheme.Spacing.medium) {
+                            ForEach(completedSessions, id: \.id) { session in
+                                NavigationLink {
+                                    SessionHistoryDetailView(sessionLog: session)
+                                } label: {
+                                    HistorySessionRow(sessionLog: session)
+                                }
+                                .buttonStyle(.plain)
+                            }
                         }
+                        .appScreenPadding()
                     }
-                    .listStyle(.insetGrouped)
+                    .appGroupedBackground()
                 }
             }
             .navigationTitle("Historie")
@@ -36,8 +49,15 @@ struct HistoryView: View {
 }
 
 struct SessionHistoryDetailView: View {
+    // MARK: - Properties
+
     let sessionLog: SessionLog
+
+    // MARK: - State
+
     @State private var exportURL: URL?
+
+    // MARK: - Derived State
 
     private var exerciseLogs: [ExerciseLog] {
         sessionLog.exerciseLogs.sorted {
@@ -48,6 +68,8 @@ struct SessionHistoryDetailView: View {
     private var completedSetCount: Int {
         sessionLog.exerciseLogs.flatMap(\.setLogs).filter(\.isCompleted).count
     }
+
+    // MARK: - Body
 
     var body: some View {
         ScrollView {
@@ -75,20 +97,16 @@ struct SessionHistoryDetailView: View {
         }
     }
 
-    private var header: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(sessionLog.workoutPlan?.title ?? "Training")
-                .font(.largeTitle.bold())
-                .lineLimit(2)
-                .minimumScaleFactor(0.72)
+    // MARK: - UI
 
-            Text(dateLine)
-                .font(.subheadline.weight(.medium))
-                .foregroundStyle(.secondary)
+    private var header: some View {
+        DashboardCard(
+            title: sessionLog.workoutPlan?.title ?? "Training",
+            subtitle: dateLine,
+            systemImage: "clock.arrow.circlepath"
+        ) {
+            AppStatusPill(title: "Historie", systemImage: "archivebox", tint: .blue)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(AppTheme.Spacing.large)
-        .appCardSurface()
     }
 
     private var metricGrid: some View {
@@ -159,6 +177,8 @@ struct SessionHistoryDetailView: View {
         }
     }
 
+    // MARK: - Display
+
     private var dateLine: String {
         let started = sessionLog.startedAt.formatted(date: .abbreviated, time: .shortened)
         guard let completedAt = sessionLog.completedAt else { return started }
@@ -188,13 +208,21 @@ struct SessionHistoryDetailView: View {
         return "\(maxPain)/10"
     }
 
+    // MARK: - Export
+
     private func refreshExportURL() {
+        // ShareLink needs a file URL up front; export generation is cheap enough
+        // to refresh on task without adding asynchronous state machinery.
         exportURL = try? TrainingExportService().fileURL(forSession: sessionLog)
     }
 }
 
 struct ExerciseProgressView: View {
+    // MARK: - Properties
+
     let exercise: Exercise
+
+    // MARK: - Queries
 
     @Query(
         filter: #Predicate<SessionLog> { session in
@@ -203,6 +231,8 @@ struct ExerciseProgressView: View {
         sort: \SessionLog.completedAt,
         order: .reverse
     ) private var completedSessions: [SessionLog]
+
+    // MARK: - Derived State
 
     private var entries: [ExerciseProgressEntry] {
         ExerciseProgressCalculator.entries(for: exercise, in: completedSessions)
@@ -341,7 +371,9 @@ private struct HistorySessionRow: View {
             .font(.caption)
             .foregroundStyle(.secondary)
         }
-        .padding(.vertical, 4)
+        .padding(AppTheme.Spacing.large)
+        .appCardSurface()
+        .accessibilityElement(children: .combine)
     }
 
     private var dateText: String {
@@ -514,23 +546,7 @@ private struct HistoryMetricCard: View {
     let systemImage: String
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Image(systemName: systemImage)
-                .font(.headline)
-                .foregroundStyle(.secondary)
-
-            Text(value)
-                .font(.title3.weight(.bold))
-                .lineLimit(2)
-                .minimumScaleFactor(0.72)
-
-            Text(title)
-                .font(.caption.weight(.semibold))
-                .foregroundStyle(.secondary)
-        }
-        .frame(maxWidth: .infinity, minHeight: 112, alignment: .leading)
-        .padding(AppTheme.Spacing.large)
-        .appCardSurface()
+        MetricCard(title: title, value: value, systemImage: systemImage)
     }
 }
 

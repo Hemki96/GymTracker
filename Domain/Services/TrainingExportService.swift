@@ -6,13 +6,21 @@ struct TrainingExportService {
         case missingTrainingBlock
     }
 
+    // MARK: - Properties
+
     private let calendar: Calendar
+
+    // MARK: - Lifecycle
 
     init(calendar: Calendar = Calendar(identifier: .gregorian)) {
         var calendar = calendar
+        // Export filenames and CSV timestamps should be stable across devices
+        // and CI. UTC avoids locale/time-zone drift in tests and shared files.
         calendar.timeZone = TimeZone(secondsFromGMT: 0) ?? calendar.timeZone
         self.calendar = calendar
     }
+
+    // MARK: - Markdown Export
 
     func markdown(for session: SessionLog) throws -> String {
         guard let workout = session.workoutPlan else { throw ExportError.missingWorkoutPlan }
@@ -92,6 +100,8 @@ struct TrainingExportService {
         return lines.joined(separator: "\n")
     }
 
+    // MARK: - CSV Export
+
     func csv(for block: TrainingBlock) -> String {
         var rows: [[String]] = [[
             "Block",
@@ -140,6 +150,8 @@ struct TrainingExportService {
         return rows.map(csvLine).joined(separator: "\n")
     }
 
+    // MARK: - File Writing
+
     func fileURL(forSession session: SessionLog) throws -> URL {
         let workout = try requireWorkout(for: session)
         let blockName = workout.week?.block?.name ?? workout.title
@@ -152,6 +164,8 @@ struct TrainingExportService {
         let fileName = "\(dateString(exportDate))_\(slug(block.name)).csv"
         return try write(csv(for: block), fileName: fileName)
     }
+
+    // MARK: - Row Mapping
 
     private func rowsForExercise(
         block: TrainingBlock,
@@ -167,6 +181,8 @@ struct TrainingExportService {
         }
 
         guard !matchingLogs.isEmpty else {
+            // CSV exports include not-yet-trained exercises so the file can be
+            // used as a plan handoff as well as a history export.
             let planRow = baseRow(block: block, week: week, workout: workout, plannedExercise: plannedExercise)
             let plannedSets = plannedExercise.plannedSets.sorted { $0.setNumber < $1.setNumber }
             guard !plannedSets.isEmpty else {
@@ -235,6 +251,8 @@ struct TrainingExportService {
         ]
     }
 
+    // MARK: - Formatting
+
     private func sortedExerciseLogs(_ exerciseLogs: [ExerciseLog]) -> [ExerciseLog] {
         exerciseLogs.sorted {
             ($0.plannedExercise?.sortOrder ?? 0) < ($1.plannedExercise?.sortOrder ?? 0)
@@ -251,6 +269,8 @@ struct TrainingExportService {
     }
 
     private func csvLine(_ fields: [String]) -> String {
+        // RFC-4180 style escaping keeps commas, quotes, and multi-line notes
+        // round-trippable in Numbers, Excel, and Google Sheets.
         fields
             .map { field in
                 let escaped = field.replacingOccurrences(of: "\"", with: "\"\"")

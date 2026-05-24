@@ -7,6 +7,8 @@ struct SeedDataService {
         case invalidFixture(String)
     }
 
+    // MARK: - Types
+
     struct SeedPlanDescriptor: Equatable {
         let markerKey: String
         let resourceName: String
@@ -23,6 +25,8 @@ struct SeedDataService {
         let sessions: Int
         let exerciseRows: Int
     }
+
+    // MARK: - Import
 
     func importDemoPlanIfNeeded(
         into context: ModelContext,
@@ -45,6 +49,9 @@ struct SeedDataService {
         demoSourceIdentifier: String? = nil
     ) throws -> ImportResult {
         let markerKey = descriptor.markerKey
+        // Persistent markers make bundled imports idempotent. We still validate
+        // the fixture before returning so broken app resources fail loudly even
+        // after a previous successful import.
         let existingMarker = try context.fetch(
             FetchDescriptor<PersistentTrainingMarker>(
                 predicate: #Predicate { $0.key == markerKey }
@@ -108,6 +115,9 @@ struct SeedDataService {
 
         var exercisesByName: [String: Exercise] = [:]
 
+        // Seed fixtures are transport-friendly JSON. This method rebuilds the
+        // SwiftData object graph in ownership order so relationship inverses and
+        // cascade delete rules behave the same as user-created plans.
         for weekFixture in blockFixture.weeks.sorted(by: { $0.weekNumber < $1.weekNumber }) {
             let week = TrainingWeek(
                 weekNumber: weekFixture.weekNumber,
@@ -175,6 +185,8 @@ struct SeedDataService {
         )
     }
 
+    // MARK: - Loading
+
     func loadDemoFixture(from bundle: Bundle = .main) throws -> SeedTrainingFixture {
         try loadSeedFixture(resourceName: SeedPlanDescriptor.bundledDemoPlan.resourceName, from: bundle)
     }
@@ -187,6 +199,8 @@ struct SeedDataService {
         let data = try Data(contentsOf: url)
         return try JSONDecoder().decode(SeedTrainingFixture.self, from: data)
     }
+
+    // MARK: - Validation
 
     @discardableResult
     func validate(_ fixture: SeedTrainingFixture) throws -> ImportResult {
@@ -246,6 +260,8 @@ struct SeedDataService {
         return ImportResult(didImport: false, weeks: weeks, sessions: sessions, exerciseRows: exerciseRows)
     }
 
+    // MARK: - Mapping Helpers
+
     private func normalizedOptional(_ value: String) -> String? {
         value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : value
     }
@@ -254,6 +270,9 @@ struct SeedDataService {
         from exercise: SeedPlannedExercise,
         for plannedExercise: PlannedExercise
     ) -> [PlannedSet] {
+        // The source spreadsheet stores set count as free text. Creating explicit
+        // PlannedSet rows here makes the editor and active session screens operate
+        // on one consistent shape after import.
         (1...plannedSetCount(from: exercise.sets)).map { setNumber in
             PlannedSet(
                 setNumber: setNumber,
@@ -287,6 +306,8 @@ struct SeedDataService {
         false
     }
 }
+
+// MARK: - Fixture Decoding
 
 private extension Optional where Wrapped == String {
     var isNilOrEmpty: Bool {

@@ -1,6 +1,12 @@
 import Foundation
 import SwiftData
 
+// MARK: - Planning Models
+
+// The planning graph is intentionally hierarchical:
+// TrainingBlock -> TrainingWeek -> WorkoutPlan -> PlannedExercise -> PlannedSet.
+// Cascade delete rules mirror that ownership so deleting a higher-level plan
+// cannot leave orphaned workout structure behind.
 @Model
 final class TrainingBlock {
     @Attribute(.unique) var id: UUID
@@ -19,6 +25,9 @@ final class TrainingBlock {
     @Relationship(deleteRule: .cascade, inverse: \TrainingWeek.block)
     var weeks: [TrainingWeek]
 
+    // Status enums are persisted as raw strings for SwiftData compatibility and
+    // migration tolerance. Unknown raw values fall back to planned instead of
+    // making older/newer persisted data unusable.
     var status: BlockStatus {
         get { BlockStatus(rawValue: statusRaw) ?? .planned }
         set { statusRaw = newValue.rawValue }
@@ -113,6 +122,9 @@ final class WorkoutPlan {
     @Relationship(deleteRule: .cascade, inverse: \SessionLog.workoutPlan)
     var sessionLogs: [SessionLog]
 
+    // A workout can be both a plan item and the parent of multiple session logs.
+    // Keeping status on the plan lets dashboard/list UI summarize progress
+    // without scanning every completed session on each render.
     var status: WorkoutStatus {
         get { WorkoutStatus(rawValue: statusRaw) ?? .planned }
         set { statusRaw = newValue.rawValue }
@@ -168,6 +180,9 @@ final class Exercise {
     @Relationship(deleteRule: .nullify, inverse: \PlannedExercise.exercise)
     var plannedExercises: [PlannedExercise]
 
+    // Exercises are reusable catalog entities. PlannedExercise keeps session-
+    // specific prescriptions, while Exercise stores stable metadata such as
+    // muscle group, equipment, cueing defaults, and category.
     var category: ExerciseCategory {
         get { ExerciseCategory(rawValue: categoryRaw) ?? .unknown }
         set { categoryRaw = newValue.rawValue }
@@ -225,6 +240,9 @@ final class PlannedExercise {
     @Relationship(deleteRule: .cascade, inverse: \ExerciseLog.plannedExercise)
     var exerciseLogs: [ExerciseLog]
 
+    // PlannedSet is optional in the domain because imported plans may only have
+    // a coarse prescription such as "3 x 8-10". When detailed sets exist, editor
+    // services synchronize the summary text fields from those rows.
     init(
         id: UUID = UUID(),
         sortOrder: Int,
@@ -316,6 +334,9 @@ final class PlannedSet {
         self.setLogs = setLogs
     }
 
+    // setTypeRaw is the source of truth for new data. isWarmup remains denormalized
+    // because older UI and analytics paths can answer warmup questions cheaply
+    // without parsing set types on every set row.
     var setType: PlannedSetType {
         get {
             if let setTypeRaw, let setType = PlannedSetType(rawValue: setTypeRaw) {
@@ -330,6 +351,10 @@ final class PlannedSet {
     }
 }
 
+// MARK: - Execution Models
+
+// SessionLog snapshots a workout when training starts. The snapshot keeps the
+// active session stable even if the underlying plan is edited afterwards.
 @Model
 final class SessionLog {
     @Attribute(.unique) var id: UUID
@@ -349,6 +374,9 @@ final class SessionLog {
     @Relationship(deleteRule: .cascade, inverse: \ExerciseLog.sessionLog)
     var exerciseLogs: [ExerciseLog]
 
+    // Completion summaries are stored on the session because dashboard, history,
+    // and export screens all need them. SessionCompletionService owns recalculation
+    // so these cached values stay consistent with the set logs.
     var status: SessionStatus {
         get { SessionStatus(rawValue: statusRaw) ?? .active }
         set { statusRaw = newValue.rawValue }
@@ -486,6 +514,10 @@ final class SetLog {
     }
 }
 
+// MARK: - Compatibility Aliases
+
+// These aliases preserve the language used in earlier planning documents and
+// tests while the concrete model names stay explicit about plan vs. execution.
 typealias TrainingPlan = TrainingBlock
 typealias TrainingSession = WorkoutPlan
 typealias CompletedSession = SessionLog

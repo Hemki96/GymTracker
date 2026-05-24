@@ -2,13 +2,21 @@ import SwiftData
 import SwiftUI
 
 struct ActiveSessionView: View {
+    // MARK: - Environment
+
     @Environment(\.modelContext) private var modelContext
 
+    // MARK: - Properties
+
     let sessionLog: SessionLog
+
+    // MARK: - State
 
     @State private var selectedExerciseID: UUID?
     @State private var completedSession: SessionLog?
     @State private var sessionError: String?
+
+    // MARK: - Derived State
 
     private var exerciseLogs: [ExerciseLog] {
         sessionLog.exerciseLogs.sorted {
@@ -32,6 +40,8 @@ struct ActiveSessionView: View {
 
         return exerciseLogs[selectedIndex]
     }
+
+    // MARK: - Body
 
     var body: some View {
         ScrollView {
@@ -63,7 +73,7 @@ struct ActiveSessionView: View {
                 Label("Session abschließen", systemImage: "checkmark.circle.fill")
                     .frame(maxWidth: .infinity, minHeight: 52)
             }
-            .buttonStyle(.borderedProminent)
+            .buttonStyle(AppPrimaryButtonStyle())
             .controlSize(.large)
             .padding(AppTheme.Spacing.large)
             .appFloatingBarSurface()
@@ -85,31 +95,18 @@ struct ActiveSessionView: View {
         }
     }
 
+    // MARK: - UI
+
     private var sessionHeader: some View {
-        VStack(alignment: .leading, spacing: 14) {
+        DashboardCard(
+            title: sessionLog.workoutPlan?.title ?? "Training",
+            subtitle: "Uebung \(min(selectedIndex + 1, exerciseLogs.count)) von \(exerciseLogs.count)",
+            systemImage: "timer"
+        ) {
             HStack(alignment: .firstTextBaseline) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(sessionLog.workoutPlan?.title ?? "Training")
-                        .font(.title2.weight(.bold))
-                        .lineLimit(2)
-                        .minimumScaleFactor(0.8)
-
-                    Text("Übung \(min(selectedIndex + 1, exerciseLogs.count)) von \(exerciseLogs.count)")
-                        .font(.subheadline.weight(.medium))
-                        .foregroundStyle(.secondary)
-                }
-
                 Spacer(minLength: 12)
 
-                Text("Live")
-                    .font(.caption.weight(.bold))
-                    .foregroundStyle(.orange)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 7)
-                    .background {
-                        Capsule()
-                            .fill(Color.orange.opacity(0.15))
-                    }
+                AppStatusPill(title: "Live", systemImage: "bolt.fill", tint: .orange)
             }
 
             HStack(spacing: 12) {
@@ -119,7 +116,7 @@ struct ActiveSessionView: View {
                     Label("Zurück", systemImage: "chevron.left")
                         .frame(maxWidth: .infinity, minHeight: 48)
                 }
-                .buttonStyle(.bordered)
+                .buttonStyle(AppSecondaryButtonStyle())
                 .disabled(selectedIndex == 0)
 
                 Button {
@@ -128,14 +125,14 @@ struct ActiveSessionView: View {
                     Label("Weiter", systemImage: "chevron.right")
                         .frame(maxWidth: .infinity, minHeight: 48)
                 }
-                .buttonStyle(.borderedProminent)
+                .buttonStyle(AppPrimaryButtonStyle())
                 .disabled(selectedIndex >= exerciseLogs.count - 1)
             }
             .controlSize(.large)
         }
-        .padding(AppTheme.Spacing.large)
-        .appCardSurface()
     }
+
+    // MARK: - Actions
 
     private func moveSelection(by offset: Int) {
         let nextIndex = selectedIndex + offset
@@ -147,6 +144,9 @@ struct ActiveSessionView: View {
     }
 
     private func saveSession() {
+        // Persisting a set row also refreshes session summaries. We repeat that
+        // refresh here after child edits so the header, dashboard, and eventual
+        // completion screen all see the same cached metrics.
         sessionLog.updatedAt = .now
         SessionCompletionService(context: modelContext).refreshSummary(for: sessionLog)
         do {
@@ -155,6 +155,8 @@ struct ActiveSessionView: View {
             sessionError = "Deine Eingaben sind noch sichtbar, konnten aber nicht dauerhaft gespeichert werden."
         }
     }
+
+    // MARK: - Bindings
 
     private var completedSessionBinding: Binding<Bool> {
         Binding {
@@ -190,15 +192,26 @@ struct ActiveSessionView: View {
 }
 
 struct ExerciseTrackingView: View {
+    // MARK: - Environment
+
     @Environment(\.modelContext) private var modelContext
+
+    // MARK: - Properties
 
     let exerciseLog: ExerciseLog
     let onSave: () -> Void
+
+    // MARK: - State
+
     @State private var editingError: String?
+
+    // MARK: - Derived State
 
     private var setLogs: [SetLog] {
         exerciseLog.setLogs.sorted { $0.setNumber < $1.setNumber }
     }
+
+    // MARK: - Body
 
     var body: some View {
         VStack(alignment: .leading, spacing: AppTheme.Spacing.large) {
@@ -217,7 +230,7 @@ struct ExerciseTrackingView: View {
                         Label("Satz", systemImage: "plus")
                             .frame(minHeight: 44)
                     }
-                    .buttonStyle(.borderedProminent)
+                    .buttonStyle(AppPrimaryButtonStyle())
                     .controlSize(.large)
                 }
 
@@ -237,6 +250,8 @@ struct ExerciseTrackingView: View {
         }
     }
 
+    // MARK: - Actions
+
     private func addSet() {
         do {
             try SessionEditingService(context: modelContext).addSet(to: exerciseLog)
@@ -255,6 +270,8 @@ struct ExerciseTrackingView: View {
         }
     }
 
+    // MARK: - Bindings
+
     private var errorBinding: Binding<Bool> {
         Binding {
             editingError != nil
@@ -267,12 +284,22 @@ struct ExerciseTrackingView: View {
 }
 
 struct SetLogRow: View {
+    // MARK: - Properties
+
     @Bindable var setLog: SetLog
     let canDelete: Bool
     let onDelete: () -> Void
     let onSave: () -> Void
+
+    // MARK: - Environment
+
     @Environment(\.modelContext) private var modelContext
+
+    // MARK: - State
+
     @State private var saveError: String?
+
+    // MARK: - Body
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
@@ -339,8 +366,9 @@ struct SetLogRow: View {
 
                 TextField("Optional", text: notesBinding, axis: .vertical)
                     .lineLimit(2...4)
-                    .textFieldStyle(.roundedBorder)
                     .frame(minHeight: 44)
+                    .padding(.horizontal, AppTheme.Spacing.medium)
+                    .appControlSurface()
             }
         }
         .padding(AppTheme.Spacing.large)
@@ -353,6 +381,8 @@ struct SetLogRow: View {
             Text(saveError ?? "")
         }
     }
+
+    // MARK: - UI
 
     private func editableNumberField(
         title: String,
@@ -367,7 +397,7 @@ struct SetLogRow: View {
                 .foregroundStyle(.secondary)
 
             HStack {
-            TextField(placeholder, text: value)
+                TextField(placeholder, text: value)
                     .keyboardType(keyboard)
                     .font(.title3.weight(.semibold))
                     .minimumScaleFactor(0.82)
@@ -385,6 +415,8 @@ struct SetLogRow: View {
         }
     }
 
+    // MARK: - Bindings
+
     private var weightBinding: Binding<String> {
         Binding {
             guard let loggedWeightKg = setLog.loggedWeightKg else {
@@ -393,6 +425,9 @@ struct SetLogRow: View {
 
             return loggedWeightKg.formatted(.number.precision(.fractionLength(0...2)))
         } set: { newValue in
+            // TextField bindings write through immediately. Invalid or cleared
+            // numeric input becomes nil, preserving the visible edit while the
+            // save layer handles persistence errors.
             setLog.loggedWeightKg = Double(newValue.replacingOccurrences(of: ",", with: "."))
             save()
         }
@@ -438,6 +473,8 @@ struct SetLogRow: View {
         }
     }
 
+    // MARK: - Persistence
+
     private func save() {
         do {
             try SessionEditingService(context: modelContext).save(setLog: setLog)
@@ -459,9 +496,13 @@ struct SetLogRow: View {
 }
 
 struct RIRPicker: View {
+    // MARK: - Properties
+
     @Binding var value: Double?
 
     private let values: [Double] = [0, 1, 2, 3, 4, 5]
+
+    // MARK: - Body
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
@@ -496,6 +537,8 @@ struct RIRPicker: View {
         }
     }
 
+    // MARK: - Display
+
     private var displayValue: String {
         guard let value else {
             return "-"
@@ -506,7 +549,11 @@ struct RIRPicker: View {
 }
 
 struct PainPicker: View {
+    // MARK: - Properties
+
     @Binding var value: Int?
+
+    // MARK: - Body
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
@@ -541,6 +588,8 @@ struct PainPicker: View {
         }
     }
 
+    // MARK: - Display
+
     private var displayValue: String {
         guard let value else {
             return "-"
@@ -566,11 +615,15 @@ struct PainPicker: View {
 }
 
 struct ExerciseHeaderCard: View {
+    // MARK: - Properties
+
     let exerciseLog: ExerciseLog
 
     private var plannedExercise: PlannedExercise? {
         exerciseLog.plannedExercise
     }
+
+    // MARK: - Body
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
@@ -617,6 +670,8 @@ struct ExerciseHeaderCard: View {
         .padding(AppTheme.Spacing.large)
         .appCardSurface()
     }
+
+    // MARK: - UI
 
     private func planValue(title: String, value: String?) -> some View {
         VStack(alignment: .leading, spacing: 3) {

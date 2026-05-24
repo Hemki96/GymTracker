@@ -91,6 +91,52 @@ struct SessionCompletionServiceTests {
     }
 
     @Test
+    func completeSessionWithNoCompletedSetsStoresEmptySummaryAndWarning() throws {
+        let container = try makeInMemoryContainer()
+        let context = ModelContext(container)
+        let workout = makeWorkoutPlan()
+        let startedAt = Date(timeIntervalSince1970: 1_777_000_000)
+        let completedAt = startedAt.addingTimeInterval(600)
+        context.insert(workout)
+
+        let session = try SessionStartService(context: context).startSession(from: workout, at: startedAt)
+
+        try SessionCompletionService(context: context).completeSession(
+            session,
+            note: "   ",
+            at: completedAt
+        )
+
+        #expect(session.status == .completed)
+        #expect(session.durationSeconds == 600)
+        #expect(session.overallNotes == nil)
+        #expect(session.totalVolumeKg == nil)
+        #expect(session.averageRIR == nil)
+        #expect(session.maxPain == nil)
+        #expect(session.warningMessages == ["Keine abgeschlossenen Saetze erfasst."])
+        #expect(session.exerciseLogs.allSatisfy { !$0.isCompleted })
+        #expect(session.exerciseLogs.allSatisfy { $0.completedAt == nil })
+    }
+
+    @Test
+    func completeSessionClampsNegativeDurationToZero() throws {
+        let container = try makeInMemoryContainer()
+        let context = ModelContext(container)
+        let workout = makeWorkoutPlan()
+        let startedAt = Date(timeIntervalSince1970: 1_777_000_000)
+        let completedAt = startedAt.addingTimeInterval(-60)
+        context.insert(workout)
+
+        let session = try SessionStartService(context: context).startSession(from: workout, at: startedAt)
+
+        try SessionCompletionService(context: context).completeSession(session, note: nil, at: completedAt)
+
+        #expect(session.durationSeconds == 0)
+        #expect(session.completedAt == completedAt)
+        #expect(session.updatedAt == completedAt)
+    }
+
+    @Test
     func editingServiceAddsCopiesDeletesRenumbersAndRefreshesSummary() throws {
         let container = try makeInMemoryContainer()
         let context = ModelContext(container)

@@ -3,12 +3,22 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct PlanView: View {
+    // MARK: - Environment
+
     @Environment(\.modelContext) private var modelContext
+
+    // MARK: - Queries
+
     @Query(sort: \TrainingBlock.createdAt) private var blocks: [TrainingBlock]
+
+    // MARK: - State
+
     @State private var path: [UUID] = []
     @State private var errorMessage: String?
     @State private var isImporting = false
     @State private var pendingDeletion: TrainingPlan?
+
+    // MARK: - Derived State
 
     private var viewModel: PlanOverviewViewModel {
         PlanOverviewViewModel(plans: blocks)
@@ -17,6 +27,8 @@ struct PlanView: View {
     private var planActions: PlanActionService {
         PlanActionService(context: modelContext)
     }
+
+    // MARK: - Body
 
     var body: some View {
         NavigationStack(path: $path) {
@@ -29,6 +41,7 @@ struct PlanView: View {
             }
             .appGroupedBackground()
             .navigationTitle("Trainingspläne")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Menu {
@@ -89,40 +102,30 @@ struct PlanView: View {
         }
     }
 
+    // MARK: - UI
+
     private var emptyState: some View {
         VStack(spacing: 20) {
             Spacer(minLength: 24)
 
-            ContentUnavailableView {
-                Label(viewModel.emptyTitle, systemImage: "figure.strengthtraining.traditional")
-            } description: {
-                Text(viewModel.emptyDescription)
-            }
+            EmptyStateView(
+                title: viewModel.emptyTitle,
+                message: viewModel.emptyDescription,
+                systemImage: "figure.strengthtraining.traditional"
+            )
 
             VStack(spacing: 12) {
-                Button {
+                PrimaryButton(title: "Neuen Trainingsplan erstellen", systemImage: "plus") {
                     createPlan()
-                } label: {
-                    Label("Neuen Trainingsplan erstellen", systemImage: "plus")
-                        .frame(maxWidth: .infinity)
                 }
-                .buttonStyle(.borderedProminent)
 
-                Button {
+                SecondaryButton(title: "Demo-Plan laden", systemImage: "tray.and.arrow.down") {
                     loadDemoPlan()
-                } label: {
-                    Label("Demo-Plan laden", systemImage: "tray.and.arrow.down")
-                        .frame(maxWidth: .infinity)
                 }
-                .buttonStyle(.bordered)
 
-                Button {
+                SecondaryButton(title: "Trainingsplan importieren", systemImage: "square.and.arrow.down") {
                     isImporting = true
-                } label: {
-                    Label("Trainingsplan importieren", systemImage: "square.and.arrow.down")
-                        .frame(maxWidth: .infinity)
                 }
-                .buttonStyle(.bordered)
             }
             .controlSize(.large)
             .frame(maxWidth: 420)
@@ -135,7 +138,13 @@ struct PlanView: View {
     private var overview: some View {
         ScrollView {
             LazyVStack(alignment: .leading, spacing: 24) {
-                overviewHeader
+                ModernNavigationBar(
+                    title: "Trainingsplaene",
+                    subtitle: "Waehle einen Plan zum Tracken aus oder bereite den naechsten Trainingsblock vor.",
+                    systemImage: "calendar"
+                )
+
+                overviewMetrics
 
                 ForEach(viewModel.sections) { section in
                     PlanOverviewSectionView(
@@ -148,21 +157,19 @@ struct PlanView: View {
                     )
                 }
             }
-            .padding(AppTheme.Spacing.screen)
+            .appScreenPadding()
             .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 
-    private var overviewHeader: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Deine Trainingspläne")
-                .font(.title2.weight(.semibold))
-            Text("Wähle einen Plan zum Tracken aus oder bereite den nächsten Trainingsblock vor.")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
+    private var overviewMetrics: some View {
+        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: AppTheme.Spacing.medium) {
+            MetricCard(title: "Aktiv", value: "\(viewModel.activePlans.count)", systemImage: "bolt.circle", tint: .blue)
+            MetricCard(title: "Entwuerfe", value: "\(viewModel.draftPlans.count)", systemImage: "doc.text", tint: .orange)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
     }
+
+    // MARK: - Actions
 
     private func createPlan() {
         do {
@@ -184,6 +191,9 @@ struct PlanView: View {
     }
 
     private func importPlan(from result: Result<[URL], Error>) {
+        // fileImporter returns security-scoped URLs. PlanActionService owns the
+        // scoped access and import mapping so this view only coordinates routing
+        // and user-visible errors.
         do {
             if let imported = try planActions.importPlan(from: result, existingPlans: blocks) {
                 path.append(imported.id)
@@ -220,6 +230,8 @@ struct PlanView: View {
         }
     }
 
+    // MARK: - Presentation Helpers
+
     static func visibleWeeks(from weeks: [TrainingWeek]) -> [TrainingWeek] {
         PlanDetailPresentation.visibleWeeks(from: weeks)
     }
@@ -234,6 +246,8 @@ struct PlanView: View {
 }
 
 private struct PlanOverviewSectionView: View {
+    // MARK: - Properties
+
     let section: PlanOverviewViewModel.Section
     let viewModel: PlanOverviewViewModel
     let open: (TrainingPlan) -> Void
@@ -241,20 +255,10 @@ private struct PlanOverviewSectionView: View {
     let archive: (TrainingPlan) -> Void
     let delete: (TrainingPlan) -> Void
 
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack(spacing: 10) {
-                Image(systemName: section.systemImage)
-                    .foregroundStyle(.secondary)
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(section.title)
-                        .font(.headline)
-                    Text(section.subtitle)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-            }
+    // MARK: - Body
 
+    var body: some View {
+        SectionContainer(section.title, subtitle: section.subtitle, systemImage: section.systemImage) {
             if section.plans.isEmpty {
                 Text(emptyText)
                     .font(.subheadline)
@@ -279,6 +283,8 @@ private struct PlanOverviewSectionView: View {
         }
     }
 
+    // MARK: - Display
+
     private var emptyText: String {
         switch section.id {
         case .active:
@@ -294,12 +300,16 @@ private struct PlanOverviewSectionView: View {
 }
 
 private struct PlanOverviewRow: View {
+    // MARK: - Properties
+
     let plan: TrainingPlan
     let badgeText: String
     let open: () -> Void
     let duplicate: () -> Void
     let archive: () -> Void
     let delete: () -> Void
+
+    // MARK: - Body
 
     var body: some View {
         HStack(spacing: 12) {
@@ -364,7 +374,11 @@ private struct PlanOverviewRow: View {
         }
         .padding(16)
         .appCardSurface()
+        .contentShape(Rectangle())
+        .accessibilityElement(children: .combine)
     }
+
+    // MARK: - Display
 
     private var workoutCount: Int {
         plan.weeks.reduce(0) { $0 + $1.workoutPlans.count }
@@ -372,13 +386,26 @@ private struct PlanOverviewRow: View {
 }
 
 private struct PlanDetailView: View {
+    // MARK: - Environment
+
     @Environment(\.modelContext) private var modelContext
+
+    // MARK: - Queries
+
     @Query(sort: \TrainingBlock.createdAt) private var blocks: [TrainingBlock]
+
+    // MARK: - Properties
+
     let selectedBlockID: UUID
+
+    // MARK: - State
+
     @State private var selectedWeekNumber = 1
     @State private var blockExportURL: URL?
     @State private var errorMessage: String?
     @State private var isEditingPlan = false
+
+    // MARK: - Derived State
 
     private var selectedBlock: TrainingBlock? {
         blocks.first { $0.id == selectedBlockID }
@@ -395,6 +422,8 @@ private struct PlanDetailView: View {
     private var workouts: [WorkoutPlan] {
         PlanDetailPresentation.visibleWorkouts(for: selectedWeek)
     }
+
+    // MARK: - Body
 
     var body: some View {
         ScrollView {
@@ -453,6 +482,8 @@ private struct PlanDetailView: View {
         }
     }
 
+    // MARK: - UI
+
     @ViewBuilder
     private var exportButton: some View {
         if let blockExportURL {
@@ -489,23 +520,26 @@ private struct PlanDetailView: View {
     }
 
     private func planHeader(_ block: TrainingBlock) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack(spacing: 8) {
-                Text(block.status == .planned ? "Entwurf" : block.status.rawValue.capitalized)
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(.secondary)
+        DashboardCard(
+            title: block.name,
+            subtitle: block.goal.isEmpty ? nil : block.goal,
+            systemImage: "calendar.badge.clock"
+        ) {
+            HStack(spacing: AppTheme.Spacing.small) {
+                AppStatusPill(
+                    title: block.status == .planned ? "Entwurf" : block.status.rawValue.capitalized,
+                    systemImage: nil,
+                    tint: block.status == .active ? .green : .secondary
+                )
 
                 if block.isDemoPlan {
-                    Label("Demo", systemImage: "doc.badge.gearshape")
-                        .font(.caption.weight(.semibold))
-                        .foregroundStyle(.tint)
+                    AppStatusPill(title: "Demo", systemImage: "doc.badge.gearshape", tint: AppTheme.ColorToken.primary)
                 }
             }
 
-            if !block.goal.isEmpty {
-                Text(block.goal)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: AppTheme.Spacing.medium) {
+                compactHeaderMetric(title: "Wochen", value: "\(visibleWeeks.count)")
+                compactHeaderMetric(title: "Trainingstage", value: "\(workouts.count)")
             }
 
             if let description = block.descriptionText, !description.isEmpty {
@@ -514,6 +548,21 @@ private struct PlanDetailView: View {
                     .foregroundStyle(.secondary)
             }
         }
+    }
+
+    private func compactHeaderMetric(title: String, value: String) -> some View {
+        VStack(alignment: .leading, spacing: AppTheme.Spacing.xsmall) {
+            Text(value)
+                .font(.title3.weight(.bold))
+                .monospacedDigit()
+            Text(title)
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(.secondary)
+        }
+        .frame(maxWidth: .infinity, minHeight: 64, alignment: .leading)
+        .padding(.horizontal, AppTheme.Spacing.medium)
+        .padding(.vertical, AppTheme.Spacing.small)
+        .appControlSurface()
     }
 
     private func emptyPlanDetailState(for block: TrainingBlock) -> some View {
@@ -546,6 +595,8 @@ private struct PlanDetailView: View {
         }
     }
 
+    // MARK: - Export
+
     private func refreshBlockExportURL() {
         guard let selectedBlock else {
             blockExportURL = nil
@@ -555,7 +606,12 @@ private struct PlanDetailView: View {
         blockExportURL = try? TrainingExportService().fileURL(forBlock: selectedBlock)
     }
 
+    // MARK: - Selection
+
     private func normalizeSelectedWeek() {
+        // Plan edits can remove or renumber weeks while this detail screen is
+        // visible. Normalizing keeps the WeekSelector bound to an existing week
+        // instead of leaving the UI on an empty stale selection.
         guard let firstWeek = visibleWeeks.first else { return }
         if !visibleWeeks.contains(where: { $0.weekNumber == selectedWeekNumber }) {
             selectedWeekNumber = firstWeek.weekNumber

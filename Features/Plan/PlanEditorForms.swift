@@ -54,6 +54,7 @@ struct TrainingPlanEditorView: View {
                 } label: {
                     Label("Woche hinzufuegen", systemImage: "calendar.badge.plus")
                 }
+                .buttonStyle(AppSecondaryButtonStyle())
             }
 
             Section("Trainingswochen") {
@@ -98,6 +99,8 @@ struct TrainingPlanEditorView: View {
                 }
             }
         }
+        .scrollContentBackground(.hidden)
+        .appGroupedBackground()
         .navigationTitle("Plan bearbeiten")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -210,6 +213,7 @@ struct TrainingWeekEditorView: View {
                 } label: {
                     Label("Session hinzufuegen", systemImage: "plus.circle")
                 }
+                .buttonStyle(AppSecondaryButtonStyle())
             }
 
             Section("Sessions") {
@@ -228,6 +232,8 @@ struct TrainingWeekEditorView: View {
                 }
             }
         }
+        .scrollContentBackground(.hidden)
+        .appGroupedBackground()
         .navigationTitle("Woche bearbeiten")
         .alert("Editor-Aktion fehlgeschlagen", isPresented: Binding(
             get: { errorMessage != nil },
@@ -302,6 +308,7 @@ struct TrainingSessionEditorView: View {
                 } label: {
                     Label("Uebung hinzufuegen", systemImage: "plus.circle")
                 }
+                .buttonStyle(AppSecondaryButtonStyle())
             }
 
             Section("Uebungen") {
@@ -320,6 +327,8 @@ struct TrainingSessionEditorView: View {
                 }
             }
         }
+        .scrollContentBackground(.hidden)
+        .appGroupedBackground()
         .navigationTitle("Session bearbeiten")
         .alert("Editor-Aktion fehlgeschlagen", isPresented: Binding(
             get: { errorMessage != nil },
@@ -403,6 +412,7 @@ struct PlannedExerciseEditorView: View {
                 } label: {
                     Label("Satz hinzufuegen", systemImage: "plus.circle")
                 }
+                .buttonStyle(AppSecondaryButtonStyle())
             }
 
             Section("Saetze") {
@@ -421,6 +431,8 @@ struct PlannedExerciseEditorView: View {
                 }
             }
         }
+        .scrollContentBackground(.hidden)
+        .appGroupedBackground()
         .navigationTitle("Uebung bearbeiten")
         .alert("Editor-Aktion fehlgeschlagen", isPresented: Binding(
             get: { errorMessage != nil },
@@ -512,6 +524,8 @@ struct PlannedSetEditorView: View {
                 Button("Satz sichern") { saveSet() }
             }
         }
+        .scrollContentBackground(.hidden)
+        .appGroupedBackground()
         .navigationTitle("Satz bearbeiten")
         .alert("Editor-Aktion fehlgeschlagen", isPresented: Binding(
             get: { errorMessage != nil },

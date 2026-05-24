@@ -11,6 +11,7 @@ struct RIRAnalyzerTests {
         #expect(try #require(analyzer.parseTargetRange(from: "3-4")) == 3...4)
         #expect(try #require(analyzer.parseTargetRange(from: "2–3")) == 2...3)
         #expect(try #require(analyzer.parseTargetRange(from: "2.5-3.5")) == 2.5...3.5)
+        #expect(try #require(analyzer.parseTargetRange(from: "1,5—2,5")) == 1.5...2.5)
         #expect(try #require(analyzer.parseTargetRange(from: "3")) == 3...3)
     }
 
@@ -48,5 +49,7 @@ struct RIRAnalyzerTests {
         #expect(analyzer.evaluate(actualRIR: 2, targetText: "") == .noTarget)
         #expect(analyzer.evaluate(actualRIR: 2, targetText: "leicht") == .invalidTarget("leicht"))
         #expect(analyzer.parseTargetRange(from: "4-3") == nil)
+        #expect(analyzer.parseTargetRange(from: "-1-2") == nil)
+        #expect(analyzer.parseTargetRange(from: "2 bis 3") == nil)
     }
 }

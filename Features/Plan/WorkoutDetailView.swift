@@ -2,11 +2,20 @@ import SwiftData
 import SwiftUI
 
 struct WorkoutDetailView: View {
+    // MARK: - Environment
+
     @Environment(\.modelContext) private var modelContext
 
+    // MARK: - Properties
+
     let workout: WorkoutPlan
+
+    // MARK: - State
+
     @State private var activeSession: SessionLog?
     @State private var sessionStartError: String?
+
+    // MARK: - Derived State
 
     private var weekNumber: Int {
         workout.week?.weekNumber ?? 0
@@ -16,10 +25,16 @@ struct WorkoutDetailView: View {
         workout.plannedExercises.sorted { $0.sortOrder < $1.sortOrder }
     }
 
+    // MARK: - Body
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: AppTheme.Spacing.large) {
-                VStack(alignment: .leading, spacing: 10) {
+                DashboardCard(
+                    title: workout.title,
+                    subtitle: "\(exercises.count) Uebungen",
+                    systemImage: "dumbbell"
+                ) {
                     HStack {
                         Text("Woche \(weekNumber) · Tag \(workout.dayNumber)")
                             .font(.subheadline.weight(.semibold))
@@ -29,15 +44,6 @@ struct WorkoutDetailView: View {
 
                         WorkoutStatusBadge(status: workout.status)
                     }
-
-                    Text(workout.title)
-                        .font(.largeTitle.bold())
-                        .lineLimit(2)
-                        .minimumScaleFactor(0.72)
-
-                    Text("\(exercises.count) Übungen")
-                        .font(.body)
-                        .foregroundStyle(.secondary)
 
                     if let focus = workout.focus, !focus.isEmpty {
                         Label(focus, systemImage: "target")
@@ -57,9 +63,6 @@ struct WorkoutDetailView: View {
                             .foregroundStyle(.secondary)
                     }
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(AppTheme.Spacing.large)
-                .appCardSurface()
 
                 ForEach(exercises, id: \.id) { exercise in
                     ExercisePlanRow(plannedExercise: exercise)
@@ -77,7 +80,7 @@ struct WorkoutDetailView: View {
                 Label(sessionButtonTitle, systemImage: "play.circle.fill")
                     .frame(maxWidth: .infinity, minHeight: 52)
             }
-            .buttonStyle(.borderedProminent)
+            .buttonStyle(AppPrimaryButtonStyle())
             .controlSize(.large)
             .padding(AppTheme.Spacing.large)
             .appFloatingBarSurface()
@@ -96,9 +99,13 @@ struct WorkoutDetailView: View {
         }
     }
 
+    // MARK: - Display
+
     private var sessionButtonTitle: String {
         workout.sessionLogs.contains { $0.status == .active } ? "Session fortsetzen" : "Training starten"
     }
+
+    // MARK: - Bindings
 
     private var errorBinding: Binding<Bool> {
         Binding {
@@ -120,12 +127,17 @@ struct WorkoutDetailView: View {
         }
     }
 
+    // MARK: - Actions
+
     private func startOrResumeSession() {
         let service = SessionStartService(context: modelContext)
 
         do {
             activeSession = try service.startOrResumeSession(from: workout)
         } catch SessionStartError.activeSessionAlreadyExists {
+            // The service enforces a single active session globally. The view
+            // keeps that rule visible instead of silently opening the wrong
+            // workout's session.
             sessionStartError = "Es läuft bereits eine andere aktive Session. Beende diese zuerst oder öffne sie über den aktuellen Workout-Kontext."
         } catch {
             sessionStartError = "Die Session konnte nicht gespeichert werden."

@@ -11,6 +11,8 @@ enum RIRStatus: Equatable {
 }
 
 struct RIRAnalyzer {
+    // MARK: - Evaluation
+
     func evaluate(actualRIR: Double?, targetText: String?) -> RIRStatus {
         guard let targetText = targetText?.trimmedNonEmpty else { return .noTarget }
 
@@ -28,10 +30,14 @@ struct RIRAnalyzer {
             return .inTarget(actualRIR: actualRIR, range: range)
         }
 
+        // Higher RIR means more reps in reserve and therefore an easier set; a
+        // lower value than target means the load or fatigue was too high.
         return actualRIR > range.upperBound
             ? .tooEasy(actualRIR: actualRIR, range: range)
             : .tooHeavy(actualRIR: actualRIR, range: range)
     }
+
+    // MARK: - Parsing
 
     func parseTargetRange(from text: String?) -> ClosedRange<Double>? {
         guard let text = text?.trimmedNonEmpty else { return nil }
@@ -58,10 +64,16 @@ struct RIRAnalyzer {
         return nil
     }
 
+    // MARK: - Helpers
+
     private func isTextStatus(_ text: String) -> Bool {
+        // RPE prescriptions are accepted as qualitative targets. They are not
+        // converted into RIR because that mapping is coach-specific.
         text.range(of: #"^\s*\d+(?:[.,]\d+)?\s*RPE\s*$"#, options: [.regularExpression, .caseInsensitive]) != nil
     }
 }
+
+// MARK: - String Parsing Helpers
 
 extension String {
     var trimmedNonEmpty: String? {

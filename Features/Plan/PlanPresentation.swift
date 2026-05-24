@@ -1,6 +1,8 @@
 import Foundation
 
 struct PlanOverviewViewModel {
+    // MARK: - Types
+
     struct Section: Identifiable {
         let id: BlockStatus
         let title: String
@@ -9,7 +11,11 @@ struct PlanOverviewViewModel {
         let plans: [TrainingPlan]
     }
 
+    // MARK: - Properties
+
     let plans: [TrainingPlan]
+
+    // MARK: - Derived State
 
     var isEmpty: Bool {
         plans.isEmpty
@@ -56,6 +62,8 @@ struct PlanOverviewViewModel {
         ]
     }
 
+    // MARK: - Display
+
     func badgeText(for plan: TrainingPlan) -> String {
         if plan.isDemoPlan {
             return "Demo"
@@ -84,6 +92,11 @@ struct PlanOverviewViewModel {
 }
 
 enum PlanDetailPresentation {
+    // MARK: - Sorting
+
+    // SwiftData relationship arrays are not guaranteed to be in business order.
+    // Centralizing presentation sorting keeps plan overview, detail, and dashboard
+    // behavior aligned.
     static func visibleWeeks(from weeks: [TrainingWeek]) -> [TrainingWeek] {
         weeks.sorted { $0.weekNumber < $1.weekNumber }
     }

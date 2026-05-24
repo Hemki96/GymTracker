@@ -37,12 +37,18 @@ struct ExerciseFilterOption: Identifiable, Equatable {
 }
 
 struct ChartDataMapper {
+    // MARK: - Properties
+
     var calendar: Calendar = .autoupdatingCurrent
     private let volumeCalculator = VolumeCalculator()
+
+    // MARK: - Lifecycle
 
     init(calendar: Calendar = .autoupdatingCurrent) {
         self.calendar = calendar
     }
+
+    // MARK: - Mapping
 
     func weeklyVolume(from sessions: [SessionLog]) -> [WeeklyVolumePoint] {
         let completedSessions = completed(sessions)
@@ -117,6 +123,8 @@ struct ChartDataMapper {
                 .flatMap(\.setLogs)
                 .filter { $0.isCompleted && !$0.isWarmup }
 
+            // Warmup sets are excluded from max-weight trends because they are
+            // preparation volume, not progression evidence.
             guard
                 let maxWeight = completedSets.compactMap(\.loggedWeightKg).max(),
                 maxWeight > 0,
@@ -135,6 +143,8 @@ struct ChartDataMapper {
         }
         .sorted { $0.date < $1.date }
     }
+
+    // MARK: - Helpers
 
     private func completed(_ sessions: [SessionLog]) -> [SessionLog] {
         sessions.filter { $0.status == .completed }
@@ -157,6 +167,8 @@ struct ChartDataMapper {
             return totalVolumeKg
         }
 
+        // Older or partially edited sessions may not have cached summaries yet;
+        // charts recompute as a fallback instead of dropping historical data.
         let completedSets = session.exerciseLogs
             .flatMap(\.setLogs)
             .filter(\.isCompleted)

@@ -2,17 +2,27 @@ import SwiftData
 import SwiftUI
 
 struct SessionSummaryView: View {
+    // MARK: - Environment
+
     @Environment(\.modelContext) private var modelContext
+
+    // MARK: - Properties
 
     @Bindable var sessionLog: SessionLog
 
+    // MARK: - State
+
     @State private var noteText: String
     @State private var exportURL: URL?
+
+    // MARK: - Lifecycle
 
     init(sessionLog: SessionLog) {
         self.sessionLog = sessionLog
         _noteText = State(initialValue: sessionLog.overallNotes ?? "")
     }
+
+    // MARK: - Derived State
 
     private var exerciseLogs: [ExerciseLog] {
         sessionLog.exerciseLogs.sorted {
@@ -23,6 +33,8 @@ struct SessionSummaryView: View {
     private var completedSetCount: Int {
         sessionLog.exerciseLogs.flatMap(\.setLogs).filter(\.isCompleted).count
     }
+
+    // MARK: - Body
 
     var body: some View {
         ScrollView {
@@ -54,51 +66,27 @@ struct SessionSummaryView: View {
         }
     }
 
-    private var header: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(sessionLog.workoutPlan?.title ?? "Training")
-                .font(.largeTitle.bold())
-                .lineLimit(2)
-                .minimumScaleFactor(0.72)
+    // MARK: - UI
 
-            Text(dateLine)
-                .font(.subheadline.weight(.medium))
-                .foregroundStyle(.secondary)
+    private var header: some View {
+        DashboardCard(
+            title: sessionLog.workoutPlan?.title ?? "Training",
+            subtitle: dateLine,
+            systemImage: "checkmark.seal.fill"
+        ) {
+            AppStatusPill(title: "Abgeschlossen", systemImage: "checkmark", tint: .green)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(AppTheme.Spacing.large)
-        .appCardSurface()
     }
 
     private var metricGrid: some View {
         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
-            summaryMetric(title: "Dauer", value: durationText, systemImage: "clock")
-            summaryMetric(title: "Volumen", value: volumeText, systemImage: "scalemass")
-            summaryMetric(title: "Ø RIR", value: averageRIRText, systemImage: "gauge.with.dots.needle.bottom.50percent")
-            summaryMetric(title: "Max. Schmerz", value: maxPainText, systemImage: "cross.case")
-            summaryMetric(title: "Saetze", value: "\(completedSetCount)", systemImage: "checkmark.circle")
-            summaryMetric(title: "Warnungen", value: "\(sessionLog.warningMessages.count)", systemImage: "exclamationmark.triangle")
+            MetricCard(title: "Dauer", value: durationText, systemImage: "clock", tint: .blue)
+            MetricCard(title: "Volumen", value: volumeText, systemImage: "scalemass", tint: .purple)
+            MetricCard(title: "Ø RIR", value: averageRIRText, systemImage: "gauge.with.dots.needle.bottom.50percent", tint: .green)
+            MetricCard(title: "Max. Schmerz", value: maxPainText, systemImage: "cross.case", tint: .red)
+            MetricCard(title: "Saetze", value: "\(completedSetCount)", systemImage: "checkmark.circle", tint: .green)
+            MetricCard(title: "Warnungen", value: "\(sessionLog.warningMessages.count)", systemImage: "exclamationmark.triangle", tint: .orange)
         }
-    }
-
-    private func summaryMetric(title: String, value: String, systemImage: String) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Image(systemName: systemImage)
-                .font(.headline)
-                .foregroundStyle(.secondary)
-
-            Text(value)
-                .font(.title3.weight(.bold))
-                .lineLimit(1)
-                .minimumScaleFactor(0.72)
-
-            Text(title)
-                .font(.caption.weight(.semibold))
-                .foregroundStyle(.secondary)
-        }
-        .frame(maxWidth: .infinity, minHeight: 112, alignment: .leading)
-        .padding(AppTheme.Spacing.large)
-        .appCardSurface()
     }
 
     private var noteSection: some View {
@@ -108,8 +96,9 @@ struct SessionSummaryView: View {
 
             TextField("Wie lief die Einheit?", text: $noteText, axis: .vertical)
                 .lineLimit(4...8)
-                .textFieldStyle(.roundedBorder)
                 .frame(minHeight: 96)
+                .padding(.horizontal, AppTheme.Spacing.medium)
+                .appControlSurface()
         }
         .padding(AppTheme.Spacing.large)
         .appCardSurface()
@@ -152,6 +141,8 @@ struct SessionSummaryView: View {
         }
     }
 
+    // MARK: - Display
+
     private var dateLine: String {
         let started = sessionLog.startedAt.formatted(date: .abbreviated, time: .shortened)
         guard let completedAt = sessionLog.completedAt else { return started }
@@ -181,11 +172,17 @@ struct SessionSummaryView: View {
         return "\(maxPain)/10"
     }
 
+    // MARK: - Persistence
+
     private func saveNote(_ note: String) {
+        // Notes are saved immediately from the summary screen because users often
+        // leave by sharing/exporting rather than tapping an explicit save button.
         sessionLog.overallNotes = note.trimmedNonEmpty
         sessionLog.updatedAt = .now
         try? modelContext.save()
     }
+
+    // MARK: - Export
 
     private func refreshExportURL() {
         exportURL = try? TrainingExportService().fileURL(forSession: sessionLog)
@@ -193,7 +190,11 @@ struct SessionSummaryView: View {
 }
 
 private struct ExerciseSummaryRow: View {
+    // MARK: - Properties
+
     let exerciseLog: ExerciseLog
+
+    // MARK: - Derived State
 
     private var completedSets: [SetLog] {
         exerciseLog.setLogs
@@ -204,6 +205,8 @@ private struct ExerciseSummaryRow: View {
     private var volume: Double {
         VolumeCalculator().totalVolumeKg(from: completedSets)
     }
+
+    // MARK: - Body
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {

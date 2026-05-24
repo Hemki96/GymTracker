@@ -160,6 +160,58 @@ struct TrainingPlanEditorViewModelTests {
         #expect(plan.weeks.count == 1)
     }
 
+    @Test
+    @MainActor
+    func updateSetSynchronizesParentPrescriptionFromTrimmedUniqueValues() throws {
+        let context = try Self.makeContext()
+        let viewModel = TrainingPlanEditorViewModel(context: context)
+        let plannedExercise = PlannedExercise(
+            sortOrder: 1,
+            setsPrescription: "0",
+            repsPrescription: "",
+            plannedWeightText: nil,
+            targetRIRText: nil,
+            painTargetText: nil,
+            exercise: Exercise(name: "Split Squat")
+        )
+        context.insert(plannedExercise)
+        let firstSet = try viewModel.addSet(to: plannedExercise)
+        let secondSet = try viewModel.addSet(to: plannedExercise)
+
+        try viewModel.updateSet(
+            firstSet,
+            reps: " 8-10 ",
+            weight: " 24 kg ",
+            targetRIR: " 2 ",
+            rest: " 90s ",
+            tempo: " 3-1-1 ",
+            setType: .working,
+            painTarget: " max 3/10 ",
+            notes: " Topset "
+        )
+        try viewModel.updateSet(
+            secondSet,
+            reps: "8-10",
+            weight: "26 kg",
+            targetRIR: "1",
+            rest: "  ",
+            tempo: nil,
+            setType: .working,
+            painTarget: "max 4/10",
+            notes: nil
+        )
+
+        #expect(plannedExercise.setsPrescription == "2")
+        #expect(plannedExercise.repsPrescription == "8-10")
+        #expect(plannedExercise.plannedWeightText == "24 kg")
+        #expect(plannedExercise.targetRIRText == "2")
+        #expect(plannedExercise.painTargetText == "max 3/10")
+        #expect(firstSet.restText == "90s")
+        #expect(firstSet.tempo == "3-1-1")
+        #expect(firstSet.notes == "Topset")
+        #expect(secondSet.restText == nil)
+    }
+
     @MainActor
     private static func makeContext() throws -> ModelContext {
         let schema = Schema([

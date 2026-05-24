@@ -2,10 +2,14 @@ import Foundation
 import SwiftData
 
 struct SessionCompletionService {
+    // MARK: - Properties
+
     private let context: ModelContext
     private let volumeCalculator: VolumeCalculator
     private let rirAnalyzer: RIRAnalyzer
     private let painEvaluator: PainThresholdEvaluator
+
+    // MARK: - Lifecycle
 
     init(
         context: ModelContext,
@@ -19,12 +23,17 @@ struct SessionCompletionService {
         self.painEvaluator = painEvaluator
     }
 
+    // MARK: - Completion
+
     @discardableResult
     func completeSession(
         _ session: SessionLog,
         note: String?,
         at completedAt: Date = .now
     ) throws -> SessionLog {
+        // Completion is the single persistence boundary for final session state:
+        // status, duration, cached analytics summaries, warnings, and related
+        // plan status move forward together or not at all.
         let completedSets = session.exerciseLogs
             .flatMap(\.setLogs)
             .filter(\.isCompleted)
@@ -55,7 +64,11 @@ struct SessionCompletionService {
         return session
     }
 
+    // MARK: - Summary Refresh
+
     func refreshSummary(for session: SessionLog) {
+        // Live editing uses the same summary calculations as completion so
+        // dashboard/history/export numbers cannot drift from the active session UI.
         let completedSets = session.exerciseLogs
             .flatMap(\.setLogs)
             .filter(\.isCompleted)
@@ -68,6 +81,8 @@ struct SessionCompletionService {
         session.warningMessages = warnings(for: session, completedSets: completedSets)
     }
 
+    // MARK: - Warning Rules
+
     private func averageRIR(from completedSets: [SetLog]) -> Double? {
         let rirValues = completedSets.compactMap(\.rir)
         guard !rirValues.isEmpty else { return nil }
@@ -77,6 +92,9 @@ struct SessionCompletionService {
     private func warnings(for session: SessionLog, completedSets: [SetLog]) -> [String] {
         var warnings: [String] = []
 
+        // An empty completed set list is a valid save state during editing, but
+        // it should be visible after completion/export because analytics would
+        // otherwise look like a zero-volume training day.
         if completedSets.isEmpty {
             warnings.append("Keine abgeschlossenen Saetze erfasst.")
         }
@@ -110,6 +128,9 @@ struct SessionCompletionService {
         exerciseName: String,
         to warnings: inout [String]
     ) {
+        // Pain warnings are intentionally stricter than RIR warnings: any value
+        // >= 7 is flagged even when no target exists, because pain is a safety
+        // signal rather than just a training-intensity signal.
         switch painEvaluator.evaluate(actualPain: setLog.pain, targetText: targetText) {
         case let .warning(actualPain, maxPain):
             warnings.append("\(exerciseName), Satz \(setLog.setNumber): Schmerz \(actualPain)/10 ueber Ziel max \(maxPain)/10.")
@@ -160,11 +181,17 @@ struct SessionCompletionService {
 }
 
 struct SessionEditingService {
+    // MARK: - Properties
+
     private let context: ModelContext
+
+    // MARK: - Lifecycle
 
     init(context: ModelContext) {
         self.context = context
     }
+
+    // MARK: - Editing
 
     @discardableResult
     func addSet(to exerciseLog: ExerciseLog, at date: Date = .now) throws -> SetLog {
@@ -172,6 +199,9 @@ struct SessionEditingService {
         let lastSet = setLogs.last
         let plannedExercise = exerciseLog.plannedExercise
         let nextPlannedSet = plannedExercise?.plannedSets.first { $0.setNumber == setLogs.count + 1 }
+        // New ad-hoc sets inherit the previous actual values. During training
+        // this reduces repeated entry for straight sets while still linking to
+        // the next planned set when the plan contains detailed rows.
         let setLog = SetLog(
             setNumber: setLogs.count + 1,
             plannedRepsText: nextPlannedSet?.repsText ?? plannedExercise?.repsPrescription,
@@ -220,6 +250,8 @@ struct SessionEditingService {
         }
         try context.save()
     }
+
+    // MARK: - Helpers
 
     private func renumberSets(for exerciseLog: ExerciseLog, excluding deletedID: UUID, at date: Date) {
         let remainingSets = sortedSetLogs(exerciseLog.setLogs).filter { $0.id != deletedID }

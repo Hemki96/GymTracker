@@ -22,11 +22,17 @@ enum EditorMoveDirection {
 
 @MainActor
 final class TrainingPlanEditorViewModel {
+    // MARK: - Properties
+
     private let context: ModelContext
+
+    // MARK: - Lifecycle
 
     init(context: ModelContext) {
         self.context = context
     }
+
+    // MARK: - Validation
 
     func validate(_ plan: TrainingPlan) -> [EditorValidationIssue] {
         trimmed(plan.name).isEmpty ? [.required("Name")] : []
@@ -50,6 +56,8 @@ final class TrainingPlanEditorViewModel {
     func validate(_ exercise: Exercise) -> [EditorValidationIssue] {
         trimmed(exercise.name).isEmpty ? [.required("Uebungsname")] : []
     }
+
+    // MARK: - Plan Editing
 
     func updatePlan(
         _ plan: TrainingPlan,
@@ -79,6 +87,8 @@ final class TrainingPlanEditorViewModel {
         context.delete(plan)
         try context.save()
     }
+
+    // MARK: - Week Editing
 
     func addWeek(to plan: TrainingPlan) throws -> TrainingWeek {
         let week = TrainingWeek(weekNumber: plan.weeks.count + 1, title: "Neue Woche", block: plan)
@@ -118,6 +128,8 @@ final class TrainingPlanEditorViewModel {
         renumberWeeks(in: plan)
         try context.save()
     }
+
+    // MARK: - Session Editing
 
     func addSession(to week: TrainingWeek) throws -> TrainingSession {
         let session = TrainingSession(
@@ -170,6 +182,8 @@ final class TrainingPlanEditorViewModel {
         try context.save()
     }
 
+    // MARK: - Exercise Editing
+
     func addExercise(to session: TrainingSession) throws -> PlannedExercise {
         let exercise = Exercise(name: "Neue Uebung")
         let plannedExercise = PlannedExercise(
@@ -202,6 +216,9 @@ final class TrainingPlanEditorViewModel {
             plannedExercise.exercise = exercise
             context.insert(exercise)
         }
+        // Exercise is shared metadata; PlannedExercise is the per-session
+        // prescription. Updating both here keeps the editor form simple while
+        // preserving that split in the persistence model.
         exercise.name = trimmed(name)
         exercise.muscleGroup = normalized(muscleGroup)
         exercise.equipment = normalized(equipment)
@@ -240,6 +257,8 @@ final class TrainingPlanEditorViewModel {
         renumberExercises(in: session)
         try context.save()
     }
+
+    // MARK: - Set Editing
 
     func addSet(to plannedExercise: PlannedExercise) throws -> PlannedSet {
         let set = PlannedSet(setNumber: plannedExercise.plannedSets.count + 1, plannedExercise: plannedExercise)
@@ -300,6 +319,8 @@ final class TrainingPlanEditorViewModel {
         try context.save()
     }
 
+    // MARK: - Persistence
+
     private func saveValidated(_ plan: TrainingPlan) throws {
         guard validate(plan).isEmpty else { throw TrainingPlanEditorError.validationFailed(validate(plan)) }
         try context.save()
@@ -319,6 +340,8 @@ final class TrainingPlanEditorViewModel {
         guard validate(exercise).isEmpty else { throw TrainingPlanEditorError.validationFailed(validate(exercise)) }
         try context.save()
     }
+
+    // MARK: - Cloning
 
     private func clone(_ plan: TrainingPlan) -> TrainingPlan {
         let copy = TrainingPlan(
@@ -368,6 +391,9 @@ final class TrainingPlanEditorViewModel {
     }
 
     private func clone(_ plannedExercise: PlannedExercise) -> PlannedExercise {
+        // Duplicating a planned exercise creates a separate Exercise record so
+        // editing the copy's name or defaults cannot unexpectedly rename the
+        // source row in the same or another plan.
         let exerciseCopy = plannedExercise.exercise.map { source in
             Exercise(
                 name: source.name,
@@ -414,6 +440,8 @@ final class TrainingPlanEditorViewModel {
         )
     }
 
+    // MARK: - Ordering
+
     private func insert<T: Identifiable>(_ item: T, after reference: T, in items: inout [T], sortedBy areInIncreasingOrder: (T, T) -> Bool) where T.ID == UUID {
         var sorted = items.sorted(by: areInIncreasingOrder)
         let insertionIndex = (sorted.firstIndex { $0.id == reference.id } ?? sorted.endIndex - 1) + 1
@@ -435,6 +463,8 @@ final class TrainingPlanEditorViewModel {
         sorted.swapAt(index, targetIndex)
         items = sorted
     }
+
+    // MARK: - Denormalization
 
     private func renumberWeeks(in plan: TrainingPlan) {
         for (index, week) in plan.weeks.enumerated() {
@@ -474,6 +504,9 @@ final class TrainingPlanEditorViewModel {
     }
 
     private func syncExercisePrescriptions(_ plannedExercise: PlannedExercise) {
+        // The UI still shows exercise-level summary fields, while detailed set
+        // editing lives in PlannedSet rows. Synchronizing here makes list cards,
+        // exports, and session creation read the same prescription after edits.
         let sortedSets = plannedExercise.plannedSets.sorted { $0.setNumber < $1.setNumber }
         plannedExercise.setsPrescription = "\(sortedSets.count)"
         plannedExercise.repsPrescription = compactJoined(sortedSets.compactMap(\.repsText))
@@ -489,6 +522,8 @@ final class TrainingPlanEditorViewModel {
         }
         return lhs.sortOrder < rhs.sortOrder
     }
+
+    // MARK: - Text Helpers
 
     private func compactJoined(_ values: [String]) -> String {
         let unique = values.map(trimmed).filter { !$0.isEmpty }.uniqued()

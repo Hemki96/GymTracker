@@ -1,6 +1,10 @@
 import SwiftData
 
 enum GymTrackerModelContainer {
+    // MARK: - Factory
+
+    // App, previews, and tests should all build containers from the same schema
+    // list. Keeping it here avoids subtle drift when SwiftData model types change.
     static func make(isStoredInMemoryOnly: Bool = false) throws -> ModelContainer {
         let schema = makeSchema()
         let configuration = ModelConfiguration(
@@ -13,6 +17,8 @@ enum GymTrackerModelContainer {
             configurations: [configuration]
         )
     }
+
+    // MARK: - Schema
 
     private static func makeSchema() -> Schema {
         Schema([

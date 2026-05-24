@@ -157,6 +157,39 @@ struct SessionStartServiceTests {
         #expect(sessions.first?.workoutPlan === firstWorkout)
     }
 
+    @Test
+    func startSessionFallsBackToOneDraftSetWhenPrescriptionHasNoUsableCount() throws {
+        let container = try makeInMemoryContainer()
+        let context = ModelContext(container)
+        let workoutPlan = TrainingSession(dayNumber: 1, title: "Recovery", sortOrder: 1)
+        let exercise = Exercise(name: "Mobility Flow")
+        workoutPlan.plannedExercises = [
+            PlannedExercise(
+                sortOrder: 1,
+                setsPrescription: "nach Gefuehl",
+                repsPrescription: "5 min",
+                workoutPlan: workoutPlan,
+                exercise: exercise
+            ),
+            PlannedExercise(
+                sortOrder: 2,
+                setsPrescription: "0",
+                repsPrescription: "Atemzuege",
+                workoutPlan: workoutPlan,
+                exercise: Exercise(name: "Breathing")
+            )
+        ]
+        context.insert(workoutPlan)
+
+        let session = try SessionStartService(context: context).startSession(from: workoutPlan)
+
+        let setCounts = session.exerciseLogs
+            .sorted { ($0.plannedExercise?.sortOrder ?? 0) < ($1.plannedExercise?.sortOrder ?? 0) }
+            .map { $0.setLogs.count }
+        #expect(setCounts == [1, 1])
+        #expect(session.exerciseLogs.flatMap(\.setLogs).allSatisfy { $0.setNumber == 1 })
+    }
+
     private func makeWorkoutPlan(dayNumber: Int = 1) -> WorkoutPlan {
         let workoutPlan = WorkoutPlan(
             dayNumber: dayNumber,

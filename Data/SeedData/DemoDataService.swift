@@ -4,11 +4,17 @@ import SwiftData
 struct DemoDataService {
     static let bundledDemoPlanIdentifier = "demo.trainingPlan.christianHemkerB1.v1"
 
+    // MARK: - Properties
+
     private let seedDataService: SeedDataService
+
+    // MARK: - Lifecycle
 
     init(seedDataService: SeedDataService = SeedDataService()) {
         self.seedDataService = seedDataService
     }
+
+    // MARK: - Bundled Demo Plan
 
     func loadBundledDemoPlan(
         into context: ModelContext,
@@ -25,6 +31,8 @@ struct DemoDataService {
 
     @discardableResult
     func deleteBundledDemoPlan(from context: ModelContext) throws -> Int {
+        // Demo deletion removes both imported blocks and their marker. That lets
+        // users reset sample data and import it again without touching real plans.
         let plans = try bundledDemoPlans(in: context)
         for plan in plans {
             context.delete(plan)
@@ -44,6 +52,8 @@ struct DemoDataService {
         return plans.count
     }
 
+    // MARK: - Copying
+
     func duplicateDemoPlan(
         _ demoPlan: TrainingPlan,
         name: String? = nil,
@@ -60,6 +70,8 @@ struct DemoDataService {
             demoSourceIdentifier: nil
         )
 
+        // Copies are intentionally not marked as demo plans. They are editable
+        // user-owned starting points derived from the bundled resource.
         for week in demoPlan.weeks.sorted(by: { $0.weekNumber < $1.weekNumber }) {
             let weekCopy = TrainingWeek(
                 weekNumber: week.weekNumber,
@@ -117,6 +129,8 @@ struct DemoDataService {
         try context.save()
         return copy
     }
+
+    // MARK: - Queries
 
     private func bundledDemoPlans(in context: ModelContext) throws -> [TrainingPlan] {
         let demoIdentifier: String? = Self.bundledDemoPlanIdentifier

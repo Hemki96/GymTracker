@@ -3,6 +3,10 @@ import SwiftData
 import SwiftUI
 
 struct AnalyticsView: View {
+    // MARK: - Queries
+
+    // The chart layer consumes completed sessions only because active sessions
+    // can contain partially-entered sets and stale summary caches.
     @Query(
         filter: #Predicate<SessionLog> { session in
             session.statusRaw == "completed"
@@ -11,9 +15,15 @@ struct AnalyticsView: View {
         order: .forward
     ) private var completedSessions: [SessionLog]
 
+    // MARK: - State
+
     @State private var selectedExerciseID: UUID?
 
+    // MARK: - Properties
+
     private let mapper = ChartDataMapper()
+
+    // MARK: - Derived State
 
     private var weeklyVolume: [WeeklyVolumePoint] {
         mapper.weeklyVolume(from: completedSessions)
@@ -35,18 +45,25 @@ struct AnalyticsView: View {
         mapper.weightTrend(for: selectedExerciseID, in: completedSessions)
     }
 
+    // MARK: - Body
+
     var body: some View {
         NavigationStack {
             Group {
                 if completedSessions.isEmpty {
-                    ContentUnavailableView(
-                        "Keine Analysedaten",
-                        systemImage: "chart.xyaxis.line",
-                        description: Text("Schließe Sessions ab, um Volumen, Schmerz, RIR und Gewichte auszuwerten.")
+                    EmptyStateView(
+                        title: "Keine Analysedaten",
+                        message: "Schliesse Sessions ab, um Volumen, Schmerz, RIR und Gewichte auszuwerten.",
+                        systemImage: "chart.xyaxis.line"
                     )
                 } else {
                     ScrollView {
                         VStack(alignment: .leading, spacing: AppTheme.Spacing.large) {
+                            ModernNavigationBar(
+                                title: "Analyse",
+                                subtitle: "Volumen, Schmerz, RIR und Gewichtsentwicklung in einem klaren Verlauf.",
+                                systemImage: "chart.xyaxis.line"
+                            )
                             weeklyVolumeChart
                             painChart
                             rirChart
@@ -58,12 +75,15 @@ struct AnalyticsView: View {
                 }
             }
             .navigationTitle("Analyse")
+            .navigationBarTitleDisplayMode(.inline)
             .onAppear(perform: selectDefaultExerciseIfNeeded)
             .onChange(of: exerciseOptions) { _, _ in
                 selectDefaultExerciseIfNeeded()
             }
         }
     }
+
+    // MARK: - Charts
 
     private var weeklyVolumeChart: some View {
         AnalyticsChartCard(
@@ -183,7 +203,12 @@ struct AnalyticsView: View {
         }
     }
 
+    // MARK: - Selection
+
     private func selectDefaultExerciseIfNeeded() {
+        // Exercise options are derived from the current completed-session query.
+        // Keep the picker selection valid as sessions are imported, deleted, or
+        // filtered by SwiftData refreshes.
         guard !exerciseOptions.isEmpty else {
             selectedExerciseID = nil
             return
@@ -202,18 +227,26 @@ struct ExerciseFilter: View {
     @Binding var selection: UUID?
 
     var body: some View {
-        Picker("Übung", selection: $selection) {
-            if options.isEmpty {
-                Text("Keine Übungen").tag(UUID?.none)
-            } else {
-                ForEach(options) { option in
-                    Text(option.name).tag(Optional(option.id))
+        AppCard {
+            HStack {
+                Label("Uebung", systemImage: "dumbbell")
+                    .font(.headline)
+
+                Spacer()
+
+                Picker("Uebung", selection: $selection) {
+                    if options.isEmpty {
+                        Text("Keine Uebungen").tag(UUID?.none)
+                    } else {
+                        ForEach(options) { option in
+                            Text(option.name).tag(Optional(option.id))
+                        }
+                    }
                 }
+                .pickerStyle(.menu)
+                .disabled(options.isEmpty)
             }
         }
-        .pickerStyle(.menu)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .disabled(options.isEmpty)
     }
 }
 

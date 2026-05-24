@@ -60,6 +60,7 @@ struct WorkoutDayCard: View {
         }
         .padding(AppTheme.Spacing.large)
         .appCardSurface()
+        .accessibilityElement(children: .combine)
     }
 }
 

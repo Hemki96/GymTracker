@@ -3,7 +3,13 @@ import SwiftUI
 
 @main
 struct GymTrackerApp: App {
+    // The app builds its persistent environment synchronously at launch so every
+    // root tab receives the same SwiftData container. Startup failures stay in
+    // UI state instead of crashing, which keeps schema/container issues visible
+    // during development and TestFlight installs.
     private let startupState: StartupState
+
+    // MARK: - Lifecycle
 
     init() {
         do {
@@ -12,6 +18,8 @@ struct GymTrackerApp: App {
             startupState = .failed(error.localizedDescription)
         }
     }
+
+    // MARK: - Scene
 
     var body: some Scene {
         WindowGroup {
@@ -32,8 +40,15 @@ private enum StartupState {
 }
 
 private struct RootTabView: View {
+    // MARK: - Body
+
     var body: some View {
         TabView {
+            DashboardView()
+                .tabItem {
+                    Label("Dashboard", systemImage: "square.grid.2x2")
+                }
+
             PlanView()
                 .tabItem {
                     Label("Plan", systemImage: "calendar")
@@ -55,6 +70,8 @@ private struct RootTabView: View {
 
 private struct StartupFailureView: View {
     let message: String
+
+    // MARK: - Body
 
     var body: some View {
         ContentUnavailableView(
