@@ -2,171 +2,201 @@
 
 Datum: 2026-05-24
 Projekt: GymTracker iOS
+Status: Abschnitt 1 Projektanalyse abgeschlossen und verifiziert; Refactoring noch nicht gestartet
 
-## Zusammenfassung
+## Executive Summary
 
-Die App ist als native SwiftUI-/SwiftData-Anwendung mit grober MVVM-Trennung aufgebaut. Die zentrale fachliche Logik liegt ueberwiegend in `Domain/Services`, SwiftData-Modelle liegen in `Data/SwiftDataModels`, Feature-Screens sind unter `Features/*` gruppiert, und Unit Tests decken Domain-, SeedData-, Session- und ViewModel-Logik ab.
+GymTracker ist als native SwiftUI-/SwiftData-App mit einer groben Feature-/Domain-/Data-Struktur aufgebaut. Die bestehende Richtung passt zur vorhandenen ADR `docs/adr/0001-native-swiftui-mvvm-swiftdata.md`: SwiftUI, MVVM, SwiftData, Domain Services und testbare fachliche Logik.
 
-Im Rahmen dieser Analyse wurden Build und Tests ausgefuehrt, ein regressionssicherer Bugfix in der Session-Bearbeitung umgesetzt und Plan-Praesentationslogik aus `PlanView.swift` extrahiert. Die Architektur ist damit an einer Stelle klarer, die groessten offenen Risiken liegen aber weiterhin in grossen SwiftUI-Dateien, fehlenden UI Tests, unvollstaendigen Repository-Abstraktionen und eingecheckten Build-Artefakten.
+Die Analyse zeigt aber klare Wartbarkeitsrisiken: mehrere SwiftUI-Dateien sind sehr gross, `PlanView` kapselt noch UI, SwiftData-Zugriff, Import, Demo-Load, Navigation und Fehlerzustand in einem Typ, `TrainingPlanEditorViewModel` ist eher ein grosser Editor-Service als ein fokussiertes ViewModel, und die geplante Repository-Schicht ist aktuell nur ein Platzhalter. Ein UI-Test-Target fehlt, Build-Artefakte sind versioniert, und es gibt keine Lint-/Format-Konfiguration.
 
-## Durchgefuehrte Refactorings und Fixes
+## Erledigte Analysepunkte
 
-### 1. Plan-Praesentationslogik ausgelagert
+- [x] 1.1 Projektstruktur analysiert
+- [x] 1.1 Module identifiziert
+- [x] 1.1 Architektur identifiziert
+- [x] 1.1 Datenfluss analysiert
+- [x] 1.1 Abhaengigkeiten analysiert
+- [x] 1.1 Externe Libraries dokumentiert
+- [x] 1.1 Dead Code identifiziert
+- [x] 1.1 Ungenutzte Dateien identifiziert
+- [x] 1.2 Architektur Review durchgefuehrt
+- [x] 1.3 Code Quality Analyse durchgefuehrt
 
-Dateien:
+## Projektstruktur
 
-- `Features/Plan/PlanPresentation.swift`
-- `Features/Plan/PlanView.swift`
-- `GymTracker.xcodeproj/project.pbxproj`
+Top-Level-Struktur:
 
-`PlanOverviewViewModel` und die reinen Sortier-/Summary-Regeln fuer die Plan-Detailansicht wurden aus `PlanView.swift` in `PlanPresentation.swift` verschoben. Dadurch enthaelt `PlanView.swift` weniger fachliche Transformationslogik und bleibt staerker auf Navigation und UI-Zusammenbau fokussiert. Die bestehenden statischen Test-Einstiegspunkte in `PlanView` delegieren weiterhin, damit vorhandene Tests und Aufrufer stabil bleiben.
+- `App/`: App Root und `AppEnvironment`
+- `Features/`: SwiftUI Feature Screens und feature-nahe Presentation/ViewModel-Typen
+- `Domain/`: fachliche Services, Enums und kleine Domain Models
+- `Data/`: SwiftData-Modelle, Seed-/Demo-Daten, Repository-Platzhalter
+- `DesignSystem/`: Theme-Modifier und Design Tokens
+- `Tests/`: Unit Tests fuer Domain, SeedData, Sessions und ViewModels
+- `docs/`: Produkt-, Architektur-, QA- und Report-Dokumentation
+- `build/`: versionierte Xcode-Build-Artefakte
 
-### 2. SessionEditingService uebernimmt Warm-up-Metadaten
+## Abhaengigkeiten
 
-Dateien:
+Interne Frameworks und Apple APIs:
 
-- `Domain/Services/SessionCompletionService.swift`
-- `Tests/SessionTests/SessionCompletionServiceTests.swift`
+- SwiftUI
+- SwiftData
+- Foundation
+- UniformTypeIdentifiers
+- Swift Testing (`import Testing`)
 
-Beim manuellen Hinzufuegen eines Satzes in einer aktiven Session uebernahm `SessionEditingService.addSet` zwar geplante Wiederholungen, Gewicht und `plannedSet`, aber nicht den Warm-up-Status des passenden geplanten Satzes. Der neue Regressionstest `editingServiceUsesNextPlannedSetMetadataWhenAddingSet` reproduziert den Fehler. Die Implementierung setzt jetzt `isWarmup` aus `nextPlannedSet?.isWarmup`.
+Externe Libraries:
 
-## Test- und Build-Status
+- Keine externen Swift Package Dependencies im Xcode-Projekt gefunden.
+- Kein `Package.resolved` gefunden.
+- Keine SwiftLint-/SwiftFormat-Konfiguration gefunden.
 
-Ausgefuehrte Verifikation:
+## Datenfluss
 
-- Baseline: `xcodebuild test -scheme GymTracker -project GymTracker.xcodeproj -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.6'`
-  - Ergebnis: erfolgreich
-- Regression rot: `xcodebuild test ... -only-testing:GymTrackerTests/SessionCompletionServiceTests`
-  - Ergebnis vor Fix: `editingServiceUsesNextPlannedSetMetadataWhenAddingSet` fehlgeschlagen
-- Regression gruen: `xcodebuild test ... -only-testing:GymTrackerTests/SessionCompletionServiceTests`
-  - Ergebnis nach Fix: erfolgreich
-- Refactoring-Verifikation: `xcodebuild test ... -only-testing:GymTrackerTests/PlanViewPresentationTests -only-testing:GymTrackerTests/TrainingPlanEditorViewModelTests`
-  - Ergebnis: erfolgreich
+1. `GymTrackerApp` erstellt eine `TabView` und injiziert den SwiftData `ModelContainer`.
+2. Feature Views lesen SwiftData ueber `@Query` und `@Environment(\.modelContext)`.
+3. Domain Services wie `SessionStartService`, `SessionCompletionService`, `VolumeCalculator`, `RIRAnalyzer`, `PainThresholdEvaluator`, `ChartDataMapper` und `TrainingExportService` kapseln fachliche Regeln.
+4. SwiftData-Modelle bilden Trainingsplaene, Wochen, Workouts, geplante Uebungen, geplante Saetze, Session Logs, Exercise Logs und Set Logs ab.
+5. Tests nutzen In-Memory-`ModelContainer`, um Domain- und ViewModel-Verhalten zu pruefen.
 
-Hinweis: `xcodebuild` meldet bei der Destination eine Warnung, weil mehrere passende Architekturen fuer `iPhone 16, OS=18.6` existieren. Der Testlauf waehlt die erste passende Destination und laeuft stabil durch.
-
-## Projektstruktur und Datenfluss
-
-### App-Schicht
-
-- `App/GymTrackerApp.swift` erstellt die App-Shell mit `TabView` und injiziert den SwiftData `ModelContainer`.
-- `App/AppEnvironment.swift` kapselt aktuell nur `ModelContainer` und einen Dashboard-ViewModel-Factory-Closure.
-
-### Domain-Schicht
-
-- `Domain/Services` enthaelt testbare fachliche Services: Session-Start, Session-Abschluss, Volumen, RIR, Schmerzschwellen, Chart Mapping und Export.
-- `Domain/Models` und `Domain/Enums` enthalten kleinere Typen wie `DashboardSummary` und Status-Enums.
-
-### Data-Schicht
-
-- `Data/SwiftDataModels/TrainingModels.swift` enthaelt die komplette SwiftData-Objektgrafik: Trainingsblock, Woche, Workout, geplante Uebung, geplante Saetze, Session Logs, Exercise Logs und Set Logs.
-- `Data/SeedData` kapselt Demo-/Seed-Importe.
-- `Data/Repositories/RepositoryProtocols.swift` ist derzeit nur ein leerer Platzhalter.
-
-### Feature-Schicht
-
-- `Features/Plan` enthaelt Planuebersicht, Detailansicht, Editor-Views, Preview-Daten und Zeilenkomponenten.
-- `Features/Session` enthaelt aktive Session, Satztracking, Picker und Summary.
-- `Features/History` und `Features/Analytics` enthalten eigene Query-, Transformations- und Darstellungsteile.
-
-### Tests
-
-- Unit Tests sind vorhanden fuer Domain Services, SwiftData-Modellgraph, Seed-/Demo-Daten, Session-Start/-Abschluss und einige ViewModel-/Praesentationsregeln.
-- Ein expliziter UI-Test-Target ist im Xcode-Projekt nicht vorhanden. Das Projekt listet nur `GymTracker` und `GymTrackerTests`.
-
-## Offene Issues
+## Issues
 
 ### P1 - Kein UI-Test-Target fuer kritische User Flows
 
-Fundstelle: `GymTracker.xcodeproj/project.pbxproj`, Projekt-Target-Liste enthaelt nur `GymTracker` und `GymTrackerTests`.
+Fundstelle: `GymTracker.xcodeproj/project.pbxproj`, Target-Liste enthaelt nur `GymTracker` und `GymTrackerTests`.
 
-Risiko: Kritische Flows wie Plan anlegen, Demo-Plan laden, Session starten, Satz erfassen, Session abschliessen und Historie oeffnen werden nicht end-to-end abgesichert. SwiftUI- und Navigation-Regressions koennen trotz gruenen Unit Tests unentdeckt bleiben.
+Risiko: Navigation, Formularvalidierung, Loading-/Error-States, Listen, Detailansichten und kritische User Flows werden nicht end-to-end abgesichert.
 
-Empfehlung: `GymTrackerUITests` hinzufuegen und mindestens Smoke Tests fuer diese Flows erstellen. Testdaten sollten ueber In-Memory-/Preview-Container oder kontrollierte Launch Arguments injiziert werden.
+Empfehlung: `GymTrackerUITests` anlegen und Smoke Tests fuer Plan anlegen, Demo-Plan laden, Session starten, Satz erfassen, Session abschliessen und Historie pruefen.
 
 ### P1 - Build-Artefakte sind versioniert
 
 Fundstelle: `build/GymTracker.build/Release-iphoneos/...`
 
-Risiko: Eingecheckte Derived-/Build-Dateien erzeugen grosse Diffs, Merge-Konflikte und koennen veraltete Build-Zustaende vortaeuschen. Sie verschlechtern Code Review und Repository-Hygiene.
+Risiko: Veraltete Derived-/Build-Dateien koennen Merge-Konflikte, irrefuehrende Diffs und falsche Build-Sicherheit erzeugen.
 
 Empfehlung: `build/` aus Git entfernen, `.gitignore` ergaenzen und nur reproduzierbare Quellen, Fixtures und Projektdateien versionieren.
 
-### P2 - Sehr grosse SwiftUI-Dateien mit gemischten Verantwortlichkeiten
+### P2 - Grosse SwiftUI-Dateien mit gemischten Verantwortlichkeiten
 
 Fundstellen:
 
-- `Features/History/HistoryView.swift` ca. 699 Zeilen
-- `Features/Session/ActiveSessionView.swift` ca. 657 Zeilen
-- `Features/Plan/PlanEditorForms.swift` ca. 560 Zeilen
-- `Features/Plan/TrainingPlanEditorViewModel.swift` ca. 521 Zeilen
+- `Features/History/HistoryView.swift`: 699 Zeilen
+- `Features/Session/ActiveSessionView.swift`: 657 Zeilen
+- `Features/Plan/PlanView.swift`: 601 Zeilen
+- `Features/Plan/PlanEditorForms.swift`: 560 Zeilen
+- `Features/Analytics/AnalyticsView.swift`: 282 Zeilen
 
-Risiko: Views enthalten UI, Query-Zugriff, Formatierung, lokale Interaktionslogik und teilweise fachliche Transformationen. Das erschwert isolierte Tests und erhoeht die Wahrscheinlichkeit, dass kleine UI-Aenderungen fachliche Regeln beruehren.
+Risiko: UI, Query-Zugriff, Formatierung, Navigation, lokale Mutationen und Side Effects liegen teilweise zusammen. Das erhoeht Aenderungsrisiko und senkt Testbarkeit.
 
-Empfehlung: Schrittweise in fokussierte Presentation-/Formatter-/Calculator-Typen und kleinere View-Komponenten extrahieren. Pro Extraktion vorhandene Tests erweitern oder neue Tests fuer reine Logik ergaenzen.
+Empfehlung: Reine Presentation-/Formatter-/Mapper-Typen und kleine SwiftUI-Komponenten extrahieren. Pro Extraktion Build und Tests laufen lassen.
 
-### P2 - Repository-Schicht ist nur ein Platzhalter
+### P2 - `PlanView` fuehrt Side Effects direkt aus
 
-Fundstelle: `Data/Repositories/RepositoryProtocols.swift:1`
+Fundstelle: `Features/Plan/PlanView.swift:163`
 
-Risiko: Die Architektur deutet eine Repository-Schicht an, nutzt aber direkt `ModelContext` in Services und Views. Dadurch ist unklar, ob langfristig SwiftData direkt die App-Grenze sein soll oder eine Repository-Abstraktion geplant ist.
+Beobachtung: `PlanView` erstellt Plaene, laedt Demo-Daten, importiert JSON, dupliziert, archiviert und loescht direkt ueber `modelContext`.
 
-Empfehlung: Entweder Platzhalter entfernen und SwiftData-direkt als bewusste ADR dokumentieren, oder konkrete Protokolle fuer Plan-, Session- und History-Zugriffe einfuehren. Kein leeres Protokoll behalten.
+Risiko: Die View ist schwer isoliert testbar und mischt UI mit Persistenz-/Importlogik.
 
-### P2 - AppEnvironment enthaelt ungenutzte Dashboard-Factory
+Empfehlung: Plan-Aktionen in einen Plan-Service oder Store auslagern und nur UI-State in der View halten.
 
-Fundstelle: `App/AppEnvironment.swift:5`
+### P2 - `TrainingPlanEditorViewModel` ist zu gross und service-artig
 
-Risiko: `makeDashboardViewModel` wird im aktuellen App-Root nicht genutzt; `DashboardView` ist nicht in der Tab-Struktur verdrahtet. Das erzeugt Unklarheit, ob Dashboard ein altes Feature, ein geplantes Feature oder ein vergessenes Tab ist.
+Fundstelle: `Features/Plan/TrainingPlanEditorViewModel.swift`, 521 Zeilen
 
-Empfehlung: Dashboard bewusst integrieren, entfernen oder als geplantes Feature im Backlog markieren. Falls Environment-Injection ausgebaut werden soll, sollten auch Services/Repositories dort konfiguriert werden.
+Beobachtung: Der Typ validiert, mutiert, dupliziert, loescht, verschiebt, renummeriert, klont und synchronisiert Plan-, Wochen-, Session-, Exercise- und Set-Daten.
 
-### P2 - Editor-Views erzeugen ViewModels mehrfach lokal
+Risiko: Eine Aenderung an einem Unterbereich kann andere Editor-Regeln brechen. Der Name `ViewModel` passt nur teilweise, weil kein beobachtbarer UI-State gehalten wird.
 
-Fundstellen:
+Empfehlung: In fokussierte Editor-Services oder Commands teilen: Validation, Clone/Duplicate, Reordering/Renumbering, Prescription Sync.
 
-- `Features/Plan/PlanEditorForms.swift:18`
-- `Features/Plan/PlanEditorForms.swift:185`
-- `Features/Plan/PlanEditorForms.swift:274`
-- `Features/Plan/PlanEditorForms.swift:368`
-- `Features/Plan/PlanEditorForms.swift:480`
+### P2 - Repository-Schicht ist leer
 
-Risiko: Jeder Editor-Subscreen erstellt aus `modelContext` ein neues `TrainingPlanEditorViewModel`. Aktuell ist der ViewModel zustandslos, aber das Muster erschwert spaetere Abhaengigkeiten, Logging, Validation State oder Undo/Redo.
+Fundstelle: `Data/Repositories/RepositoryProtocols.swift`
 
-Empfehlung: Einen gemeinsamen Editor-Store oder eine kleine Environment-/Factory-Loesung fuer Editor-Aktionen einfuehren. Alternativ den Typ in `TrainingPlanEditorService` umbenennen, wenn er bewusst zustandslos bleiben soll.
+Risiko: Die Architektur deutet eine Repository-Schicht an, waehrend Views und Services SwiftData direkt nutzen. Das ist als bewusste Architektur moeglich, aber aktuell inkonsistent dokumentiert.
 
-### P2 - Runtime-`fatalError` bei ModelContainer-Erstellung
+Empfehlung: Platzhalter entfernen oder konkrete Protokolle fuer Plan-/Session-/History-Zugriffe einfuehren.
 
-Fundstellen:
+### P2 - AppEnvironment wird kaum genutzt
 
-- `Data/SwiftDataModels/GymTrackerModelContainer.swift:29`
-- `Features/Plan/PlanPreviewData.swift:28`
-- `Features/Plan/PlanPreviewData.swift:37`
+Fundstelle: `App/AppEnvironment.swift`
 
-Risiko: Bei Container-Initialisierungsfehlern beendet die App sofort. Fuer Preview-Code ist das vertretbarer, fuer die Live-App sollte ein kontrollierter Fehlerzustand oder zumindest eine zentral sichtbare Diagnose existieren.
+Beobachtung: `AppEnvironment` kapselt `ModelContainer` und `makeDashboardViewModel`, aber `DashboardView` ist nicht in der App-Tab-Struktur verdrahtet.
 
-Empfehlung: Live-Container-Erstellung in eine fallible Factory verschieben und im App-Root einen Fehlerbildschirm oder Recovery-Hinweis anzeigen. Preview-`fatalError` kann bleiben, sollte aber klar als Preview-only eingegrenzt sein.
+Risiko: Dependency Injection ist begonnen, aber nicht konsequent. Unklar bleibt, ob Dashboard aktiv, geplant oder veraltet ist.
 
-### P3 - Tests sind fachlich gut, aber stark target-intern gebuendelt
+Empfehlung: Dashboard-Entscheidung treffen und Environment entweder ausbauen oder vereinfachen.
 
-Fundstelle: `Tests/ViewModelTests/DashboardViewModelTests.swift` enthaelt neben Dashboard auch `TrainingPlanEditorViewModelTests` und `PlanViewPresentationTests`.
+### P2 - Runtime-`fatalError` bei SwiftData-Container-Erstellung
 
-Risiko: Testdateinamen spiegeln ihren Inhalt nicht mehr wider. Neue Entwickler finden relevante Tests schlechter, und selektive Testlaeufe werden unuebersichtlicher.
+Fundstelle: `Data/SwiftDataModels/GymTrackerModelContainer.swift`
 
-Empfehlung: Tests in `TrainingPlanEditorViewModelTests.swift` und `PlanViewPresentationTests.swift` splitten und im Xcode-Projekt referenzieren.
+Risiko: Ein Container-Initialisierungsfehler beendet die App hart. Fuer Live-App-Start ist ein kontrollierter Fehlerzustand robuster.
 
-### P3 - Keine explizite Lint-/Format-Konfiguration gefunden
+Empfehlung: Fallible Factory oder App-Root-Fehlerzustand einfuehren; Preview-`fatalError` separat bewerten.
 
-Fundstelle: keine `swiftlint`, `SwiftFormat` oder vergleichbare Konfiguration im Repository gefunden.
+### P3 - Tests sind teilweise in unpassenden Dateien gebuendelt
 
-Risiko: Stilfragen bleiben manuell, und grosse SwiftUI-Dateien koennen weiter wachsen, ohne automatisierte Warnung zu Komplexitaet, Dateilaenge oder Force-Unwraps zu geben.
+Fundstelle: `Tests/ViewModelTests/DashboardViewModelTests.swift`
 
-Empfehlung: SwiftFormat und optional SwiftLint einfuehren. Fuer dieses Projekt waeren Regeln zu Dateilaenge, Typ-Laenge und `fatal_error_message` besonders nuetzlich.
+Beobachtung: Die Datei enthaelt `DashboardViewModelTests`, `TrainingPlanEditorViewModelTests` und `PlanViewPresentationTests`.
 
-## Naechste empfohlene Schritte
+Risiko: Testnavigation und selektive Testausfuehrung werden unuebersichtlicher.
 
-1. `build/` aus der Versionskontrolle entfernen und `.gitignore` ergaenzen.
-2. UI-Test-Target anlegen und einen stabilen Smoke Flow fuer Plan -> Workout -> Session -> History implementieren.
-3. `HistoryView.swift` und `ActiveSessionView.swift` analog zu `PlanPresentation.swift` schrittweise um reine Presentation-/Formatter-Logik erleichtern.
-4. Entscheidung zur Repository-Schicht treffen: entfernen oder konkretisieren.
-5. Testdateien nach getesteter Komponente splitten.
+Empfehlung: In getrennte Testdateien splitten und Xcode-Projekt referenzieren.
+
+### P3 - Keine Lint-/Format-Automation
+
+Fundstelle: keine `.swiftlint.yml`, keine `.swiftformat`.
+
+Risiko: Dateilaenge, Typ-Laenge, Namenskonventionen und Force-Unwraps bleiben manuell.
+
+Empfehlung: SwiftFormat und optional SwiftLint einfuehren; Regeln fuer Dateilaenge, Typ-Laenge, Force-Unwraps und `fatalError` pruefen.
+
+### P3 - Force-Unwraps in Tests
+
+Fundstelle: `Tests/DomainModelTests/ChartDataMapperTests.swift`
+
+Risiko: In Tests akzeptabel, aber `TimeZone(secondsFromGMT: 0)!` und `components.date!` koennen bei spaeterer Anpassung unschoene Crashs erzeugen.
+
+Empfehlung: Mit `#require` oder explizitem Guard stabilisieren.
+
+## Refactorings
+
+Noch nicht gestartet in diesem Durchlauf. Abschnitt 2 wird erst begonnen, nachdem Abschnitt 1 dokumentiert, Build und Tests erfolgreich verifiziert sind.
+
+## Build- und Teststatus
+
+Build:
+
+- Befehl: `xcodebuild build -scheme GymTracker -project GymTracker.xcodeproj -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.6'`
+- Ergebnis: `BUILD SUCCEEDED`
+
+Tests:
+
+- Befehl: `xcodebuild test -scheme GymTracker -project GymTracker.xcodeproj -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.6'`
+- Ergebnis: `TEST SUCCEEDED`
+
+Dokumentierte Warnungen:
+
+- Xcode meldet mehrere passende Simulator-Destinations fuer `iPhone 16, OS=18.6` und nutzt die erste.
+- AppIntents-Metadatenextraktion wird uebersprungen, weil keine `AppIntents.framework`-Abhaengigkeit vorhanden ist.
+
+## Risiken
+
+- Grosse View-Dateien sind das wichtigste Wartbarkeitsrisiko.
+- Fehlendes UI-Test-Target ist das wichtigste QA-Risiko.
+- Versionierte Build-Artefakte sind das wichtigste Repository-Hygiene-Risiko.
+- Direkter SwiftData-Zugriff in Views ist ein mittleres Architektur-Risiko, solange die Repository-Strategie unentschieden ist.
+
+## Priorisierung
+
+1. UI-Test-Target und Smoke Tests ergaenzen.
+2. `build/` aus Git entfernen und `.gitignore` einfuehren.
+3. `PlanView`, `ActiveSessionView` und `HistoryView` schrittweise aufteilen.
+4. `TrainingPlanEditorViewModel` in kleinere Services splitten.
+5. Repository-/SwiftData-Direktzugriff per ADR entscheiden.
+6. Testdateien splitten und Lint-/Format-Automation einfuehren.
