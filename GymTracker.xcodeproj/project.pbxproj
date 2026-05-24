@@ -33,6 +33,7 @@
 		9A000001000000000000001C /* PlanPreviewData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A000001000000000000011C /* PlanPreviewData.swift */; };
 		9A0000010000000000000031 /* TrainingPlanEditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0000010000000000000131 /* TrainingPlanEditorViewModel.swift */; };
 		9A0000010000000000000032 /* PlanEditorForms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0000010000000000000132 /* PlanEditorForms.swift */; };
+		9A0000010000000000000033 /* PlanPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0000010000000000000133 /* PlanPresentation.swift */; };
 		9A000001000000000000001D /* SessionStartService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A000001000000000000011D /* SessionStartService.swift */; };
 		9A000001000000000000001E /* SessionStartServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A000001000000000000011E /* SessionStartServiceTests.swift */; };
 		9A000001000000000000001F /* ActiveSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A000001000000000000011F /* ActiveSessionView.swift */; };
@@ -90,6 +91,7 @@
 		9A000001000000000000011C /* PlanPreviewData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanPreviewData.swift; sourceTree = "<group>"; };
 		9A0000010000000000000131 /* TrainingPlanEditorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingPlanEditorViewModel.swift; sourceTree = "<group>"; };
 		9A0000010000000000000132 /* PlanEditorForms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanEditorForms.swift; sourceTree = "<group>"; };
+		9A0000010000000000000133 /* PlanPresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanPresentation.swift; sourceTree = "<group>"; };
 		9A000001000000000000011D /* SessionStartService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionStartService.swift; sourceTree = "<group>"; };
 		9A000001000000000000011E /* SessionStartServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionStartServiceTests.swift; sourceTree = "<group>"; };
 		9A000001000000000000011F /* ActiveSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveSessionView.swift; sourceTree = "<group>"; };
@@ -360,6 +362,7 @@
 				9A000001000000000000011C /* PlanPreviewData.swift */,
 				9A0000010000000000000131 /* TrainingPlanEditorViewModel.swift */,
 				9A0000010000000000000132 /* PlanEditorForms.swift */,
+				9A0000010000000000000133 /* PlanPresentation.swift */,
 			);
 			path = Plan;
 			sourceTree = "<group>";
@@ -519,6 +522,7 @@
 				9A000001000000000000001C /* PlanPreviewData.swift in Sources */,
 				9A0000010000000000000031 /* TrainingPlanEditorViewModel.swift in Sources */,
 				9A0000010000000000000032 /* PlanEditorForms.swift in Sources */,
+				9A0000010000000000000033 /* PlanPresentation.swift in Sources */,
 				9A000001000000000000001D /* SessionStartService.swift in Sources */,
 				9A0000010000000000000026 /* SessionCompletionService.swift in Sources */,
 				9A000001000000000000001F /* ActiveSessionView.swift in Sources */,

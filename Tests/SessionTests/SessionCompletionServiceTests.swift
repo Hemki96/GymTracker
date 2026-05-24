@@ -125,6 +125,30 @@ struct SessionCompletionServiceTests {
         #expect(remainingNumbers == [1, 2])
     }
 
+    @Test
+    func editingServiceUsesNextPlannedSetMetadataWhenAddingSet() throws {
+        let container = try makeInMemoryContainer()
+        let context = ModelContext(container)
+        let workout = makeWorkoutPlanWithPlannedSets()
+        context.insert(workout)
+
+        let session = try SessionStartService(context: context).startSession(from: workout)
+        let exerciseLog = try #require(session.exerciseLogs.first)
+        let firstSet = try #require(exerciseLog.setLogs.first { $0.setNumber == 1 })
+        let secondSet = try #require(exerciseLog.setLogs.first { $0.setNumber == 2 })
+        exerciseLog.setLogs = [firstSet]
+        context.delete(secondSet)
+        try context.save()
+
+        let addedSet = try SessionEditingService(context: context).addSet(to: exerciseLog)
+
+        #expect(addedSet.setNumber == 2)
+        #expect(addedSet.plannedRepsText == "10")
+        #expect(addedSet.plannedWeightText == "40")
+        #expect(addedSet.isWarmup)
+        #expect(addedSet.plannedSet?.setNumber == 2)
+    }
+
     private func makeWorkoutPlan() -> WorkoutPlan {
         let workoutPlan = WorkoutPlan(dayNumber: 1, title: "Tag 1", sortOrder: 1)
         let squat = Exercise(name: "Kniebeugen", category: .squat)
@@ -142,6 +166,37 @@ struct SessionCompletionServiceTests {
             )
         ]
 
+        return workoutPlan
+    }
+
+    private func makeWorkoutPlanWithPlannedSets() -> WorkoutPlan {
+        let workoutPlan = WorkoutPlan(dayNumber: 1, title: "Tag 1", sortOrder: 1)
+        let exercise = Exercise(name: "Goblet Squat", category: .squat)
+        let plannedExercise = PlannedExercise(
+            sortOrder: 1,
+            setsPrescription: "2",
+            repsPrescription: "8",
+            plannedWeightText: "32",
+            workoutPlan: workoutPlan,
+            exercise: exercise
+        )
+        plannedExercise.plannedSets = [
+            PlannedSet(
+                setNumber: 1,
+                repsText: "8",
+                weightText: "32",
+                setType: .working,
+                plannedExercise: plannedExercise
+            ),
+            PlannedSet(
+                setNumber: 2,
+                repsText: "10",
+                weightText: "40",
+                setType: .warmup,
+                plannedExercise: plannedExercise
+            )
+        ]
+        workoutPlan.plannedExercises = [plannedExercise]
         return workoutPlan
     }
 

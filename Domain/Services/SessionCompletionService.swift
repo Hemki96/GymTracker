@@ -180,6 +180,7 @@ struct SessionEditingService {
             loggedWeightKg: lastSet?.loggedWeightKg,
             rir: lastSet?.rir,
             pain: lastSet?.pain,
+            isWarmup: nextPlannedSet?.isWarmup ?? false,
             createdAt: date,
             updatedAt: date,
             exerciseLog: exerciseLog,
